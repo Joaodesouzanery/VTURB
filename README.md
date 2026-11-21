@@ -4,7 +4,7 @@ Transcrições dos vídeos de https://www.youtube.com/@vturb (2022–2026).
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate && pip install -U --pre "yt-dlp[default]"
-python baixar.py --workers 3 --cookies-from-browser chrome   # baixa (retoma se interromper)
+python baixar.py --workers 2 --cookies-from-browser chrome   # baixa (retoma se interromper)
 python indexar.py                                            # gera INDEX.md e conhecimento/
 ```
 
@@ -14,3 +14,5 @@ python indexar.py                                            # gera INDEX.md e c
 - `.claude/skills/` – skills: baixar, consultar e resumir
 
 Sem legenda: `sem_legenda.txt`.
+
+O YouTube limita a taxa (HTTP 429): o script pausa sozinho e retoma. Pode levar 15–60 min; se sobrar erro, rode o mesmo comando de novo.

@@ -5,7 +5,10 @@ import html
 import re
 import subprocess
 import sys
+import random
 import tempfile
+import threading
+import time
 import unicodedata
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -47,21 +50,69 @@ def sub_rank(path: Path):
     return (0 if ".pt" in n else 1, 0 if "orig" not in n else 1, n)
 
 
-def process(vid, args, tmp, cookies):
-    """Retorna (id, status, extra). status: ok | sem_legenda | fora | erro"""
+PAUSE = {"until": 0.0, "nivel": 0}
+LOCK = threading.Lock()
+ESPERAS = [60, 120, 300, 600]
+
+
+def esperar_pausa():
+    while True:
+        falta = PAUSE["until"] - time.time()
+        if falta <= 0:
+            return
+        time.sleep(min(falta, 5))
+
+
+def registrar_429():
+    with LOCK:
+        if PAUSE["until"] < time.time():
+            espera = ESPERAS[min(PAUSE["nivel"], len(ESPERAS) - 1)]
+            PAUSE["nivel"] += 1
+            PAUSE["until"] = time.time() + espera
+            print(f"  >> YouTube limitou (429). Pausando {espera}s...", flush=True)
+
+
+def rodar(vid, args, tmp, cookies, langs):
     cmd = YTDLP + [
         "--skip-download", "--no-simulate", "--write-subs", "--write-auto-subs",
-        "--sub-langs", "pt.*,en.*", "--sub-format", "vtt", "--no-warnings",
+        "--sub-langs", langs, "--sub-format", "vtt", "--no-warnings",
+        "--sleep-requests", "1.5", "--sleep-subtitles", "2",
         "--dateafter", args.depois, "--datebefore", args.antes,
         "--print", "%(upload_date)s|%(title)s",
         "-o", str(tmp / "%(id)s"), f"https://www.youtube.com/watch?v={vid}",
     ] + cookies
-    for _ in range(3):
+    ultimo = ""
+    for _ in range(6):
+        esperar_pausa()
+        time.sleep(random.uniform(3, 6))
         r = subprocess.run(cmd, capture_output=True, text=True)
+        err = r.stderr
+        if "429" in err:
+            registrar_429()
+            ultimo = "429 Too Many Requests"
+            continue
+        if "needs to be reloaded" in err:
+            time.sleep(10)
+            ultimo = "page needs to be reloaded"
+            continue
         if r.returncode == 0:
-            break
-    else:
-        return vid, "erro", r.stderr.strip().splitlines()[-1:] or [""]
+            with LOCK:
+                PAUSE["nivel"] = 0
+            return r, None
+        ultimo = (err.strip().splitlines() or [""])[-1]
+    return None, ultimo
+
+
+def process(vid, args, tmp, cookies):
+    """Retorna (id, status, extra). status: ok | sem_legenda | fora | erro"""
+    r, erro = rodar(vid, args, tmp, cookies, "pt,pt-BR,pt-PT,pt-orig")
+    if r is None:
+        return vid, "erro", erro
+    if r.stdout.strip() and not list(tmp.glob(f"{vid}*.vtt")):
+        r2, erro = rodar(vid, args, tmp, cookies, "en,en-orig")
+        if r2 is None:
+            return vid, "erro", erro
+        r = r2
     info = r.stdout.strip().splitlines()
     if not info:
         return vid, "fora", ""
@@ -89,7 +140,7 @@ def process(vid, args, tmp, cookies):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--limit", type=int, default=0, help="só os N primeiros (teste)")
-    p.add_argument("--workers", type=int, default=8)
+    p.add_argument("--workers", type=int, default=2)
     p.add_argument("--depois", default="20220101")
     p.add_argument("--antes", default="20261231")
     p.add_argument("--saida", type=Path, default=Path("transcricoes"))
@@ -109,21 +160,33 @@ def main():
     print(f"{len(todo)} a processar com {args.workers} em paralelo.")
 
     cont = {"ok": 0, "sem_legenda": 0, "fora": 0, "erro": 0}
-    with tempfile.TemporaryDirectory() as t, ThreadPoolExecutor(args.workers) as ex:
-        futs = [ex.submit(process, v, args, Path(t), cookies) for v in todo]
-        for n, f in enumerate(as_completed(futs), 1):
-            vid, st, extra = f.result()
-            cont[st] += 1
-            if st != "erro":
-                with estado.open("a") as fh:
-                    fh.write(vid + "\n")
-            if st == "sem_legenda":
-                with open("sem_legenda.txt", "a") as fh:
-                    fh.write(f"{vid} {extra}\n")
-            print(f"[{n}/{len(todo)}] {st}: {extra if st != 'fora' else vid}")
+    with tempfile.TemporaryDirectory() as t:
+        for passe in (1, 2):
+            if not todo:
+                break
+            if passe == 2:
+                print(f"\nSegundo passe: {len(todo)} vídeos com erro (aguardando 60s)...")
+                time.sleep(60)
+            cont["erro"] = 0
+            falhas = []
+            with ThreadPoolExecutor(args.workers) as ex:
+                futs = [ex.submit(process, v, args, Path(t), cookies) for v in todo]
+                for n, f in enumerate(as_completed(futs), 1):
+                    vid, st, extra = f.result()
+                    cont[st] += 1
+                    if st == "erro":
+                        falhas.append(vid)
+                    else:
+                        with estado.open("a") as fh:
+                            fh.write(vid + "\n")
+                    if st == "sem_legenda":
+                        with open("sem_legenda.txt", "a") as fh:
+                            fh.write(f"{vid} {extra}\n")
+                    print(f"[{n}/{len(todo)}] {st}: {extra if st != 'fora' else vid}", flush=True)
+            todo = falhas
     print("Resumo:", cont)
     if cont["erro"]:
-        print("Houve erros: rode de novo (retoma de onde parou) ou use --workers 3 / --cookies-from-browser chrome")
+        print("Ainda há erros: espere ~30-60 min e rode o mesmo comando (retoma de onde parou).")
 
 
 if __name__ == "__main__":
