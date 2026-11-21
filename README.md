@@ -1,12 +1,16 @@
-# VTURB – transcrições do YouTube
+# VTURB – base de conhecimento
 
-Baixa as transcrições dos vídeos de https://www.youtube.com/@vturb (2022–2026) em paralelo.
+Transcrições dos vídeos de https://www.youtube.com/@vturb (2022–2026).
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate && pip install -U yt-dlp
-python baixar.py --limit 3   # teste
-python baixar.py             # completo (retoma de onde parou)
+python3 -m venv .venv && source .venv/bin/activate && pip install -U --pre "yt-dlp[default]"
+python baixar.py --workers 3 --cookies-from-browser chrome   # baixa (retoma se interromper)
+python indexar.py                                            # gera INDEX.md e conhecimento/
 ```
 
-Saída: `transcricoes/AAAA-MM-DD - titulo [id].txt`; vídeos sem legenda em `sem_legenda.txt`.
-Opções: `--workers 8`, `--depois 20220101`, `--antes 20261231`, `--cookies-from-browser chrome`.
+- `transcricoes/AAAA/AAAA-MM-DD_slug_id/transcricao.md` – uma pasta por vídeo
+- `INDEX.md` – lista de todos os vídeos
+- `conhecimento/AAAA.md` – transcrições do ano num arquivo só, para anexar em chats/Projects do Claude
+- `.claude/skills/` – skills: baixar, consultar e resumir
+
+Sem legenda: `sem_legenda.txt`.

@@ -6,6 +6,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import unicodedata
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -72,10 +73,17 @@ def process(vid, args, tmp, cookies):
     for s in subs:
         s.unlink()
     d = f"{date[:4]}-{date[4:6]}-{date[6:]}"
-    safe = re.sub(r'[\\/:*?"<>|]+', "", title).strip()[:90]
-    dest = args.saida / f"{d} - {safe} [{vid}].txt"
-    dest.write_text(f"{title}\nhttps://www.youtube.com/watch?v={vid}\n{d}\n\n{text}\n", encoding="utf-8")
-    return vid, "ok", dest.name
+    slug = re.sub(r"[^a-z0-9]+", "-", unicodedata.normalize("NFKD", title).encode("ascii", "ignore").decode().lower()).strip("-")[:70]
+    pasta = args.saida / date[:4] / f"{d}_{slug}_{vid}"
+    pasta.mkdir(parents=True, exist_ok=True)
+    dest = pasta / "transcricao.md"
+    paras = re.sub(r"((?:[^.!?]+[.!?]\s*){5})", r"\1\n\n", text)
+    safe_title = title.replace('"', "'")
+    dest.write_text(
+        f'---\ntitulo: "{safe_title}"\nurl: https://www.youtube.com/watch?v={vid}\n'
+        f"data: {d}\nid: {vid}\ncanal: VTURB\n---\n\n# {title}\n\n{paras.strip()}\n",
+        encoding="utf-8")
+    return vid, "ok", str(pasta.name)
 
 
 def main():
