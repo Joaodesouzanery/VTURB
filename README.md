@@ -11,7 +11,8 @@ python indexar.py                                            # gera INDEX.md e c
 - `transcricoes/AAAA/AAAA-MM-DD_slug_id/transcricao.md` – uma pasta por vídeo
 - `INDEX.md` – lista de todos os vídeos
 - `conhecimento/AAAA.md` – transcrições do ano num arquivo só, para anexar em chats/Projects do Claude
-- `.claude/skills/` – skills: baixar, consultar e resumir
+- `MARKETING/` – casos e playbooks de marketing com IA
+- `.claude/skills/` – skills: baixar, consultar, resumir e marketing
 
 Sem legenda: `sem_legenda.txt`.
 
