@@ -1,0 +1,14 @@
+{
+  "name": "briefing-criativos-engine",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Engine da skill Briefing de Criativos: transcricao (faster-whisper) + extracao de frames (ffmpeg) de criativos minerados.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "setup": "node setup.mjs",
+    "preflight": "node preflight.mjs",
+    "process": "node process.mjs",
+    "dry-run": "node process.mjs --dry-run"
+  }
+}

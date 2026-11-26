@@ -1,0 +1,27 @@
+{
+  "_doc": "Break points: limiares mínimos que justificam mexer na operação quando NÃO há gargalo expressivo. Editável. Espelhado em '02. Conhecimento/Operação & Performance/02. Break Points por Dimensão.md'.",
+  "version": 1,
+  "atualizado": "2026-06-16",
+  "criativo": {
+    "ctr_link_min_pct": 1.0,
+    "frequencia_max_7d": 2.5,
+    "cpm_aumento_max_pct": 30,
+    "hold_3s_min_pct": 25
+  },
+  "funil": {
+    "conversao_min_pct": 1.5,
+    "atc_to_checkout_min_pct": 50
+  },
+  "preco_oferta": {
+    "cpa_ideal_pct_ticket": 30,
+    "cpa_excesso_max_pct": 20,
+    "margem_desvio_max_pct": 5,
+    "aov_min_vs_meta_pct": 100,
+    "roas_min_vs_breakeven": 1.0
+  },
+  "guarda_estatistica": {
+    "min_impressoes": 1000,
+    "min_cliques": 50,
+    "min_gasto_em_cpa_ideal": 1.0
+  }
+}

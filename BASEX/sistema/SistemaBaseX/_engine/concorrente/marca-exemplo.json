@@ -1,0 +1,291 @@
+{
+ "nome": "Aldervik",
+ "dominio": "aldervikwatches.com · livre, ainda não registrado",
+ "slogan": "Relógio de ateliê, preço de quem sabe comprar.",
+ "promessa": "O visual de um relógio de luxo, feito para durar, sem pagar o preço de grife.",
+ "resumo": "Relógio masculino para os EUA e o Reino Unido, de 59 a 79 dólares, loja de coleção com o mostrador verde na frente.",
+ "mercado": "EUA e Reino Unido, em inglês",
+ "catalogo": "Relógio esportivo de aço com pulseira de borracha, cronógrafo de metal e clássico de couro",
+ "direcao": "Ateliê discreto: verde fechado, latão e muito branco",
+ "produto": {
+  "heroi": "Relógio de mostrador verde, pulseira de borracha, caixa de aço 316L"
+ },
+ "posicionamento": "Para o homem que repara em detalhe e não quer usar o mesmo relógio que todo mundo, a Aldervik é o ateliê que vende pouco modelo, bem feito, a preço de quem sabe comprar.",
+ "diferenca": [
+  "As referências vendem só o fim da loja. A Aldervik vende o relógio que dura, e a oferta vem depois.",
+  "A referência roda um corpo de anúncio só para tudo. Aqui cada ângulo ganha o seu corpo e o seu título."
+ ],
+ "fundador": {
+  "nome": "Quem assina a Aldervik",
+  "rosto": "",
+  "bio_curta": "A pessoa que aparece na página Sobre, nas cartas e nos banners. Uma pessoa só, com o mesmo rosto em toda peça.",
+  "por_que": "Escolher entre três rostos e manter o mesmo daqui para frente: trocar agora é barato, depois é caro."
+ },
+ "biografia": {
+  "titulo": "Fewer watches, made to stay.",
+  "texto": "We started Aldervik because the watches we liked cost a month's rent, and the ones we could afford looked tired by spring.\n\nSo we kept the part that matters. A 316L steel case that does not scratch on the first door frame. Sapphire over the dial. A Japanese movement you never have to think about.\n\nWe make a short list of models and we keep making them. When one sells out it can take a while to come back. That is the trade: fewer choices, and a watch that still looks right on your wrist two years from now.",
+  "assinatura": "The Aldervik workshop"
+ },
+ "persona": {
+  "quem": "Homem de 30 a 50 anos, trabalha em escritório, compra para ele ou ganha de presente da parceira",
+  "momento": "Quer subir de nível no visual sem gastar milhares; desconfia de relógio barato que parece barato",
+  "camadas": [
+   "Demografia: 30 a 50 anos, renda média, EUA e Reino Unido",
+   "Situação: reunião, casamento, jantar em que repara no pulso dos outros",
+   "Crença: relógio bonito é caro, e o barato descasca"
+  ],
+  "dor_primaria": "Relógio de grife custa milhares e o barato descasca em três meses",
+  "e_dai": [
+   "Tem que comprar outro",
+   "Gastou errado de novo",
+   "Não sabe escolher sozinho"
+  ],
+  "dor_final": "Não quer parecer que comprou errado",
+  "desejo": "Ser notado pelo detalhe, não pela marca",
+  "palavras": [
+   "looks way more expensive than it was",
+   "gets compliments every time",
+   "the green dial is stunning"
+  ]
+ },
+ "tom": {
+  "usa": [
+   "Frase curta seguida de frase longa",
+   "Material com nome: aço 316L, safira, quartzo japonês",
+   "Admitir o limite: poucos modelos, reposição demora"
+  ],
+  "evita": [
+   "Exclamação e emoji em toda linha",
+   "Adjetivo empilhado",
+   "Promessa que o cliente não confere ao receber"
+  ],
+  "vocab_usa": [
+   "worn",
+   "weight",
+   "sapphire",
+   "holds up",
+   "on the wrist"
+  ],
+  "vocab_evita": [
+   "luxury",
+   "exclusive",
+   "elevate your style",
+   "timeless elegance",
+   "must-have"
+  ],
+  "antes_depois": [
+   [
+    "Elevate your style with our premium luxury timepiece!",
+    "Steel case, sapphire glass, and a green dial that catches the light."
+   ],
+   [
+    "Limited stock!!! Buy now!!!",
+    "When a model sells out, it takes a while to come back."
+   ]
+  ]
+ },
+ "colecoes": [
+  {
+   "nome": "Atelier",
+   "categoria": "Esportivo de borracha (verde, preto e azul)",
+   "preco": "69,90",
+   "equivalente": "Nimbus e President (referencia-exemplo.com)"
+  },
+  {
+   "nome": "Meridian",
+   "categoria": "Cronógrafo de metal",
+   "preco": "79,90",
+   "equivalente": "All Watches (referencia-exemplo.com)"
+  },
+  {
+   "nome": "Heritage",
+   "categoria": "Clássico de couro",
+   "preco": "59,90",
+   "equivalente": "—"
+  }
+ ],
+ "oferta": {
+  "nome": "The First Hundred",
+  "contexto": "Abertura: os cem primeiros relógios com o preço de lançamento",
+  "mecanica": "50% off no preço de lançamento e progressivo por cima: 1 peça no preço de lançamento, 2 peças +10% off, 3 peças +15% off, 4 ou mais +20% off",
+  "duracao": "Até acabar o primeiro lote",
+  "motivo": "lote de abertura, com reposição só no próximo",
+  "titulo_link": "First hundred · 50% off, up to 20% more",
+  "texto": "The first hundred Aldervik watches go out at half price. Take two and save an extra 10%, three for 15%, four or more for 20%. When this batch is gone, the next one ships at full price."
+ },
+ "identidade": {
+  "cores": [
+   {
+    "nome": "Verde ateliê",
+    "hex": "#1F4D3A",
+    "uso": "destaque, botões e selo de oferta"
+   },
+   {
+    "nome": "Latão",
+    "hex": "#B08D57",
+    "uso": "detalhe fino, nunca texto"
+   },
+   {
+    "nome": "Faixa",
+    "hex": "#EFE9DF",
+    "uso": "fundo de seção"
+   },
+   {
+    "nome": "Texto",
+    "hex": "#111111",
+    "uso": "texto, sobre o fundo branco"
+   }
+  ],
+  "fonte_titulo": "Cormorant Garamond",
+  "fonte_texto": "Inter",
+  "uso_titulo": "Título, nome de coleção e o logo. Nunca corpo de texto.",
+  "uso_texto": "Corpo, descrição, menu e preço: resolve a leitura no celular.",
+  "logo": "",
+  "monograma": "",
+  "favicon": ""
+ },
+ "banners": [
+  {
+   "titulo": "O pulso na luz do dia",
+   "onde": "Home, slide 1",
+   "cena": "Pulso de camisa clara ao ar livre, o mostrador verde grande e nítido",
+   "referencia": "referencia-exemplo.com P004",
+   "desktop": "",
+   "mobile": "",
+   "lado": "esquerda",
+   "texto": {
+    "eyebrow": "Steel · Sapphire",
+    "titulo": "Made to be noticed in daylight.",
+    "sub": "The dial you keep looking at.",
+    "botao": "Shop the watches"
+   }
+  },
+  {
+   "titulo": "As três cores",
+   "onde": "Home, slide 2 e coleção Atelier",
+   "cena": "Os três modelos lado a lado em pedra clara, luz lateral",
+   "referencia": "referencia-exemplo.com P012",
+   "desktop": "",
+   "mobile": "",
+   "lado": "esquerda",
+   "texto": {
+    "eyebrow": "The Atelier",
+    "titulo": "Three colours. One you keep.",
+    "sub": "",
+    "botao": "See the three"
+   }
+  },
+  {
+   "titulo": "A oferta",
+   "onde": "Barra da home e página da oferta",
+   "cena": "Mão segurando o relógio sobre a mesa de trabalho, espaço vazio à direita para o texto do tema",
+   "referencia": "referencia-exemplo.com P055",
+   "desktop": "",
+   "mobile": "",
+   "lado": "direita",
+   "texto": {
+    "eyebrow": "Launch pricing",
+    "titulo": "50% off the first hundred.",
+    "sub": "",
+    "botao": "Shop the offer"
+   }
+  },
+  {
+   "titulo": "Da bancada do fundador",
+   "onde": "Coleção (todas), no meio da grade, e página Sobre",
+   "cena": "O fundador na bancada, montando o relógio com as próprias mãos, lupa na mesa, luz de janela; o rosto e as mãos à vista",
+   "referencia": "molde: carta 'A letter from <marca>' (seção nm-feature da coleção)",
+   "desktop": "",
+   "mobile": "",
+   "lado": "esquerda",
+   "texto": {
+    "eyebrow": "From the founder's bench",
+    "titulo": "Take more, save up to 20% more.",
+    "sub": "On top of 50% off: +10% on two, +15% on three, +20% on four or more.",
+    "botao": "Build your set"
+   }
+  }
+ ],
+ "angulos": [
+  {
+   "angulo": "parecer luxo sem pagar luxo",
+   "gancho": "Benefício",
+   "formatos": [
+    "Demonstração",
+    "Oferta Direta",
+    "UGC"
+   ],
+   "referencias": [
+    "referencia-exemplo.com:P006",
+    "referencia-exemplo.com:P001"
+   ]
+  },
+  {
+   "angulo": "o primeiro lote",
+   "gancho": "Curiosidade",
+   "formatos": [
+    "Storytelling",
+    "Oferta Direta"
+   ],
+   "referencias": [
+    "referencia-exemplo.com:P011",
+    "referencia-exemplo.com:P003"
+   ]
+  },
+  {
+   "angulo": "ser diferente de todo mundo",
+   "gancho": "Problema",
+   "formatos": [
+    "Demonstração",
+    "UGC"
+   ],
+   "referencias": [
+    "referencia-exemplo.com:P018"
+   ]
+  },
+  {
+   "angulo": "feito para durar",
+   "gancho": "Benefício",
+   "formatos": [
+    "Lifestyle",
+    "Catálogo"
+   ],
+   "referencias": [
+    "referencia-exemplo.com:P023",
+    "referencia-exemplo.com:P035"
+   ]
+  },
+  {
+   "angulo": "presente para ele",
+   "gancho": "Curiosidade",
+   "formatos": [
+    "Demonstração",
+    "Lifestyle"
+   ],
+   "referencias": [
+    "referencia-exemplo.com:P025"
+   ]
+  }
+ ],
+ "copy": {
+  "primeiras_linhas": [
+   "You notice the details other people miss.",
+   "Steel case. Sapphire glass. A dial you keep looking at."
+  ],
+  "titulos_link": [
+   "First hundred · up to 30% off",
+   "The Aldervik Atelier, launch pricing"
+  ],
+  "nunca_escrever": [
+   "luxury brand (não é grife)",
+   "Swiss made (não é)",
+   "Black Friday fora de novembro"
+  ]
+ },
+ "pendencias": [
+  "Registrar o domínio",
+  "Escolher o rosto de quem assina a marca entre três opções",
+  "Gerar logo, monograma e favicon",
+  "Gerar os quatro banners nas duas medidas"
+ ]
+}

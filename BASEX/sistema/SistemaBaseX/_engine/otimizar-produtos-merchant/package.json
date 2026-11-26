@@ -1,0 +1,18 @@
+{
+  "name": "otimizar-produtos-merchant",
+  "version": "1.0.0",
+  "description": "Bulk fill Merchant Center fields (productCategory, color, size, age_group, gender, condition, custom_product) + fix out-of-stock inventory",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "preflight": "node preflight.mjs",
+    "snapshot": "node snapshot.mjs",
+    "decide": "node decide-fields.mjs --dry-run",
+    "apply": "node apply-fields.mjs",
+    "audit": "node audit.mjs",
+    "publish-channel": "node publish-channel.mjs",
+    "rollback": "node rollback.mjs"
+  }
+}

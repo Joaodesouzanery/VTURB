@@ -1,0 +1,11 @@
+{
+  "name": "setup-avaliacao-manual",
+  "version": "1.0.0",
+  "description": "Engine da skill 58. Setup Avaliacao Manual (Section Trust Reviews) - instala a section trust-reviews.liquid em temas Shopify",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "preflight": "node preflight.mjs",
+    "install-section": "node install.mjs"
+  }
+}

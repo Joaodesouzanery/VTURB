@@ -1,0 +1,126 @@
+/* BX Provador Virtual — estilos da section.
+   Tudo prefixado com bxfit para nao colidir com o tema.
+   Nenhuma regra global, nenhum reset, nenhum !important em tag. */
+
+.bx-provador { margin-top: var(--bxfit-margem, 12px); }
+
+.bxfit-abrir {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; cursor: pointer;
+  background: transparent; color: var(--bxfit-texto, #303030);
+  border: 1px solid var(--bxfit-borda, #E8E4DE);
+  border-radius: var(--bxfit-raio, 8px);
+  font: inherit; font-size: 0.92em; line-height: 1.2;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+.bxfit-abrir:hover { border-color: var(--bxfit-acento, #1B472B); }
+.bxfit-abrir:focus-visible { outline: 2px solid var(--bxfit-acento, #1B472B); outline-offset: 2px; }
+
+.bxfit-modal[hidden] { display: none; }
+.bxfit-modal {
+  position: fixed; inset: 0; z-index: 2147483000;
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.bxfit-fundo { position: absolute; inset: 0; background: rgba(16,16,16,.55); }
+.bxfit-caixa {
+  position: relative; width: min(680px, 100%); max-height: 88vh; overflow-y: auto;
+  background: var(--bxfit-fundo, #fff); color: var(--bxfit-texto, #303030);
+  border-radius: calc(var(--bxfit-raio, 8px) + 4px);
+  padding: 28px 26px 22px;
+  box-shadow: 0 18px 60px rgba(0,0,0,.28);
+}
+.bxfit-fechar {
+  position: absolute; top: 10px; right: 12px;
+  width: 36px; height: 36px; border: 0; background: transparent; cursor: pointer;
+  font-size: 26px; line-height: 1; color: var(--bxfit-texto, #303030); opacity: .6;
+}
+.bxfit-fechar:hover { opacity: 1; }
+
+.bxfit-titulo { margin: 0 0 6px; font-size: 1.35em; line-height: 1.25; }
+.bxfit-sub { margin: 0 0 18px; opacity: .78; font-size: .95em; line-height: 1.5; }
+.bxfit-nota { margin: 16px 0 0; font-size: .8em; opacity: .62; line-height: 1.5; }
+
+.bxfit-escolhas { display: grid; gap: 10px; }
+.bxfit-escolha {
+  display: grid; gap: 3px; text-align: left; cursor: pointer;
+  padding: 16px 18px; font: inherit;
+  background: transparent; color: inherit;
+  border: 1px solid var(--bxfit-borda, #E8E4DE);
+  border-radius: var(--bxfit-raio, 8px);
+}
+.bxfit-escolha:hover { border-color: var(--bxfit-acento, #1B472B); }
+.bxfit-escolha strong { font-size: 1.02em; }
+.bxfit-escolha span { font-size: .88em; opacity: .75; }
+.bxfit-escolha em { font-size: .74em; font-style: normal; letter-spacing: .04em; text-transform: uppercase; opacity: .62; }
+.bxfit-escolha--forte { border-color: var(--bxfit-acento, #1B472B); border-width: 2px; }
+
+.bxfit-campos { display: grid; gap: 14px; }
+.bxfit-campos--linha { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+.bxfit-campo { display: grid; gap: 4px; }
+.bxfit-rotulo { font-size: .9em; font-weight: 600; }
+.bxfit-campo input {
+  width: 100%; padding: 10px 12px; font: inherit;
+  color: var(--bxfit-texto, #303030); background: var(--bxfit-fundo, #fff);
+  border: 1px solid var(--bxfit-borda, #E8E4DE); border-radius: var(--bxfit-raio, 8px);
+}
+.bxfit-campo input:focus-visible { outline: 2px solid var(--bxfit-acento, #1B472B); outline-offset: 1px; }
+.bxfit-campo small { font-size: .78em; opacity: .68; line-height: 1.45; }
+.bxfit-tag-est {
+  font-style: normal; font-size: .72em; text-transform: uppercase; letter-spacing: .05em;
+  padding: 1px 6px; border-radius: 99px; background: #F0EDE6; color: #5A5548;
+}
+
+.bxfit-formato { margin: 18px 0 0; padding: 0; border: 0; }
+.bxfit-formato legend { padding: 0; margin-bottom: 8px; font-size: .9em; font-weight: 600; }
+.bxfit-radio { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; cursor: pointer; }
+.bxfit-radio input { margin-top: 3px; }
+.bxfit-radio span { display: grid; gap: 1px; font-size: .92em; }
+.bxfit-radio small { font-size: .82em; opacity: .68; }
+
+.bxfit-erro[hidden] { display: none; }
+.bxfit-erro {
+  margin-top: 14px; padding: 10px 12px; font-size: .88em; line-height: 1.45;
+  color: #7A1F19; background: #FBEAE8; border-radius: var(--bxfit-raio, 8px);
+}
+
+.bxfit-acoes { display: flex; gap: 10px; margin-top: 22px; }
+.bxfit-principal, .bxfit-secundario {
+  flex: 1; padding: 12px 18px; font: inherit; cursor: pointer;
+  border-radius: var(--bxfit-raio, 8px); border: 1px solid var(--bxfit-acento, #1B472B);
+}
+.bxfit-principal { background: var(--bxfit-acento, #1B472B); color: #fff; }
+.bxfit-secundario { background: transparent; color: var(--bxfit-texto, #303030); border-color: var(--bxfit-borda, #E8E4DE); }
+.bxfit-principal:focus-visible, .bxfit-secundario:focus-visible { outline: 2px solid var(--bxfit-acento, #1B472B); outline-offset: 2px; }
+
+.bxfit-res-cabeca { display: grid; gap: 4px; margin-bottom: 20px; }
+.bxfit-res-label { font-size: .8em; text-transform: uppercase; letter-spacing: .06em; opacity: .65; }
+.bxfit-res-tam { font-size: 2.6em; line-height: 1; }
+.bxfit-res-ajuste { font-size: .85em; color: #7A1F19; }
+.bxfit-res-conf { font-size: .85em; opacity: .8; line-height: 1.45; }
+.bxfit-conf--baixa { color: #7A1F19; opacity: 1; }
+
+.bxfit-res-corpo { display: grid; grid-template-columns: 150px 1fr; gap: 22px; align-items: start; }
+@media (max-width: 560px) { .bxfit-res-corpo { grid-template-columns: 1fr; } .bxfit-res-svg { max-width: 160px; margin: 0 auto; } }
+.bxfit-svg { width: 100%; height: auto; display: block; }
+.bxfit-res-lista h3 { margin: 0 0 10px; font-size: 1em; }
+
+.bxfit-legenda { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.bxfit-linha { display: flex; align-items: center; gap: 8px; font-size: .9em; }
+.bxfit-bolinha { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 auto; }
+.bxfit-reg-nome { font-weight: 600; min-width: 74px; }
+.bxfit-rot { opacity: .82; }
+.bxfit-num { margin-left: auto; font-variant-numeric: tabular-nums; opacity: .7; font-size: .92em; }
+.bxfit-est {
+  font-size: .72em; text-transform: uppercase; letter-spacing: .04em;
+  padding: 1px 6px; border-radius: 99px; background: #F0EDE6; color: #5A5548;
+}
+
+.bxfit-entre { margin: 14px 0 0; font-size: .9em; line-height: 1.5; }
+.bxfit-aviso-loja { margin: 10px 0 0; font-size: .82em; color: #7A1F19; line-height: 1.45; }
+.bxfit-detalhe { margin: 12px 0 0; padding-left: 18px; font-size: .9em; line-height: 1.6; }
+.bxfit-acoes--res { margin-top: 24px; }
+.bxfit-limpar {
+  display: block; margin: 14px auto 0; padding: 4px; font: inherit; font-size: .8em;
+  background: none; border: 0; cursor: pointer; opacity: .6; text-decoration: underline;
+  color: inherit;
+}

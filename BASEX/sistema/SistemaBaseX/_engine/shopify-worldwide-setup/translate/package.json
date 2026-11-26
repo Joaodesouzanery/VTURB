@@ -1,0 +1,14 @@
+{
+  "name": "shopify-worldwide-setup-translate",
+  "version": "1.0.0",
+  "description": "Sub-engine da Fase 7 da skill 04. Scan + apply de traducoes via translationsRegister GraphQL com glossario genérico.",
+  "type": "module",
+  "scripts": {
+    "preflight": "node preflight.mjs",
+    "scan": "node scan.mjs",
+    "apply": "node apply.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

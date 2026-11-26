@@ -1,0 +1,9 @@
+{
+  "descricao": "Marcas gigantes de pet a excluir",
+  "marcas": [
+    "PetSmart", "Chewy", "Petco", "Petz", "Cobasi", "Royal Canin",
+    "Pedigree", "Whiskas", "Purina", "Hill's Science Diet", "Premier Pet",
+    "Eukanuba", "Iams", "Friskies", "Fancy Feast", "Blue Buffalo",
+    "Wellness", "Taste of the Wild"
+  ]
+}

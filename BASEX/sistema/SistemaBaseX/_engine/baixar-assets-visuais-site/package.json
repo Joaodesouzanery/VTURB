@@ -1,0 +1,17 @@
+{
+  "name": "baixar-assets-visuais-site",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Captura logo, favicon, banners desktop/mobile e capas de colecao de qualquer site. Auto-detecta Shopify.",
+  "scripts": {
+    "preflight": "node preflight.mjs",
+    "download": "node download.mjs",
+    "dry-run": "node download.mjs --dry-run"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

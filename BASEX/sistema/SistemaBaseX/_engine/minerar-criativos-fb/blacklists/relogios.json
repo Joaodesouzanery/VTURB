@@ -1,0 +1,9 @@
+{
+  "descricao": "Marcas gigantes de relógios a excluir",
+  "marcas": [
+    "Rolex", "Omega", "Audemars Piguet", "Patek Philippe", "Hublot",
+    "TAG Heuer", "Cartier", "Breitling", "IWC", "Tudor", "Longines",
+    "Tissot", "Fossil", "Casio", "Citizen", "Seiko", "Daniel Wellington",
+    "MVMT", "Garmin", "Apple Watch"
+  ]
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "ref": "/Users/seu-usuario/criativos/ref/base-01.png",
+    "out": "saida/hero-desktop.png",
+    "prompt": "Use the attached image only as a reference for framing, light and mood. Create a NEW editorial photograph in the same cinematic style, in a DIFFERENT location and with a DIFFERENT model. Location: a whitewashed terrace above the sea, stone parapet, a lemon tree, late morning sun and soft shadows. Model: a man in his mid-30s, relaxed posture, wearing a sand-beige linen shirt. Photorealistic 35mm photography, muted warm palette, generous empty space on the left for the headline. Absolutely NO text, NO lettering, NO logo, NO watermark and NO brand name anywhere in the image. Wide 16:9 landscape format, no borders, no bars, no letterbox."
+  },
+  {
+    "ref": "/Users/seu-usuario/criativos/ref/base-02.png",
+    "out": "saida/hero-mobile.png",
+    "prompt": "Use the attached image only as a reference for framing, light and mood. Create a NEW vertical editorial photograph in the same cinematic style, in a DIFFERENT location and with a DIFFERENT model. Location: a narrow stepped lane with ochre plaster walls and dark green shutters, jasmine climbing the wall. Model: a man in his early 40s, walking, wearing an unstructured light jacket. Photorealistic 35mm photography, muted warm palette, the subject in the lower half so the top stays free for the headline. Absolutely NO text, NO lettering, NO logo, NO watermark and NO brand name anywhere in the image. Vertical 9:16 format, no borders, no bars, no letterbox."
+  }
+]

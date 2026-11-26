@@ -1,0 +1,1527 @@
+{%- comment -%}
+  ============================================================
+  Trust Reviews (EC) - v1.0
+  Section standalone de reviews estilo Trustpilot.
+  - Zero apps, zero dependencias externas. 1 arquivo.
+  - Multi-idioma: EN / ES / DE / IT / FR (seletor no editor).
+  - Carrossel horizontal com setas, dots, swipe e drag.
+  - Reviews 100% editaveis como blocks (nome, foto, estrelas,
+    titulo, texto, data relativa, verified, fotos do cliente).
+  Compativel com qualquer tema Online Store 2.0 (Dawn e derivados).
+  Instalacao: soltar este arquivo em sections/ e adicionar a
+  section pelo editor de temas.
+  ============================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign lang = s.language
+
+  # ---------- dicionario de UI ----------
+  case lang
+    when 'es'
+      assign t_verified = 'Compra verificada'
+      assign t_based_on = 'Basado en'
+      assign t_reviews_pl = 'opiniones'
+      assign t_reviews_sg = 'opinión'
+      assign t_prev = 'Anterior'
+      assign t_next = 'Siguiente'
+      assign t_close = 'Cerrar'
+      assign t_view = 'Ver foto'
+      assign t_more = 'Ver más opiniones'
+      assign t_l5 = 'Excelente'
+      assign t_l4 = 'Muy bueno'
+      assign t_l3 = 'Normal'
+      assign t_l2 = 'Malo'
+      assign t_l1 = 'Muy malo'
+      assign date_pattern = 'hace %n% %u%'
+      assign u_day_sg = 'día'
+      assign u_day_pl = 'días'
+      assign u_week_sg = 'semana'
+      assign u_week_pl = 'semanas'
+      assign u_month_sg = 'mes'
+      assign u_month_pl = 'meses'
+    when 'de'
+      assign t_verified = 'Verifizierter Kauf'
+      assign t_based_on = 'Basierend auf'
+      assign t_reviews_pl = 'Bewertungen'
+      assign t_reviews_sg = 'Bewertung'
+      assign t_prev = 'Zurück'
+      assign t_next = 'Weiter'
+      assign t_close = 'Schließen'
+      assign t_view = 'Foto ansehen'
+      assign t_more = 'Mehr Bewertungen anzeigen'
+      assign t_l5 = 'Ausgezeichnet'
+      assign t_l4 = 'Gut'
+      assign t_l3 = 'Akzeptabel'
+      assign t_l2 = 'Mangelhaft'
+      assign t_l1 = 'Ungenügend'
+      assign date_pattern = 'vor %n% %u%'
+      assign u_day_sg = 'Tag'
+      assign u_day_pl = 'Tagen'
+      assign u_week_sg = 'Woche'
+      assign u_week_pl = 'Wochen'
+      assign u_month_sg = 'Monat'
+      assign u_month_pl = 'Monaten'
+    when 'it'
+      assign t_verified = 'Acquisto verificato'
+      assign t_based_on = 'Basato su'
+      assign t_reviews_pl = 'recensioni'
+      assign t_reviews_sg = 'recensione'
+      assign t_prev = 'Precedente'
+      assign t_next = 'Successivo'
+      assign t_close = 'Chiudi'
+      assign t_view = 'Vedi foto'
+      assign t_more = 'Mostra altre recensioni'
+      assign t_l5 = 'Eccellente'
+      assign t_l4 = 'Ottimo'
+      assign t_l3 = 'Nella media'
+      assign t_l2 = 'Scarso'
+      assign t_l1 = 'Pessimo'
+      assign date_pattern = '%n% %u% fa'
+      assign u_day_sg = 'giorno'
+      assign u_day_pl = 'giorni'
+      assign u_week_sg = 'settimana'
+      assign u_week_pl = 'settimane'
+      assign u_month_sg = 'mese'
+      assign u_month_pl = 'mesi'
+    when 'fr'
+      assign t_verified = 'Achat vérifié'
+      assign t_based_on = 'Basé sur'
+      assign t_reviews_pl = 'avis'
+      assign t_reviews_sg = 'avis'
+      assign t_prev = 'Précédent'
+      assign t_next = 'Suivant'
+      assign t_close = 'Fermer'
+      assign t_view = 'Voir la photo'
+      assign t_more = "Voir plus d'avis"
+      assign t_l5 = 'Excellent'
+      assign t_l4 = 'Bien'
+      assign t_l3 = 'Moyen'
+      assign t_l2 = 'Médiocre'
+      assign t_l1 = 'Mauvais'
+      assign date_pattern = 'il y a %n% %u%'
+      assign u_day_sg = 'jour'
+      assign u_day_pl = 'jours'
+      assign u_week_sg = 'semaine'
+      assign u_week_pl = 'semaines'
+      assign u_month_sg = 'mois'
+      assign u_month_pl = 'mois'
+    else
+      assign t_verified = 'Verified Purchase'
+      assign t_based_on = 'Based on'
+      assign t_reviews_pl = 'reviews'
+      assign t_reviews_sg = 'review'
+      assign t_prev = 'Previous'
+      assign t_next = 'Next'
+      assign t_close = 'Close'
+      assign t_view = 'View photo'
+      assign t_more = 'Show more reviews'
+      assign t_l5 = 'Excellent'
+      assign t_l4 = 'Great'
+      assign t_l3 = 'Average'
+      assign t_l2 = 'Poor'
+      assign t_l1 = 'Bad'
+      assign date_pattern = '%n% %u% ago'
+      assign u_day_sg = 'day'
+      assign u_day_pl = 'days'
+      assign u_week_sg = 'week'
+      assign u_week_pl = 'weeks'
+      assign u_month_sg = 'month'
+      assign u_month_pl = 'months'
+  endcase
+
+  # ---------- media automatica ----------
+  assign rt_sum = 0
+  assign rt_count = 0
+  for block in section.blocks
+    if block.type == 'review'
+      assign rt_sum = rt_sum | plus: block.settings.rating
+      assign rt_count = rt_count | plus: 1
+    endif
+  endfor
+
+  if rt_count > 0
+    assign rt_avg = rt_sum | times: 1.0 | divided_by: rt_count | round: 1
+  else
+    assign rt_avg = 5.0
+  endif
+
+  # override manual da nota
+  assign rating_num = rt_avg
+  assign rating_display = rt_avg
+  unless s.rating_override == blank
+    assign rating_display = s.rating_override | strip
+    assign rating_try = s.rating_override | strip | replace: ',', '.' | times: 1.0
+    if rating_try > 0
+      assign rating_num = rating_try
+    endif
+  endunless
+  if rating_num > 5
+    assign rating_num = 5.0
+  endif
+
+  # override manual do total
+  if s.count_override == blank
+    assign total_display = rt_count
+    assign total_num = rt_count
+  else
+    assign total_display = s.count_override | strip
+    assign total_num = 2
+    if total_display == '1'
+      assign total_num = 1
+    endif
+  endif
+  if total_num == 1
+    assign t_reviews_word = t_reviews_sg
+  else
+    assign t_reviews_word = t_reviews_pl
+  endif
+
+  # rotulo pela nota
+  if rating_num >= 4.3
+    assign rating_label = t_l5
+  elsif rating_num >= 3.5
+    assign rating_label = t_l4
+  elsif rating_num >= 2.5
+    assign rating_label = t_l3
+  elsif rating_num >= 1.5
+    assign rating_label = t_l2
+  else
+    assign rating_label = t_l1
+  endif
+
+  assign stars_pct = rating_num | times: 20.0 | round: 1
+-%}
+
+{%- capture star_svg -%}
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 3.2l2.34 4.9 5.36.7-3.93 3.73.99 5.32L12 15.28l-4.76 2.57.99-5.32L4.3 8.8l5.36-.7L12 3.2z" fill="#ffffff"/></svg>
+{%- endcapture -%}
+
+{%- style -%}
+  #ec-rt-{{ section.id }} {
+    background: {{ s.section_bg }};
+    padding-top: {{ s.padding_top }}px;
+    padding-bottom: {{ s.padding_bottom }}px;
+    font-family: inherit;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__wrap {
+    max-width: {{ s.max_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__head {
+    text-align: center;
+    margin-bottom: 34px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__heading {
+    color: {{ s.text_color }};
+    font-size: {{ s.heading_size }}px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 16px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__score-label {
+    color: {{ s.text_color }};
+    font-size: {{ s.heading_size | times: 0.86 | round }}px;
+    font-weight: 700;
+    margin: 0 0 10px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__stars {
+    position: relative;
+    display: inline-flex;
+    line-height: 0;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__stars-row {
+    display: inline-flex;
+    gap: 4px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__stars-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__star {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: {{ s.star_empty_color }};
+    flex: none;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__star--on { background: {{ s.star_color }}; }
+  #ec-rt-{{ section.id }} .ec-rt__stars--head .ec-rt__star {
+    width: 34px;
+    height: 34px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__stars--head .ec-rt__star svg { width: 26px; height: 26px; }
+  #ec-rt-{{ section.id }} .ec-rt__stars--card .ec-rt__star {
+    width: {{ s.card_star_size }}px;
+    height: {{ s.card_star_size }}px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__stars--card .ec-rt__star svg {
+    width: {{ s.card_star_size | times: 0.78 | round }}px;
+    height: {{ s.card_star_size | times: 0.78 | round }}px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__stars--card .ec-rt__stars-row { gap: 3px; }
+  #ec-rt-{{ section.id }} .ec-rt__basedon {
+    color: {{ s.muted_color }};
+    font-size: 15px;
+    margin: 12px 0 0;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__basedon strong { color: {{ s.text_color }}; font-weight: 700; }
+  #ec-rt-{{ section.id }} .ec-rt__tplogo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 12px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__tplogo svg { width: 20px; height: 20px; flex: none; }
+  #ec-rt-{{ section.id }} .ec-rt__tplogo span {
+    color: {{ s.text_color }};
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  /* ---------- carrossel ---------- */
+  #ec-rt-{{ section.id }} .ec-rt__carousel { position: relative; }
+  #ec-rt-{{ section.id }} .ec-rt__track {
+    display: flex;
+    gap: {{ s.card_gap }}px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 6px 2px 14px;
+    cursor: grab;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__track::-webkit-scrollbar { display: none; }
+  #ec-rt-{{ section.id }} .ec-rt__track.is-dragging {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+    cursor: grabbing;
+    user-select: none;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__card {
+    scroll-snap-align: start;
+    flex: 0 0 calc((100% - {{ s.cards_desktop | minus: 1 | times: s.card_gap }}px) / {{ s.cards_desktop }});
+    min-width: 0;
+    background: {{ s.card_bg }};
+    border: 1px solid {{ s.card_border_color }};
+    border-radius: {{ s.card_radius }}px;
+    padding: 22px 22px 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    {% if s.card_shadow %}box-shadow: 0 6px 22px rgba(23, 23, 33, 0.07);{% endif %}
+  }
+  #ec-rt-{{ section.id }} .ec-rt__photos {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__photo {
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+    line-height: 0;
+    border-radius: {{ s.photo_radius }}px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__photo:hover img { opacity: .85; }
+  #ec-rt-{{ section.id }} .ec-rt__photos img {
+    width: 84px;
+    height: 84px;
+    object-fit: cover;
+    border-radius: {{ s.photo_radius }}px;
+    display: block;
+    transition: opacity .15s ease;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__photos--top {
+    display: block;
+    margin: 0 0 14px;
+    padding-top: 0;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__photo--hero {
+    display: block;
+    width: 100%;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__photo--hero img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__photos-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    flex: none;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__who { min-width: 0; }
+  #ec-rt-{{ section.id }} .ec-rt__name {
+    display: block;
+    color: {{ s.name_color }};
+    font-size: {{ s.name_size }}px;
+    font-weight: 700;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__date {
+    display: block;
+    color: {{ s.muted_color }};
+    font-size: {{ s.name_size | minus: 2 }}px;
+    line-height: 1.3;
+    margin-top: 2px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__verified {
+    margin-left: auto;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: {{ s.verified_color }};
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__verified svg { width: 13px; height: 13px; flex: none; }
+  #ec-rt-{{ section.id }} .ec-rt__card-stars {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__rating-num {
+    color: {{ s.text_color }};
+    font-weight: 700;
+    font-size: {{ s.card_star_size | minus: 2 }}px;
+    line-height: 1;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__title {
+    color: {{ s.text_color }};
+    font-size: {{ s.title_size }}px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0 0 8px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__body {
+    color: {{ s.body_color }};
+    font-size: {{ s.body_size }}px;
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ---------- setas ---------- */
+  #ec-rt-{{ section.id }} .ec-rt__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid {{ s.card_border_color }};
+    background: {{ s.card_bg }};
+    color: {{ s.text_color }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 4px 14px rgba(23, 23, 33, 0.10);
+    transition: opacity .2s ease;
+    padding: 0;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__arrow svg { width: 18px; height: 18px; }
+  #ec-rt-{{ section.id }} .ec-rt__arrow--prev { left: -14px; }
+  #ec-rt-{{ section.id }} .ec-rt__arrow--next { right: -14px; }
+  #ec-rt-{{ section.id }} .ec-rt__arrow[disabled] { opacity: .35; cursor: default; }
+
+  /* ---------- dots ---------- */
+  #ec-rt-{{ section.id }} .ec-rt__dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    background: {{ s.star_empty_color }};
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__dot.is-active {
+    background: {{ s.star_color }};
+    transform: scale(1.25);
+  }
+
+  #ec-rt-{{ section.id }} .ec-rt__empty {
+    text-align: center;
+    color: {{ s.muted_color }};
+    padding: 40px 0;
+    font-size: 15px;
+  }
+
+  /* ---------- botao show more (mobile empilhado) ---------- */
+  #ec-rt-{{ section.id }} .ec-rt__more {
+    display: none;
+    margin: 6px auto 0;
+    padding: 12px 28px;
+    border-radius: 999px;
+    border: 1.5px solid {{ s.text_color }};
+    background: transparent;
+    color: {{ s.text_color }};
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  /* ---------- lightbox das fotos ---------- */
+  html.ec-rt-noscroll { overflow: hidden; }
+  #ec-rt-{{ section.id }} .ec-rt__lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(15, 15, 20, .84);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    cursor: zoom-out;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__lightbox[hidden] { display: none; }
+  #ec-rt-{{ section.id }} .ec-rt__lightbox img {
+    max-width: min(92vw, 900px);
+    max-height: 86vh;
+    width: auto;
+    height: auto;
+    border-radius: {{ s.photo_radius }}px;
+    background: #ffffff;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .5);
+    cursor: default;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, .16);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  #ec-rt-{{ section.id }} .ec-rt__lightbox-close svg { width: 20px; height: 20px; }
+
+  /* ---------- tablet ---------- */
+  @media (max-width: 989px) {
+    #ec-rt-{{ section.id }} .ec-rt__card {
+      flex-basis: calc((100% - {{ s.card_gap }}px) / 2);
+    }
+  }
+
+  /* ---------- mobile ---------- */
+  @media (max-width: 749px) {
+    #ec-rt-{{ section.id }} {
+      padding-top: {{ s.padding_top | times: 0.7 | round }}px;
+      padding-bottom: {{ s.padding_bottom | times: 0.7 | round }}px;
+    }
+    #ec-rt-{{ section.id }} .ec-rt__wrap { padding: 0 14px; }
+    #ec-rt-{{ section.id }} .ec-rt__head { margin-bottom: 24px; }
+    #ec-rt-{{ section.id }} .ec-rt__heading { font-size: {{ s.heading_size_mobile }}px; }
+    #ec-rt-{{ section.id }} .ec-rt__score-label { font-size: {{ s.heading_size_mobile | times: 0.86 | round }}px; }
+    #ec-rt-{{ section.id }} .ec-rt__stars--head .ec-rt__star { width: 28px; height: 28px; }
+    #ec-rt-{{ section.id }} .ec-rt__stars--head .ec-rt__star svg { width: 21px; height: 21px; }
+    #ec-rt-{{ section.id }} .ec-rt__basedon { font-size: 13px; }
+    #ec-rt-{{ section.id }} .ec-rt__card { padding: 18px 16px 20px; }
+    {% if s.mobile_layout == 'stacked' %}
+    #ec-rt-{{ section.id }} .ec-rt__track {
+      display: block;
+      overflow-x: visible;
+      scroll-snap-type: none;
+      padding: 2px 2px 4px;
+      cursor: default;
+    }
+    #ec-rt-{{ section.id }} .ec-rt__card { margin-bottom: 14px; }
+    #ec-rt-{{ section.id }} .ec-rt__card--extra { display: none; }
+    #ec-rt-{{ section.id }}.ec-rt--expanded .ec-rt__card--extra { display: flex; }
+    #ec-rt-{{ section.id }} .ec-rt__dots { display: none; }
+    #ec-rt-{{ section.id }} .ec-rt__more { display: block; }
+    #ec-rt-{{ section.id }}.ec-rt--expanded .ec-rt__more { display: none; }
+    {% else %}
+    #ec-rt-{{ section.id }} .ec-rt__card { flex-basis: {{ s.mobile_card_width }}%; }
+    {% endif %}
+    #ec-rt-{{ section.id }} .ec-rt__photos img { width: 68px; height: 68px; }
+    #ec-rt-{{ section.id }} .ec-rt__photo--hero img { width: 100%; height: auto; }
+    #ec-rt-{{ section.id }} .ec-rt__name { font-size: {{ s.name_size_mobile }}px; }
+    #ec-rt-{{ section.id }} .ec-rt__date { font-size: {{ s.name_size_mobile | minus: 2 }}px; }
+    #ec-rt-{{ section.id }} .ec-rt__title { font-size: {{ s.title_size_mobile }}px; }
+    #ec-rt-{{ section.id }} .ec-rt__body { font-size: {{ s.body_size_mobile }}px; }
+    #ec-rt-{{ section.id }} .ec-rt__arrow { display: none; }
+    #ec-rt-{{ section.id }} .ec-rt__avatar { width: 40px; height: 40px; font-size: 16px; }
+    #ec-rt-{{ section.id }} .ec-rt__meta { gap: 10px; }
+    #ec-rt-{{ section.id }} .ec-rt__verified { font-size: 10px; letter-spacing: .03em; gap: 4px; }
+    #ec-rt-{{ section.id }} .ec-rt__verified svg { width: 12px; height: 12px; }
+    #ec-rt-{{ section.id }} .ec-rt__date { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  }
+{%- endstyle -%}
+
+<div id="ec-rt-{{ section.id }}" class="ec-rt" data-autoplay="{{ s.autoplay }}" data-autoplay-ms="{{ s.autoplay_speed | times: 1000 }}">
+  <div class="ec-rt__wrap">
+
+    {%- if s.show_header -%}
+      <div class="ec-rt__head">
+        {%- unless s.heading == blank -%}
+          <h2 class="ec-rt__heading">{{ s.heading | escape }}</h2>
+        {%- endunless -%}
+        <p class="ec-rt__score-label">{{ rating_label }}</p>
+        <div class="ec-rt__stars ec-rt__stars--head" role="img" aria-label="{{ rating_display | escape }}/5">
+          <span class="ec-rt__stars-row">
+            {%- for i in (1..5) -%}
+              <span class="ec-rt__star">{{ star_svg }}</span>
+            {%- endfor -%}
+          </span>
+          <span class="ec-rt__stars-fill" style="width: {{ stars_pct }}%;">
+            <span class="ec-rt__stars-row">
+              {%- for i in (1..5) -%}
+                <span class="ec-rt__star ec-rt__star--on">{{ star_svg }}</span>
+              {%- endfor -%}
+            </span>
+          </span>
+        </div>
+        <p class="ec-rt__basedon">
+          <strong>{{ rating_display | escape }}</strong> &middot; {{ t_based_on }} <strong>{{ total_display }} {{ t_reviews_word }}</strong>
+        </p>
+        {%- if s.show_tp_logo -%}
+          <div class="ec-rt__tplogo">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 1.5l2.9 7.05 7.6.32-5.94 4.77 2.03 7.36L12 16.8 5.41 21l2.03-7.36L1.5 8.87l7.6-.32L12 1.5z" fill="{{ s.star_color }}"/><path d="M12 16.8l3.28-.86.94 3.41L12 16.8z" fill="{{ s.star_color }}" opacity=".55"/></svg>
+            <span>Trustpilot</span>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="ec-rt__carousel">
+        <button type="button" class="ec-rt__arrow ec-rt__arrow--prev" data-rt-prev aria-label="{{ t_prev }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <div class="ec-rt__track" data-rt-track>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'review' -%}
+              {%- liquid
+                # data relativa traduzida
+                assign d_num = block.settings.date_num | strip | default: '2'
+                case block.settings.date_unit
+                  when 'days'
+                    if d_num == '1'
+                      assign d_word = u_day_sg
+                    else
+                      assign d_word = u_day_pl
+                    endif
+                  when 'months'
+                    if d_num == '1'
+                      assign d_word = u_month_sg
+                    else
+                      assign d_word = u_month_pl
+                    endif
+                  else
+                    if d_num == '1'
+                      assign d_word = u_week_sg
+                    else
+                      assign d_word = u_week_pl
+                    endif
+                endcase
+                assign date_str = date_pattern | replace: '%n%', d_num | replace: '%u%', d_word
+
+                # cor do avatar fallback (paleta ciclica)
+                assign av_i = forloop.index0 | modulo: 5
+                case av_i
+                  when 0
+                    assign av_bg = '#00b67a'
+                  when 1
+                    assign av_bg = '#5b7ec9'
+                  when 2
+                    assign av_bg = '#c9755b'
+                  when 3
+                    assign av_bg = '#8a5bc9'
+                  else
+                    assign av_bg = '#3f9a94'
+                endcase
+              -%}
+              <article class="ec-rt__card{% if forloop.index > s.mobile_initial %} ec-rt__card--extra{% endif %}" {{ block.shopify_attributes }}>
+
+                {%- if s.photo_layout == 'top' -%}
+                  {%- if block.settings.photo_1 != blank or block.settings.photo_2 != blank or block.settings.photo_3 != blank -%}
+                    <div class="ec-rt__photos ec-rt__photos--top">
+                      {%- if block.settings.photo_1 != blank -%}
+                        <button type="button" class="ec-rt__photo ec-rt__photo--hero" data-rt-photo data-full="{{ block.settings.photo_1 | image_url: width: 1400 }}" aria-label="{{ t_view }}">
+                          <img src="{{ block.settings.photo_1 | image_url: width: 800 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="400" height="400">
+                        </button>
+                      {%- endif -%}
+                      {%- if block.settings.photo_2 != blank or block.settings.photo_3 != blank -%}
+                        <div class="ec-rt__photos-row">
+                          {%- if block.settings.photo_2 != blank -%}
+                            <button type="button" class="ec-rt__photo" data-rt-photo data-full="{{ block.settings.photo_2 | image_url: width: 1400 }}" aria-label="{{ t_view }}">
+                              <img src="{{ block.settings.photo_2 | image_url: width: 300 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="150" height="150">
+                            </button>
+                          {%- endif -%}
+                          {%- if block.settings.photo_3 != blank -%}
+                            <button type="button" class="ec-rt__photo" data-rt-photo data-full="{{ block.settings.photo_3 | image_url: width: 1400 }}" aria-label="{{ t_view }}">
+                              <img src="{{ block.settings.photo_3 | image_url: width: 300 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="150" height="150">
+                            </button>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+
+                <div class="ec-rt__meta">
+                  <span class="ec-rt__avatar" {% if block.settings.avatar == blank %}style="background: {{ av_bg }};"{% endif %}>
+                    {%- if block.settings.avatar != blank -%}
+                      <img src="{{ block.settings.avatar | image_url: width: 120 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="60" height="60">
+                    {%- else -%}
+                      {{ block.settings.name | strip | slice: 0, 1 | upcase | default: '?' }}
+                    {%- endif -%}
+                  </span>
+                  <span class="ec-rt__who">
+                    <span class="ec-rt__name">{{ block.settings.name | escape }}</span>
+                    {%- if block.settings.show_date -%}
+                      <span class="ec-rt__date">{{ date_str }}</span>
+                    {%- endif -%}
+                  </span>
+                  {%- if block.settings.verified -%}
+                    <span class="ec-rt__verified">
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2l2.6 2 3.2-.3 1 3.1 2.8 1.6-1.2 3 1.2 3-2.8 1.6-1 3.1-3.2-.3-2.6 2-2.6-2-3.2.3-1-3.1L2.4 14l1.2-3-1.2-3 2.8-1.6 1-3.1 3.2.3L12 2z" fill="currentColor" opacity=".25"/><path d="M8.6 12.2l2.3 2.3 4.5-4.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      {{ t_verified }}
+                    </span>
+                  {%- endif -%}
+                </div>
+
+                <div class="ec-rt__card-stars">
+                  {%- if s.show_rating_number -%}
+                    <span class="ec-rt__rating-num">{{ block.settings.rating }}.0</span>
+                  {%- endif -%}
+                  <span class="ec-rt__stars ec-rt__stars--card" role="img" aria-label="{{ block.settings.rating }}/5">
+                    <span class="ec-rt__stars-row">
+                      {%- for i in (1..5) -%}
+                        {%- if i <= block.settings.rating -%}
+                          <span class="ec-rt__star ec-rt__star--on">{{ star_svg }}</span>
+                        {%- else -%}
+                          <span class="ec-rt__star">{{ star_svg }}</span>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </span>
+                  </span>
+                </div>
+
+                {%- unless block.settings.title == blank -%}
+                  <h3 class="ec-rt__title">{{ block.settings.title | escape }}</h3>
+                {%- endunless -%}
+                {%- unless block.settings.body == blank -%}
+                  <p class="ec-rt__body">{{ block.settings.body | escape | newline_to_br }}</p>
+                {%- endunless -%}
+
+                {%- assign has_photos = false -%}
+                {%- if block.settings.photo_1 != blank or block.settings.photo_2 != blank or block.settings.photo_3 != blank -%}
+                  {%- assign has_photos = true -%}
+                {%- endif -%}
+                {%- if has_photos and s.photo_layout != 'top' -%}
+                  <div class="ec-rt__photos">
+                    {%- if block.settings.photo_1 != blank -%}
+                      <button type="button" class="ec-rt__photo" data-rt-photo data-full="{{ block.settings.photo_1 | image_url: width: 1400 }}" aria-label="{{ t_view }}">
+                        <img src="{{ block.settings.photo_1 | image_url: width: 300 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="150" height="150">
+                      </button>
+                    {%- endif -%}
+                    {%- if block.settings.photo_2 != blank -%}
+                      <button type="button" class="ec-rt__photo" data-rt-photo data-full="{{ block.settings.photo_2 | image_url: width: 1400 }}" aria-label="{{ t_view }}">
+                        <img src="{{ block.settings.photo_2 | image_url: width: 300 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="150" height="150">
+                      </button>
+                    {%- endif -%}
+                    {%- if block.settings.photo_3 != blank -%}
+                      <button type="button" class="ec-rt__photo" data-rt-photo data-full="{{ block.settings.photo_3 | image_url: width: 1400 }}" aria-label="{{ t_view }}">
+                        <img src="{{ block.settings.photo_3 | image_url: width: 300 }}" alt="{{ block.settings.name | escape }}" loading="lazy" width="150" height="150">
+                      </button>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <button type="button" class="ec-rt__arrow ec-rt__arrow--next" data-rt-next aria-label="{{ t_next }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      {%- if s.show_dots -%}
+        <div class="ec-rt__dots" data-rt-dots role="tablist"></div>
+      {%- endif -%}
+
+      {%- if s.mobile_layout == 'stacked' and section.blocks.size > s.mobile_initial -%}
+        <button type="button" class="ec-rt__more" data-rt-more>{{ t_more }}</button>
+      {%- endif -%}
+
+      <div class="ec-rt__lightbox" data-rt-lightbox hidden role="dialog" aria-modal="true" aria-label="{{ t_view }}">
+        <button type="button" class="ec-rt__lightbox-close" data-rt-lb-close aria-label="{{ t_close }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+        <img src="" alt="">
+      </div>
+    {%- else -%}
+      <p class="ec-rt__empty">Add review blocks in the theme editor.</p>
+    {%- endif -%}
+
+  </div>
+
+  <script>
+    (function () {
+      function initRT(root) {
+        if (!root || root.dataset.rtReady === '1') return;
+        var track = root.querySelector('[data-rt-track]');
+        if (!track) return;
+        root.dataset.rtReady = '1';
+
+        var AUTOPLAY = root.dataset.autoplay === 'true';
+        var AUTOPLAY_MS = parseInt(root.dataset.autoplayMs, 10) || 5000;
+
+        var prev = root.querySelector('[data-rt-prev]');
+        var next = root.querySelector('[data-rt-next]');
+        var dotsWrap = root.querySelector('[data-rt-dots]');
+        var timer = null;
+
+        function cardStep() {
+          var card = track.querySelector('.ec-rt__card');
+          if (!card) return track.clientWidth;
+          var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0;
+          return card.getBoundingClientRect().width + gap;
+        }
+        function maxScroll() { return Math.max(0, track.scrollWidth - track.clientWidth); }
+        function pageCount() { return Math.max(1, Math.round(maxScroll() / cardStep()) + 1); }
+        function currentPage() { return Math.min(pageCount() - 1, Math.round(track.scrollLeft / cardStep())); }
+
+        function buildDots() {
+          if (!dotsWrap) return;
+          var n = pageCount();
+          dotsWrap.innerHTML = '';
+          if (n < 2) return;
+          for (var i = 0; i < n; i++) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'ec-rt__dot';
+            b.setAttribute('aria-label', (i + 1) + '/' + n);
+            (function (idx) {
+              b.addEventListener('click', function () {
+                stopAuto();
+                track.scrollTo({ left: idx * cardStep(), behavior: 'smooth' });
+              });
+            })(i);
+            dotsWrap.appendChild(b);
+          }
+          syncUI();
+        }
+
+        function syncUI() {
+          var atStart = track.scrollLeft <= 4;
+          var atEnd = track.scrollLeft >= maxScroll() - 4;
+          if (prev) prev.disabled = atStart;
+          if (next) next.disabled = atEnd;
+          if (dotsWrap) {
+            var cur = currentPage();
+            var dots = dotsWrap.children;
+            for (var i = 0; i < dots.length; i++) {
+              dots[i].classList.toggle('is-active', i === cur);
+            }
+          }
+        }
+
+        function go(dir) {
+          var target = track.scrollLeft + dir * cardStep();
+          if (dir > 0 && track.scrollLeft >= maxScroll() - 4) target = 0;
+          track.scrollTo({ left: target, behavior: 'smooth' });
+        }
+
+        if (prev) prev.addEventListener('click', function () { stopAuto(); go(-1); });
+        if (next) next.addEventListener('click', function () { stopAuto(); go(1); });
+
+        var raf = null;
+        track.addEventListener('scroll', function () {
+          if (raf) return;
+          raf = requestAnimationFrame(function () { raf = null; syncUI(); });
+        }, { passive: true });
+
+        /* drag com mouse no desktop */
+        var dragging = false, startX = 0, startLeft = 0, moved = false;
+        track.addEventListener('dragstart', function (e) { e.preventDefault(); });
+        track.addEventListener('pointerdown', function (e) {
+          if (e.pointerType !== 'mouse') return;
+          dragging = true; moved = false;
+          startX = e.clientX; startLeft = track.scrollLeft;
+          track.classList.add('is-dragging');
+        });
+        window.addEventListener('pointermove', function (e) {
+          if (!dragging) return;
+          var dx = e.clientX - startX;
+          if (Math.abs(dx) > 4) moved = true;
+          track.scrollLeft = startLeft - dx;
+        });
+        function endDrag() {
+          if (!dragging) return;
+          dragging = false;
+          track.classList.remove('is-dragging');
+          if (moved) {
+            stopAuto();
+            var idx = Math.round(track.scrollLeft / cardStep());
+            track.scrollTo({ left: idx * cardStep(), behavior: 'smooth' });
+          }
+        }
+        window.addEventListener('pointerup', endDrag);
+        window.addEventListener('pointercancel', endDrag);
+        track.addEventListener('click', function (e) {
+          if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+        }, true);
+
+        /* lightbox das fotos */
+        var lb = root.querySelector('[data-rt-lightbox]');
+        var lbImg = lb ? lb.querySelector('img') : null;
+        function openLB(src, alt) {
+          if (!lb || !src) return;
+          lbImg.src = src;
+          lbImg.alt = alt || '';
+          lb.hidden = false;
+          document.documentElement.classList.add('ec-rt-noscroll');
+        }
+        function closeLB() {
+          if (!lb || lb.hidden) return;
+          lb.hidden = true;
+          lbImg.src = '';
+          document.documentElement.classList.remove('ec-rt-noscroll');
+        }
+        track.addEventListener('click', function (e) {
+          var btn = e.target.closest ? e.target.closest('[data-rt-photo]') : null;
+          if (!btn) return;
+          stopAuto();
+          var img = btn.querySelector('img');
+          openLB(btn.getAttribute('data-full'), img ? img.alt : '');
+        });
+        if (lb) {
+          lb.addEventListener('click', function (e) {
+            if (e.target === lb || (e.target.closest && e.target.closest('[data-rt-lb-close]'))) closeLB();
+          });
+          document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !lb.hidden) closeLB();
+          });
+        }
+
+        /* show more (mobile empilhado) */
+        var more = root.querySelector('[data-rt-more]');
+        if (more) {
+          more.addEventListener('click', function () {
+            root.classList.add('ec-rt--expanded');
+          });
+        }
+
+        /* autoplay opcional */
+        function startAuto() {
+          if (!AUTOPLAY || timer) return;
+          if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          timer = setInterval(function () { go(1); }, AUTOPLAY_MS);
+        }
+        function stopAuto() {
+          if (timer) { clearInterval(timer); timer = null; }
+        }
+        root.addEventListener('mouseenter', stopAuto);
+        root.addEventListener('touchstart', stopAuto, { passive: true });
+        root._ecRtStop = function () { stopAuto(); closeLB(); };
+        startAuto();
+
+        var rraf = null;
+        window.addEventListener('resize', function () {
+          if (rraf) return;
+          rraf = requestAnimationFrame(function () { rraf = null; buildDots(); });
+        });
+
+        buildDots();
+        syncUI();
+      }
+
+      initRT(document.getElementById('ec-rt-{{ section.id }}'));
+
+      /* re-init no theme editor */
+      if (!window.__ecRTListener) {
+        window.__ecRTListener = true;
+        document.addEventListener('shopify:section:load', function (e) {
+          var root = e.target.querySelector('.ec-rt');
+          /* se o script inline ja re-executou e inicializou, o guard rtReady evita duplicar */
+          if (root && root.dataset.rtReady !== '1' && window.__ecRTInit) window.__ecRTInit(root);
+        });
+        document.addEventListener('shopify:section:unload', function (e) {
+          var root = e.target.querySelector('.ec-rt');
+          if (root && root._ecRtStop) root._ecRtStop();
+        });
+      }
+      window.__ecRTInit = initRT;
+    })();
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Trust Reviews",
+  "tag": "section",
+  "class": "trust-reviews",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Language"
+    },
+    {
+      "type": "select",
+      "id": "language",
+      "label": "Section language",
+      "info": "Translates all fixed UI text (labels, dates, verified badge). Review texts stay as you write them.",
+      "options": [
+        { "value": "en", "label": "English" },
+        { "value": "es", "label": "Español" },
+        { "value": "de", "label": "Deutsch" },
+        { "value": "it", "label": "Italiano" },
+        { "value": "fr", "label": "Français" }
+      ],
+      "default": "en"
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show rating header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (optional)",
+      "default": "What our customers say"
+    },
+    {
+      "type": "text",
+      "id": "rating_override",
+      "label": "Rating override (optional)",
+      "info": "Leave empty to auto-calculate from the review blocks. Example: 4.9"
+    },
+    {
+      "type": "text",
+      "id": "count_override",
+      "label": "Total reviews override (optional)",
+      "info": "Leave empty to count the blocks below. Example: 2,347"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tp_logo",
+      "label": "Show Trustpilot logo",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "range",
+      "id": "cards_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Cards per view (desktop)",
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        { "value": "stacked", "label": "Stacked list" },
+        { "value": "carousel", "label": "Carousel" }
+      ],
+      "default": "stacked"
+    },
+    {
+      "type": "range",
+      "id": "mobile_initial",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "label": "Reviews before Show more (mobile)",
+      "info": "Only for the stacked list layout.",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_width",
+      "min": 70,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Card width (mobile)",
+      "info": "Only for the mobile carousel layout. Below 100% shows a peek of the next card.",
+      "default": 85
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay speed",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border",
+      "default": "#e7e7ea"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Headings text",
+      "default": "#191919"
+    },
+    {
+      "type": "color",
+      "id": "name_color",
+      "label": "Reviewer name",
+      "default": "#191919"
+    },
+    {
+      "type": "color",
+      "id": "body_color",
+      "label": "Review text",
+      "default": "#3f3f46"
+    },
+    {
+      "type": "color",
+      "id": "muted_color",
+      "label": "Dates and secondary text",
+      "default": "#6d6d78"
+    },
+    {
+      "type": "color",
+      "id": "verified_color",
+      "label": "Verified badge",
+      "default": "#6d6d78"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Stars",
+      "default": "#00b67a"
+    },
+    {
+      "type": "color",
+      "id": "star_empty_color",
+      "label": "Empty stars",
+      "default": "#dcdce6"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Card corner radius",
+      "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "card_shadow",
+      "label": "Card shadow",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "label": "Space between cards",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_star_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Card star size",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "photo_layout",
+      "label": "Customer photo layout",
+      "options": [
+        { "value": "top", "label": "Large photo on top" },
+        { "value": "bottom", "label": "Thumbnails below text" }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "range",
+      "id": "photo_radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "label": "Customer photo corner radius",
+      "info": "Applies to review photos and the zoomed view.",
+      "default": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating_number",
+      "label": "Show rating number next to stars",
+      "info": "Example: 4.0 next to the stars on each review.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Typography (desktop)"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 18,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "name_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Name size",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Review title size",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "body_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Review text size",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Typography (mobile)"
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 16,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "name_size_mobile",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Name size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 13,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Review title size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_size_mobile",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Review text size",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 1000,
+      "max": 1800,
+      "step": 50,
+      "unit": "px",
+      "label": "Max content width",
+      "default": 1200
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Reviewer name",
+          "default": "Jessica R."
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Avatar photo (optional)",
+          "info": "Without a photo, a colored circle with the initial is shown."
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Stars",
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Review title",
+          "default": "Great quality"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Review text",
+          "default": "Exactly what I was looking for. The quality is amazing and shipping was fast. Very satisfied with my purchase!"
+        },
+        {
+          "type": "header",
+          "content": "Date"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_date",
+          "label": "Show date",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "date_num",
+          "label": "Number",
+          "info": "Example: 2",
+          "default": "2"
+        },
+        {
+          "type": "select",
+          "id": "date_unit",
+          "label": "Unit",
+          "options": [
+            { "value": "days", "label": "Days" },
+            { "value": "weeks", "label": "Weeks" },
+            { "value": "months", "label": "Months" }
+          ],
+          "default": "weeks"
+        },
+        {
+          "type": "header",
+          "content": "Extras"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Verified purchase badge",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_1",
+          "label": "Customer photo 1 (optional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_2",
+          "label": "Customer photo 2 (optional)"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_3",
+          "label": "Customer photo 3 (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "name": "Jessica R.",
+            "rating": 5,
+            "title": "Great quality coat",
+            "body": "Exactly what I was looking for. Perfect weight for autumn weather, not too heavy but still very warm. The hood stays up in wind and the pockets are deep. Very satisfied with my purchase!",
+            "date_num": "2",
+            "date_unit": "weeks"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "name": "Maria K.",
+            "rating": 5,
+            "title": "Love the fit and style",
+            "body": "Beautiful coat with excellent craftsmanship. The fit is flattering and the color is even more gorgeous in person. It has become my go-to coat for autumn. Fast shipping too!",
+            "date_num": "3",
+            "date_unit": "weeks"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "name": "Anna S.",
+            "rating": 4,
+            "title": "Very happy with it",
+            "body": "The material feels premium and the size guide was accurate. I ordered my usual size and it fits perfectly. Would definitely recommend to friends.",
+            "date_num": "1",
+            "date_unit": "months"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

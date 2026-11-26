@@ -1,0 +1,10 @@
+{
+  "descricao": "Marcas gigantes de cosmético/skincare a excluir",
+  "marcas": [
+    "L'Oréal", "Maybelline", "Estée Lauder", "MAC", "NYX", "Sephora",
+    "Boticário", "Natura", "Eudora", "Avon", "Mary Kay", "Nivea",
+    "Garnier", "Olay", "Neutrogena", "Cetaphil", "La Roche-Posay",
+    "Vichy", "Clinique", "Lancôme", "Shiseido", "SK-II", "Dove",
+    "Pantene", "Head & Shoulders", "TRESemmé"
+  ]
+}

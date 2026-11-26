@@ -1,0 +1,141 @@
+{% comment %}
+  Utility Header Bar — links de utilidade (Lojas Físicas, Blog) acima do announcement bar.
+  Section customizada (não vem por padrão no tema). Não editar theme.liquid nem base.css.
+{% endcomment %}
+
+<div class="utility-header-bar" style="background-color: {{ section.settings.background_color }}; padding: {{ section.settings.padding_y }}px {{ section.settings.padding_x }}px;">
+  <div class="utility-header-bar__inner" style="display: flex; justify-content: {{ section.settings.alignment }}; align-items: center; gap: {{ section.settings.gap }}px; max-width: 100%; margin: 0 auto;">
+    {%- if section.settings.link_menu != blank -%}
+      {%- for link in section.settings.link_menu.links -%}
+        <a
+          href="{{ link.url }}"
+          style="color: {{ section.settings.text_color }}; font-family: var(--font-{{ section.settings.font }}--family); font-size: {{ section.settings.font_size }}; text-transform: {{ section.settings.text_transform }}; text-decoration: none; letter-spacing: 0.05em; font-weight: 500;"
+          class="utility-header-bar__link"
+        >
+          {{- link.title -}}
+        </a>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .utility-header-bar__link:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 749px) {
+    .utility-header-bar {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Utility Header Bar",
+  "tag": "section",
+  "class": "utility-header-bar-section",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "link_menu",
+      "label": "Menu de utilidade",
+      "default": "footer",
+      "info": "Crie um menu no admin Shopify (Navigation) e selecione aqui."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alinhamento",
+      "options": [
+        { "value": "flex-start", "label": "Esquerda" },
+        { "value": "center", "label": "Centro" },
+        { "value": "flex-end", "label": "Direita" }
+      ],
+      "default": "flex-end"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Cor de fundo",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Cor do texto",
+      "default": "#000000"
+    },
+    {
+      "type": "select",
+      "id": "font",
+      "label": "Fonte",
+      "options": [
+        { "value": "body", "label": "Corpo" },
+        { "value": "subheading", "label": "Subtítulo" },
+        { "value": "heading", "label": "Título" }
+      ],
+      "default": "body"
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "Tamanho da fonte",
+      "options": [
+        { "value": "0.7rem", "label": "11px" },
+        { "value": "0.75rem", "label": "12px" },
+        { "value": "0.875rem", "label": "14px" }
+      ],
+      "default": "0.75rem"
+    },
+    {
+      "type": "select",
+      "id": "text_transform",
+      "label": "Transformação",
+      "options": [
+        { "value": "none", "label": "Normal" },
+        { "value": "uppercase", "label": "MAIÚSCULO" }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Espaço entre links",
+      "min": 8,
+      "max": 48,
+      "step": 2,
+      "default": 24,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_y",
+      "label": "Padding vertical",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "default": 8,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_x",
+      "label": "Padding horizontal",
+      "min": 8,
+      "max": 64,
+      "step": 2,
+      "default": 32,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Utility Header Bar"
+    }
+  ]
+}
+{% endschema %}

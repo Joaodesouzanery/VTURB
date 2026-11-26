@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual do Tema BaseX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground:#FAFAF8; --surface:#FFFFFF; --surface-2:#F2F4EE; --ink:#0A0A0A; --ink-soft:#2E312C;
+    --muted:#555956; --line:#E0E3D8; --line-soft:#EDEFE7; --accent:#5F6905; --accent-solid:#BACD0B;
+    --on-solid:#0A0A0A; --accent-wash:#F3F6E0; --accent-edge:#D3DE8A;
+    --display:"Fraunces", Georgia, "Times New Roman", serif;
+    --body:"Inter", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono:"IBM Plex Mono", "SF Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:#0A0A0A; --surface:#1C1C1C; --surface-2:#242520; --ink:#F4F7EF; --ink-soft:#DCE0D6;
+      --muted:#A3A89E; --line:#2E302A; --accent:#BACD0B; --accent-wash:#1F2408;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:#0A0A0A; --surface:#1C1C1C; --surface-2:#242520; --ink:#F4F7EF; --ink-soft:#DCE0D6;
+    --muted:#A3A89E; --line:#2E302A; --accent:#BACD0B; --accent-wash:#1F2408;
+  }
+
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; background:var(--ground); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-wrap:break-word; }
+  .wrap { max-width:62rem; margin:0 auto; padding:0 16px 5rem; }
+  @media (min-width:768px) { .wrap { padding:0 2rem 6rem; } }
+
+  .masthead { padding:3rem 0 2rem; border-bottom:1px solid var(--line); display:grid; gap:1rem; }
+  .eyebrow { margin:0; font-family:var(--mono); font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  h1 { margin:0; font-family:var(--display); font-weight:600; font-size:clamp(2.2rem, 7vw, 3.6rem); line-height:1.04; letter-spacing:-.02em; }
+  .lede { margin:0; font-size:1.08rem; color:var(--ink-soft); max-width:62ch; }
+  .chips { display:flex; flex-wrap:wrap; gap:.5rem; margin:0; padding:0; list-style:none; }
+  .chip { font-family:var(--mono); font-size:.75rem; padding:.28rem .6rem; border:1px solid var(--line); border-radius:4px; background:var(--surface); color:var(--ink-soft); }
+  .chip--on { background:var(--accent-solid); border-color:var(--accent-solid); color:var(--on-solid); font-weight:500; }
+  .toc ul { display:flex; flex-wrap:wrap; gap:.35rem 1rem; margin:0; padding:0; list-style:none; font-size:.92rem; }
+  .toc a { color:var(--accent); text-decoration:none; border-bottom:1px solid currentColor; }
+
+  section { padding-top:3rem; scroll-margin-top:1rem; }
+  h2 { margin:0 0 .4rem; font-family:var(--display); font-weight:600; font-size:clamp(1.45rem, 3.6vw, 1.95rem); line-height:1.15; letter-spacing:-.01em; }
+  h3 { margin:1.75rem 0 .5rem; font-size:1.05rem; font-weight:600; line-height:1.35; }
+  p { margin:0 0 1rem; }
+  .sub { color:var(--ink-soft); margin-bottom:1.5rem; max-width:66ch; }
+  a { color:var(--accent); }
+  .path, code { font-family:var(--mono); font-size:.85em; background:var(--surface-2); color:var(--ink); border:1px solid var(--line); border-radius:3px; padding:.05rem .3rem; overflow-wrap:anywhere; }
+  .note { display:block; margin-top:.3rem; font-size:.875rem; color:var(--muted); }
+
+  ol.steps { list-style:none; counter-reset:s; margin:0; padding:0; display:grid; gap:1.1rem; }
+  ol.steps > li { counter-increment:s; display:grid; grid-template-columns:2rem minmax(0, 1fr); gap:.85rem; align-items:start; }
+  ol.steps > li::before { content:counter(s); display:grid; place-items:center; width:2rem; height:2rem; border:1px solid var(--line); border-radius:50%; background:var(--surface); font-family:var(--mono); font-size:.8rem; color:var(--muted); }
+  ol.steps strong { display:block; }
+  ol.steps p { margin:.15rem 0 0; color:var(--ink-soft); font-size:.95rem; }
+
+  .tablecard { border:1px solid var(--line); border-radius:6px; background:var(--surface); margin:0 0 1.5rem; overflow:hidden; }
+  table { width:100%; border-collapse:collapse; font-size:.94rem; }
+  caption { text-align:left; padding:.6rem 1rem; background:var(--accent-solid); color:var(--on-solid); font-family:var(--mono); font-size:.75rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; }
+  th { text-align:left; padding:.7rem 1rem; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:.72rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  td { padding:.7rem 1rem; border-bottom:1px solid var(--line); vertical-align:top; }
+  tr:last-child td { border-bottom:0; }
+  td:first-child { font-weight:500; width:34%; }
+  @media (max-width:640px) {
+    .tablecard table, .tablecard caption, .tablecard tbody, .tablecard tr, .tablecard td { display:block; width:100%; }
+    .tablecard thead { display:none; }
+    .tablecard tr { padding:.75rem 1rem; border-bottom:1px solid var(--line); }
+    .tablecard tr:last-child { border-bottom:0; }
+    .tablecard td { padding:.1rem 0; border:0; }
+    .tablecard td:first-child { width:auto; font-weight:600; }
+    .tablecard td[data-label]::before { content:attr(data-label); display:block; margin-top:.4rem; font-family:var(--mono); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  }
+
+  .callout { margin:1.25rem 0; padding:1rem 1.1rem; background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:4px; }
+  .callout p:last-child { margin-bottom:0; }
+
+  .gate { margin-top:3rem; padding:1.5rem 1.25rem 1.25rem; background:var(--accent-wash); border:1px solid var(--accent-edge); border-radius:8px; }
+  .gate .tag { display:inline-block; margin:0 0 .7rem; padding:.2rem .55rem; border-radius:4px; background:var(--accent-solid); color:var(--on-solid); font-family:var(--mono); font-size:.72rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; }
+  .gate .item { margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--accent-edge); }
+  .gate .item h3 { display:flex; gap:.6rem; align-items:baseline; margin:0 0 .6rem; font-size:1.1rem; }
+  .gate .num { flex:none; display:inline-grid; place-items:center; width:1.75rem; height:1.75rem; border-radius:50%; background:var(--accent-solid); color:var(--on-solid); font-family:var(--mono); font-size:.8rem; font-weight:500; }
+  .gate .callout { background:var(--surface); }
+
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(15rem, 100%), 1fr)); gap:.6rem; margin:0 0 1.5rem; }
+  .tile { background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:.8rem .9rem; }
+  .tile b { display:block; font-family:var(--mono); font-size:.82rem; font-weight:500; }
+  .tile span { display:block; margin-top:.2rem; font-size:.9rem; color:var(--ink-soft); }
+  .tile em { display:block; margin-top:.3rem; font-style:normal; font-size:.82rem; color:var(--muted); }
+
+  ul.plain { margin:0 0 1rem; padding-left:1.15rem; max-width:70ch; }
+  ul.plain li { margin-bottom:.5rem; }
+
+  footer { margin-top:4rem; padding-top:1.25rem; border-top:1px solid var(--line); font-family:var(--mono); font-size:.75rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">BaseX · Tema editável · versão 2</p>
+    <h1>Manual do tema BaseX</h1>
+    <p class="lede">Onde clicar para mudar cada parte da loja, pelo editor de temas, sem tocar em código. Esta versão traz a oferta num lugar só, cor pelos esquemas e fonte pelo editor.</p>
+    <ul class="chips">
+      <li class="chip chip--on">Dawn 15.5.0</li>
+      <li class="chip">43 seções BaseX</li>
+      <li class="chip">Oferta num lugar só</li>
+      <li class="chip">Novembro de 2026</li>
+    </ul>
+    <nav class="toc" aria-label="Nesta página">
+      <ul>
+        <li><a href="#instalar">Instalar</a></li>
+        <li><a href="#antes-de-publicar">Antes de publicar</a></li>
+        <li><a href="#mudou">O que mudou</a></li>
+        <li><a href="#oferta">Oferta</a></li>
+        <li><a href="#carrinho">Carrinho</a></li>
+        <li><a href="#cabecalho">Cabeçalho e rodapé</a></li>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#colecoes">Coleções</a></li>
+        <li><a href="#produto">Produto</a></li>
+        <li><a href="#cores">Cores, fontes e textos</a></li>
+        <li><a href="#sistema">Páginas de sistema</a></li>
+        <li><a href="#secoes">As 43 seções</a></li>
+        <li><a href="#modelos">Modelos prontos</a></li>
+        <li><a href="#fora">Fora do tema</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="instalar">
+    <h2>Instalar</h2>
+    <p class="sub">Faça isso uma vez, antes de qualquer edição.</p>
+    <ol class="steps">
+      <li><div><strong>Suba o arquivo</strong><p>No admin da Shopify: <span class="path">Loja virtual &gt; Temas &gt; Adicionar tema &gt; Carregar arquivo zip</span>, com o arquivo <span class="path">Tema BaseX Editável v2.zip</span>. O tema entra como rascunho e não afeta o que já está no ar.</p></div></li>
+      <li><div><strong>Duplique antes de mexer</strong><p>Nos três pontinhos do tema, clique em Duplicar. Você edita a cópia; se algo quebrar, o original continua intacto.</p></div></li>
+      <li><div><strong>Abra o editor</strong><p>Botão Personalizar. A coluna da esquerda tem duas abas: <strong>Seções</strong>, com o conteúdo de cada página, e <strong>Configurações do tema</strong>, que vale para a loja inteira. Os grupos da BaseX ficam no fim da lista: <span class="path">EC · Cart &amp; free shipping</span>, <span class="path">EC · Offer</span> e <span class="path">EC · Store texts</span>.</p></div></li>
+      <li><div><strong>Confira no celular e faça a lista de publicação</strong><p>O botão de visualização mobile fica no topo do editor; a maior parte dos erros aparece lá. Só publique depois dos quatro pontos de <a href="#antes-de-publicar">Antes de publicar a loja</a>.</p></div></li>
+    </ol>
+    <div class="callout">
+      <p><strong>A loja já vem montada.</strong> A home tem doze seções ligadas e dez prontas e desligadas. As coleções, os seis modelos de produto e a página Our story também chegam compostos. Troque texto e imagem pelo que é seu; os textos de exemplo estão em inglês.</p>
+    </div>
+  </section>
+
+  <section id="antes-de-publicar" class="gate">
+    <p class="tag">Obrigatório</p>
+    <h2>Antes de publicar a loja</h2>
+    <p class="sub">O tema chega com textos de exemplo, e alguns prometem coisas que a sua loja pode não cumprir. Passe pelos quatro pontos, um por um, antes de pôr a loja no ar.</p>
+
+    <div class="item">
+      <h3><span class="num">1</span>Confira cada promessa padrão</h3>
+      <p>Mantenha só o que você cumpre e corrija o resto com os seus números: prazo de envio, prazo de entrega, frete, devolução, garantia e atendimento.</p>
+      <div class="tablecard">
+        <table>
+          <caption>Ligadas assim que o tema sobe</caption>
+          <thead><tr><th>Promessa</th><th>Onde fica e como mudar</th></tr></thead>
+          <tbody>
+            <tr><td>Tracked shipping worldwide · Ships within 48 hours</td><td>Seção <span class="path">EC USP Icon Bar</span> da home, das seis páginas de produto e das três coleções. Cada ícone é um bloco com título e texto.<span class="note">Frete rastreado para o mundo todo e envio em até 48 horas.</span></td></tr>
+            <tr><td>30-day returns · Counted from the day it arrives</td><td>Mesma seção. Na página de produto também: bloco <span class="path">Icon + Text (EC)</span> "30-day returns from the day it arrives.", bloco <span class="path">Ícone com texto</span> "30-day returns", a aba Returns e o FAQ.<span class="note">Devolução em 30 dias, contados da entrega.</span></td></tr>
+            <tr><td>Secure checkout · Encrypted payment on every order</td><td>Seção <span class="path">EC USP Icon Bar</span>. Na página de produto, o bloco <span class="path">Payment Badges (EC)</span> diz "Guaranteed safe &amp; secure checkout", no campo Label.</td></tr>
+            <tr><td>Loved by our customers · Read the reviews on every product</td><td>Seção <span class="path">EC USP Icon Bar</span>. Só vale com avaliações reais nos produtos (ponto 3).</td></tr>
+            <tr><td>In stock. Order today, ships by [data]</td><td>Página de produto, bloco <span class="path">EC Stock line</span>. A data soma Days until it ships (vem 2) ao dia de hoje. A linha some sozinha quando a variante está esgotada.</td></tr>
+            <tr><td>Tracked shipping, delivered in 5 to 7 business days · Ships within 48 hours, with the tracking number by email</td><td>Página de produto, dois blocos <span class="path">Icon + Text (EC)</span> logo abaixo da linha de estoque.<span class="note">Entrega em 5 a 7 dias úteis, envio em 48 horas e rastreio por e-mail.</span></td></tr>
+            <tr><td>Support by email · Tracked delivery</td><td>Página de produto, bloco <span class="path">Ícone com texto</span>, abaixo das bandeiras de pagamento.</td></tr>
+            <tr><td>Abas Shipping &amp; Delivery e Returns</td><td>Página de produto, blocos <span class="path">Linha recolhível</span>: envio em 48 horas, entrega em 5 a 7 dias úteis, rastreio por e-mail, frete mostrado no checkout e devolução em 30 dias pela página de contato.</td></tr>
+            <tr><td>Perguntas frequentes</td><td>Seção <span class="path">EC FAQ Categories</span> da home e da página de produto: entrega, frete, devolução, reembolso e as perguntas da oferta, que dizem "applied automatically at checkout, no code needed".</td></tr>
+            <tr><td>[PCT]% off everything e níveis de 15, 20 e 25%</td><td><span class="path">Configurações do tema &gt; EC · Offer</span>. A frase só é verdade com o preço comparado de cada produto e os três descontos automáticos criados no admin (veja <a href="#oferta">A oferta</a>). A data de exemplo é 29/11/2026: ponha a sua.</td></tr>
+            <tr><td>Write here your company name, address and support email.</td><td><span class="path">Seções &gt; Rodapé</span>, bloco de texto. Escreva o nome da empresa, o endereço e o e-mail de atendimento.</td></tr>
+            <tr><td>Unisex sizing on a cork footbed</td><td>Modelo de produto sandals, bloco <span class="path">Size Chart (EC)</span>, campo Note. Troque se a sua sandália não tem palmilha de cortiça. Confira a nota da tabela de cada modelo que usar.</td></tr>
+            <tr><td>Tabela de medidas e How do I choose my size?</td><td>Página de produto, bloco <span class="path">Size Chart (EC)</span>, campo Table rows, em cada modelo de produto: os números vêm de exemplo. Na <span class="path">EC FAQ Categories</span> da home e do produto, a pergunta de tamanho diz para pegar o tamanho maior ("take the larger one"). Troque pelos números e pela regra reais dos seus produtos.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tablecard">
+        <table>
+          <caption>Aparecem quando você adiciona a seção ou liga o recurso</caption>
+          <thead><tr><th>Promessa</th><th>Onde fica e como mudar</th></tr></thead>
+          <tbody>
+            <tr><td>Free worldwide shipping · On all orders over €50</td><td>Exemplo da seção <span class="path">EC USP Icon Bar</span> quando você a adiciona de novo. Vem junto: "30-day easy returns · No questions asked", "Secure checkout · SSL encrypted payment" e "24/7 human support · Real people, ready to help".<span class="note">Frete grátis acima de €50, devolução sem perguntas e atendimento humano 24 horas, 7 dias por semana.</span></td></tr>
+            <tr><td>Free worldwide shipping · Secure checkout · 30-day easy returns</td><td>Exemplo da seção <span class="path">EC Image Text Icons</span>.</td></tr>
+            <tr><td>Premium quality materials · Free shipping · 30-day returns · 24/7 support</td><td>Exemplo da seção <span class="path">EC Comparison Table</span>. A que está desligada na home vem sem linhas.</td></tr>
+            <tr><td>Envio em 24 a 48 horas, entrega em 5 a 7 dias úteis, reembolso total em 30 dias, resposta do suporte em 24 horas</td><td>Exemplo da seção <span class="path">EC FAQ Accordion</span>.</td></tr>
+            <tr><td>As seen in · As seen on social</td><td>Títulos da <span class="path">EC Logo List</span> e da <span class="path">EC Video Marquee</span>. Dizem que a marca saiu na imprensa ou nas redes: use só se for verdade.</td></tr>
+            <tr><td>Frete grátis acima de 50</td><td><span class="path">Configurações do tema &gt; EC · Cart &amp; free shipping &gt; Free shipping bar</span>. Vem desligada; o limite é na moeda da loja, com a frase "You're {amount} away from FREE shipping!". Ligue só com o frete grátis configurado no admin pelo mesmo valor.</td></tr>
+            <tr><td>Secure checkout · Easy returns · Fast delivery</td><td>Mesmo grupo, <span class="path">Cart USPs</span>, os ícones dentro do carrinho. Vêm desligados.</td></tr>
+            <tr><td>Automatic discount. No code needed.</td><td>Exemplo da seção <span class="path">EC Bundle Hero</span>. Só vale com os descontos automáticos criados.</td></tr>
+            <tr><td>Avaliações com nome, nota 4.8 e 128 avaliações</td><td>Exemplos da <span class="path">EC Photo Reviews</span>, da <span class="path">EC Trust Reviews</span> (que traz também o selo de uma plataforma de avaliações), da <span class="path">EC Results</span> e da <span class="path">EC Ticker</span>. Veja o ponto 3.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout">
+        <p><strong>Modelos de teste.</strong> Os modelos <span class="path">index.qa-x3</span>, <span class="path">index.qa-x3b</span> e <span class="path">product.qa-x3</span> são vitrines de teste do tema e trazem textos como "2-year warranty included" (garantia de 2 anos), "Free worldwide shipping on orders over €50" e "24/7 human support". Não atribua esses modelos a nenhum produto ou página.</p>
+      </div>
+    </div>
+
+    <div class="item">
+      <h3><span class="num">2</span>Crie a página Our story</h3>
+      <p>Dois botões do tema levam para <span class="path">/pages/our-story</span>: o <strong>Read our story</strong>, na home, na seção Imagem com texto do fundador ("Why this brand exists"), e o <strong>Our story</strong>, na página de produto, na seção Imagem com texto da promessa ("Our promise"), presente nos seis modelos de produto. Até a página existir, quem clica cai na página 404, de página não encontrada.</p>
+      <ol class="steps">
+        <li><div><strong>Crie a página</strong><p>No admin: <span class="path">Loja virtual &gt; Páginas &gt; Adicionar página</span>. Título: Our story, ou o nome que preferir. No conteúdo, escreva a história da marca: é o texto do meio da página.</p></div></li>
+        <li><div><strong>Escolha o modelo</strong><p>Em Modelo de tema, escolha <span class="path">our-story</span>. Ele monta a abertura, o texto e o slide da oferta no fim. A lista mostra só os modelos do tema publicado: se o Tema BaseX ainda é rascunho, salve a página com o modelo padrão e volte para escolher o our-story logo depois de publicar o tema.</p></div></li>
+        <li><div><strong>Confira o endereço</strong><p>Na área de SEO da página, o identificador da URL tem de ser <span class="path">our-story</span>. Com título em outro idioma, a Shopify cria outro identificador: troque para our-story ou mude o link dos dois botões.</p></div></li>
+        <li><div><strong>Teste os botões</strong><p>Salve, abra a home e uma página de produto e clique nos dois botões.</p></div></li>
+      </ol>
+    </div>
+
+    <div class="item">
+      <h3><span class="num">3</span>Troque a nota 4,8 e o "128 reviews" pelos seus números</h3>
+      <p>A página de produto vem com dois lugares ligados e esses números de exemplo:</p>
+      <ul class="plain">
+        <li>Bloco <span class="path">Rating Stars (EC)</span>, em Informações do produto: campos Rating (4.8) e Reviews count text (128 reviews).</li>
+        <li>Seção <span class="path">EC Reviews grid</span>, abaixo do produto: Rating shown (4.8), Number of reviews (128) e oito avaliações de exemplo assinadas "Customer name", com o selo Verified.</li>
+      </ul>
+      <p>Cada modelo de produto guarda a própria cópia: mude no modelo padrão e em cada modelo que usar (shoes, sandals, trousers, linen e winter). Ainda sem avaliação real? Desligue o bloco e a seção pelo ícone de olho até ter. Com um app de avaliações, use o bloco do app no lugar. Use um número só, o mesmo no anúncio, na home e no produto.</p>
+      <p>Os mesmos números aparecem na home, nas seções desligadas <span class="path">EC Reviews grid</span> e <span class="path">EC Ticker</span> ("RATED 4.8/5 FROM 128 REVIEWS"), e nos exemplos da <span class="path">EC Photo Reviews</span> e da <span class="path">EC Results</span>.</p>
+    </div>
+
+    <div class="item">
+      <h3><span class="num">4</span>Idiomas</h3>
+      <p>Os 40 textos fixos novos desta versão (datas da oferta, guia de medidas, combo de cor e tamanho e textos para leitor de tela) existem em inglês, francês e espanhol. Nos outros 28 idiomas, a loja mostra o inglês até você traduzir pelo app Translate &amp; Adapt, da Shopify.</p>
+      <p>Os textos de exemplo do editor (oferta, seções, perguntas e avaliações) estão em inglês: reescreva no idioma da sua loja.</p>
+    </div>
+  </section>
+
+  <section id="mudou">
+    <h2>O que mudou da v1 para a v2</h2>
+    <ul class="plain">
+      <li><strong>Oferta num lugar só.</strong> O grupo <span class="path">EC · Offer</span>, em Configurações do tema, manda em todos os textos de oferta, no contador do topo, nos níveis por quantidade e na caixa do carrinho. Trocou ali, a loja inteira acompanha.</li>
+      <li><strong>Estação ou aniversário, com data real.</strong> Dois modos prontos e um desligado. Quando o último dia passa, as faixas, os slides da oferta, a carta e as caixas de níveis somem sozinhos.</li>
+      <li><strong>A EC Farewell saiu.</strong> O bloco de encerramento da v1 não vem mais.</li>
+      <li><strong>Home nova</strong>, com doze seções ligadas: banner com o slide da oferta e o da marca, ícones de confiança, cinco esteiras de produto com três banners entre elas, o fundador e o FAQ. Mais dez prontas e desligadas.</li>
+      <li><strong>Coleções novas</strong>, com topo, faixa da oferta, grade, níveis de desconto, carta e ícones, e um modelo próprio para a coleção da oferta.</li>
+      <li><strong>Página de produto nova</strong>: menu de categorias no topo, nota com estrelas, três benefícios, tabela de medidas, linha de estoque, entrega, caixa de níveis, avaliações, fotos de clientes, promessa, FAQ e botão de compra fixo no celular.</li>
+      <li><strong>Doze seções novas</strong>: EC Banner, EC Brand look, EC Bundle combo, EC Collection hero, EC Collection nav, EC Collection top, EC Community reel, EC Offer letter, EC Offer split, EC Offer strip, EC Offer tiers e EC Reviews grid. As 31 da v1 continuam: são 43 no total.</li>
+      <li><strong>As faixas e os combos da v1 leem a oferta.</strong> EC Offer Bar, EC Sticky Promo Bar, EC Collection Offer, EC Bundle Deals e EC Bundle Hero passaram a usar os textos e os níveis do EC · Offer e somem com eles.</li>
+      <li><strong>Cor só pelos esquemas.</strong> Seis esquemas com papel definido; campo de cor vazio segue o esquema, inclusive as cores do carrinho.</li>
+      <li><strong>Fonte só pelo editor.</strong> Nenhuma seção traz fonte própria: Tipografia manda no título e no corpo.</li>
+      <li><strong>Cantos iguais.</strong> Raio 4 em botões, cartões, campos, selos e mídia.</li>
+      <li><strong>Carrinho</strong> com a caixa dos níveis da oferta e brinde só visual.</li>
+      <li><strong>Avaliações ligadas no produto</strong>, com a nota 4,8 e "128 reviews" de exemplo: troque pelos seus números (ponto 3 de <a href="#antes-de-publicar">Antes de publicar</a>).</li>
+      <li><strong>Linha de estoque</strong> some quando a variante está esgotada.</li>
+      <li><strong>Modelos refeitos</strong>: seis de produto, três de coleção (com o novo offer) e a página Our story.</li>
+      <li><strong>40 textos fixos novos</strong> em inglês, francês e espanhol.</li>
+    </ul>
+    <div class="callout">
+      <p><strong>Continua da v1, conferido nesta versão:</strong> o painel EC · Store texts, a imagem separada para celular no banner e no slide, a sugestão de produtos no carrinho, o selo de promoção em porcentagem, a foto da variante no seletor, o cabeçalho transparente com logo clara, a página 404 editável e os textos de login, criar conta e minha conta.</p>
+    </div>
+  </section>
+
+  <section id="oferta">
+    <h2>A oferta</h2>
+    <p class="sub">Fica em <span class="path">Configurações do tema &gt; EC · Offer</span>. É o único lugar onde se escolhe a oferta: as seções só leem dali.</p>
+
+    <h3>Para ligar uma oferta</h3>
+    <ol class="steps">
+      <li><div><strong>Escolha o modo em Offer</strong><p>Season offer (oferta de estação, já vem escolhida), Brand anniversary (aniversário da marca) ou No offer (sem oferta: tudo o que fala de oferta some).</p></div></li>
+      <li><div><strong>Ponha o último dia em Last day</strong><p>Formato AAAA-MM-DD, por exemplo 2026-12-06. A oferta vale até 23h59 desse dia, no fuso horário da loja. Data vazia ou em outro formato desliga a oferta.</p></div></li>
+      <li><div><strong>Ponha o desconto principal em Main discount</strong><p>De 10 a 90%, vem 50. É o número que entra nos textos. O desconto de verdade está no preço de cada produto: em Preço, o valor com desconto; em Preço comparado, o valor cheio, que aparece riscado. É desse par que sai o selo -50%.</p></div></li>
+      <li><div><strong>Escolha a coleção da oferta em Offer collection</strong><p>É para lá que vão os botões de oferta sem link próprio; vazio leva a todos os produtos. Nessa coleção, use o modelo de coleção offer.</p></div></li>
+      <li><div><strong>Ajuste os níveis</strong><p>Extra off with 2 pieces, with 3 pieces e with 4 or more pieces, de 0 a 30%, vêm 15, 20 e 25. Para não mostrar níveis, desmarque Show the extra discount levels.</p></div></li>
+      <li><div><strong>Crie os descontos no admin</strong><p>Em Descontos, crie três descontos automáticos em porcentagem, para todos os produtos: a partir de 2 itens com o percentual de 2 peças, a partir de 3 itens com o de 3 e a partir de 4 itens com o de 4 ou mais. Todos terminam no mesmo último dia. O tema só mostra os níveis: quem aplica é o desconto.</p></div></li>
+      <li><div><strong>Troque os textos, se quiser</strong><p>Em Texts e em Cart box. Campo vazio usa o texto do modo escolhido.</p></div></li>
+    </ol>
+
+    <h3>Os textos de cada modo</h3>
+    <div class="tablecard">
+      <table>
+        <caption>Padrões que vêm no tema</caption>
+        <thead><tr><th>Campo</th><th>Estação</th><th>Aniversário</th></tr></thead>
+        <tbody>
+          <tr><td>Offer name</td><td data-label="Estação">The Season Edit</td><td data-label="Aniversário">The Anniversary Edit</td></tr>
+          <tr><td>Short name</td><td data-label="Estação">Season Edit</td><td data-label="Aniversário">Anniversary Edit</td></tr>
+          <tr><td>Headline</td><td data-label="Estação">[OFFER] is open.</td><td data-label="Aniversário">[BRAND] turns [YEARS] this week. Com 1 ano: [BRAND] is one year old this week.</td></tr>
+          <tr><td>Reason</td><td data-label="Estação">For the first cold weeks of the year, every piece is [PCT]% off, with [CATS] up front.</td><td data-label="Aniversário">Once a year, for seven days, everything is [PCT]% off.</td></tr>
+          <tr><td>Letter</td><td data-label="Estação">Carta sobre a primeira semana fria do ano, com o prazo e a volta dos preços.</td><td data-label="Aniversário">Carta sobre a semana em que a loja abriu, com o prazo e um agradecimento.</td></tr>
+          <tr><td>Countdown digits em Automatic</td><td data-label="Estação">Mostra a data ("until 29 November") e só passa aos dígitos nas últimas 72 horas.</td><td data-label="Aniversário">Dígitos sempre, com os dias.</td></tr>
+          <tr><td>Campo só deste modo</td><td data-label="Estação">Pieces up front, as peças em destaque (vem "the cold-weather pieces").</td><td data-label="Aniversário">Brand age in years, a idade da marca (vem 1).</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Who signs the letter é quem assina a carta; vazio, assina o nome da loja. Countdown digits também aceita Always, Last 72 hours e Never.</p>
+
+    <h3>Marcadores que você pode usar nos textos</h3>
+    <div class="tablecard">
+      <table>
+        <caption>Escreva entre colchetes e o tema troca</caption>
+        <thead><tr><th>Marcador</th><th>Vira</th></tr></thead>
+        <tbody>
+          <tr><td>[OFFER] · [OFFER_SHORT]</td><td>O nome da oferta e o nome curto.</td></tr>
+          <tr><td>[HEADLINE] · [REASON]</td><td>O título e o motivo da oferta.</td></tr>
+          <tr><td>[PCT]</td><td>O desconto principal.</td></tr>
+          <tr><td>[T2] · [T3] · [T4]</td><td>Os níveis de 2, 3 e 4 ou mais peças.</td></tr>
+          <tr><td>[END_DATE]</td><td>O último dia por extenso, no idioma da página: 29 November, 29 novembre, 29 de noviembre.</td></tr>
+          <tr><td>[YEARS] · [CATS]</td><td>A idade da marca e as peças em destaque da estação.</td></tr>
+          <tr><td>[FOUNDER]</td><td>Quem assina a carta.</td></tr>
+          <tr><td>[BRAND] · [EMAIL]</td><td>O nome e o e-mail da loja.</td></tr>
+          <tr><td>[COLLECTION]</td><td>O nome da coleção da página.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Os marcadores valem nos textos das seções da oferta, na barra do topo, nos banners, no FAQ e no carrinho. Dentro de Letter, não use [HEADLINE] nem [REASON]; dentro de Reason, não use [HEADLINE]: nesses casos eles aparecem como texto.</p>
+
+    <h3>Quando a oferta acaba</h3>
+    <div class="callout">
+      <p><strong>Some da loja</strong> depois do último dia, ou com No offer: a barra do topo, o slide da oferta da home e da página Our story, a faixa e os níveis das coleções, a carta, a EC Offer split, a categoria da oferta no FAQ, a caixa de níveis do produto e do carrinho, o contador dos combos e as seções da v1 que leem a oferta. O topo da coleção passa a mostrar o título e a descrição da coleção.</p>
+      <p><strong>Fica:</strong> o preço riscado e o selo -X%, porque vêm do preço comparado de cada produto. Volte os preços no admin quando a oferta acabar. Os descontos automáticos terminam pela data que você deu a eles.</p>
+      <p><strong>No editor</strong>, o que está escondido continua visível com o aviso "Offer is off: hidden on the live store", para você poder editar.</p>
+    </div>
+
+    <h3>Onde a oferta aparece</h3>
+    <div class="tablecard">
+      <table>
+        <caption>Seções e blocos que leem o EC · Offer</caption>
+        <thead><tr><th>Seção ou bloco</th><th>O que mostra e onde está</th></tr></thead>
+        <tbody>
+          <tr><td>EC Countdown Bar</td><td>Barra do topo, no cabeçalho, em modo Offer: nome, percentual e prazo. Section language traduz os rótulos fixos (dias, horas), com opção pt. Os modos Fixed, Evergreen e Midnight existem para uso manual e não seguem o EC · Offer.</td></tr>
+          <tr><td>EC Banner</td><td>Slide com Show only while the offer is on: o primeiro slide da home e o fim da página Our story.</td></tr>
+          <tr><td>EC Collection top</td><td>Topo das coleções. No modelo offer, mostra a oferta; nos outros, o título da coleção com o texto da categoria.</td></tr>
+          <tr><td>EC Offer strip</td><td>Duas linhas da oferta coladas no topo da coleção; a segunda mostra os níveis.</td></tr>
+          <tr><td>EC Offer tiers</td><td>História curta, quatro níveis e barra de progresso do carrinho, nas coleções. Desligada na home.</td></tr>
+          <tr><td>EC Offer letter</td><td>A carta da oferta, assinada, nas coleções.</td></tr>
+          <tr><td>EC Offer split</td><td>Texto da oferta e foto, no modelo de produto shoes.</td></tr>
+          <tr><td>EC FAQ Categories</td><td>Categoria The [OFFER_SHORT] e as perguntas dos níveis, na home e no produto.</td></tr>
+          <tr><td>Offer levels (EC)</td><td>Bloco do produto logo abaixo do botão de compra: compre mais, pague menos.</td></tr>
+          <tr><td>Gaveta do carrinho</td><td>Caixa dos níveis, com quanto falta para o próximo.</td></tr>
+          <tr><td>Seções da v1</td><td>EC Offer Bar, EC Sticky Promo Bar e EC Collection Offer somem sem oferta; EC Bundle Deals e EC Bundle Hero somem sem níveis.</td></tr>
+          <tr><td>Selo de promoção</td><td>Não lê a oferta: o -X% vem do preço comparado de cada produto.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="carrinho">
+    <h2>Carrinho</h2>
+    <p class="sub">A gaveta lateral e a página do carrinho. As configurações ficam em <span class="path">Configurações do tema &gt; EC · Cart &amp; free shipping</span>; o tipo de carrinho, no grupo Carrinho.</p>
+    <div class="tablecard">
+      <table>
+        <caption>Gaveta e página do carrinho</caption>
+        <thead><tr><th>Quero mudar</th><th>Onde clicar</th></tr></thead>
+        <tbody>
+          <tr><td>Gaveta lateral ou página</td><td><span class="path">Configurações do tema &gt; Carrinho &gt; Tipo</span>. Vem em gaveta.</td></tr>
+          <tr><td>Ligar os recursos BaseX do carrinho</td><td><span class="path">EC · Cart &amp; free shipping &gt; Enable cart suite</span>. É a chave geral e vem ligada; sem ela, nada abaixo aparece.</td></tr>
+          <tr><td>Título da gaveta</td><td>Mesmo grupo, Cart title override. Vem Your bag.</td></tr>
+          <tr><td>Cores do carrinho</td><td>Accent color, Accent text color, Message text color, USP text color, Savings color e Progress track color.<span class="note">Vazias, seguem o esquema do carrinho (Configurações do tema &gt; Carrinho &gt; Esquema de cores). Preencha só para fugir do esquema.</span></td></tr>
+          <tr><td>Linha de economia e total no botão</td><td>Bloco Savings + checkout: Show total savings row (vem ligada, "You save vs. original price"), Show total on checkout button, Checkout button in accent color e Show taxes/shipping note.</td></tr>
+          <tr><td>Caixa dos níveis da oferta</td><td>Aparece sozinha com a oferta e os níveis ligados. Os textos ficam em <span class="path">EC · Offer &gt; Cart box</span>: uma mensagem para 1, 2, 3 e 4 ou mais peças; com 4 ou mais, o link some.</td></tr>
+          <tr><td>Brinde</td><td>Bloco Free gift (in the cart): Enable free gift, Gift product, Minimum spend to unlock (0 = sempre), Gift title, Badge e Message before it unlocks. Vem desligado.</td></tr>
+          <tr><td>Barra de frete grátis</td><td>Free shipping bar, com Free shipping threshold na moeda da loja (50 = 50 euros numa loja em euro). Vem desligada.</td></tr>
+          <tr><td>Cronômetro de reserva</td><td>Reservation timer. Vem desligado. Com a oferta no ar, evite somar outro relógio: uma urgência por vez.</td></tr>
+          <tr><td>Ícones de confiança e bandeiras</td><td>Cart USPs e Payment icons. Vêm desligados.</td></tr>
+          <tr><td>Sugerir produtos no carrinho</td><td>Cart cross-sell: Enable cart cross-sell, Source of the suggested products (vem Collection), Collection to suggest, Heading, Products to show e Button text.<span class="note">Produto que já está no carrinho some da lista. O botão adiciona a primeira variante disponível: prefira produtos de uma variante só.</span></td></tr>
+          <tr><td>Sugestão também na página do carrinho</td><td>No modelo do carrinho: <span class="path">Seções &gt; Itens &gt; Show cart cross-sell</span>.</td></tr>
+          <tr><td>Textos do carrinho</td><td><span class="path">Configurações do tema &gt; EC · Store texts</span>, nos grupos Cart.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><strong>Brinde só visual.</strong> O tema mostra a linha do brinde na gaveta: foto, nome, o selo FREE e o preço riscado quando liberado, ou quanto falta para liberar. Ele nunca põe o produto no carrinho. Quem entrega o brinde é você, junto com o pedido.</p>
+    </div>
+  </section>
+
+  <section id="cabecalho">
+    <h2>Cabeçalho e rodapé</h2>
+    <div class="tablecard">
+      <table>
+        <caption>Topo e pé de todas as páginas</caption>
+        <thead><tr><th>Quero mudar</th><th>Onde clicar</th></tr></thead>
+        <tbody>
+          <tr><td>Logo e tamanho do logo</td><td><span class="path">Configurações do tema &gt; Logo &gt; Largura</span>.<span class="note">Logo grande no telefone empurra os produtos para baixo da dobra.</span></td></tr>
+          <tr><td>Menu</td><td><span class="path">Seções &gt; Cabeçalho &gt; Menu</span>. O menu se monta no admin, em Loja virtual &gt; Navegação.</td></tr>
+          <tr><td>Cabeçalho fixo ao rolar</td><td><span class="path">Seções &gt; Cabeçalho &gt; Cabeçalho fixo</span>. Vem aparecendo ao rolar para cima.</td></tr>
+          <tr><td>Cabeçalho transparente sobre o banner</td><td><span class="path">Seções &gt; Cabeçalho &gt; Enable transparent header</span>. Vem desligado; ligue só com banner escuro.<span class="note">Homepage only limita à home. Em Logo for transparent state, suba a versão clara do logo: ao rolar, o logo normal volta sozinho.</span></td></tr>
+          <tr><td>Barra do topo com a oferta</td><td><span class="path">Seções &gt; EC Countdown Bar</span>, no grupo do cabeçalho. Vem no modo Offer e no esquema 6. Some sem oferta.</td></tr>
+          <tr><td>Barra de avisos</td><td><span class="path">Seções &gt; Barra de avisos</span>. Vem desligada, com "Welcome to our store".</td></tr>
+          <tr><td>Acabamento do tema</td><td><span class="path">Seções &gt; EC Brand look</span>, no grupo do cabeçalho: títulos e botões em caixa alta, espaçamento das letras do título e cor do preço riscado.<span class="note">Não remova esta seção: é ela que acerta o acabamento das outras.</span></td></tr>
+          <tr><td>Seletor de país</td><td><span class="path">Seções &gt; Cabeçalho</span>. Vem ligado; o seletor de idioma fica no rodapé.</td></tr>
+          <tr><td>Rodapé</td><td><span class="path">Seções &gt; Rodapé</span>: esquema 6, newsletter, menus Shop (menu principal) e Help (menu do rodapé), bloco de texto da empresa, logo (desligado), seletores de país e idioma, bandeiras de pagamento e políticas.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="home">
+    <h2>Home</h2>
+    <p class="sub">Doze seções ligadas, nesta ordem. As dez de baixo vêm prontas e desligadas, com o ícone de olho cortado: clique no olho para ligar.</p>
+    <div class="tablecard">
+      <table>
+        <caption>Seções ligadas</caption>
+        <thead><tr><th>Seção</th><th>O que trocar</th></tr></thead>
+        <tbody>
+          <tr><td>1 · EC Banner, dois slides</td><td>Slide da oferta, com [OFFER] e [HEADLINE], que some sem oferta. Slide da marca, com [BRAND] e "Clothes that work together", botão para todos os produtos. Suba a imagem de computador (3000 x 1000) e a de celular (1080 x 1600).</td></tr>
+          <tr><td>2 · EC USP Icon Bar</td><td>Os quatro ícones de confiança (ponto 1 de Antes de publicar).</td></tr>
+          <tr><td>3 · Coleção em destaque: Best sellers</td><td>Escolha a coleção.</td></tr>
+          <tr><td>4 · EC Banner: Warm layers</td><td>Imagem, textos e botão. Botão sem link leva à coleção da oferta.</td></tr>
+          <tr><td>5 · Coleção em destaque: Warm layers</td><td>Escolha a coleção.</td></tr>
+          <tr><td>6 · EC Banner: The essentials</td><td>Imagem, textos e botão.</td></tr>
+          <tr><td>7 · Coleção em destaque: The essentials</td><td>Escolha a coleção.</td></tr>
+          <tr><td>8 · Coleção em destaque: New in</td><td>Escolha a coleção.</td></tr>
+          <tr><td>9 · Imagem com texto: Why this brand exists</td><td>A história do fundador em dois ou três parágrafos. O botão Read our story leva à página Our story (ponto 2).</td></tr>
+          <tr><td>10 · EC Banner: Light layers</td><td>Imagem, textos e botão.</td></tr>
+          <tr><td>11 · Coleção em destaque: Light layers</td><td>Escolha a coleção.</td></tr>
+          <tr><td>12 · EC FAQ Categories</td><td>Quatro assuntos e oito perguntas: entrega, devolução, a oferta e medidas.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Prontas e desligadas:</strong> EC Offer tiers, Lista de coleções (oito coleções), EC Ticker, EC Reviews grid (oito avaliações de exemplo), EC Video Carousel, EC Comparison Table, EC Logo List, EC Recently Viewed, EC Sticky Promo Bar e EC Promo Popup.</p>
+    <div class="tablecard">
+      <table>
+        <caption>Ajustes da home</caption>
+        <thead><tr><th>Quero mudar</th><th>Onde clicar</th></tr></thead>
+        <tbody>
+          <tr><td>Imagem diferente no celular</td><td><span class="path">EC Banner &gt; slide &gt; Mobile image</span>. Nos banners da Dawn: <span class="path">Banner de imagem &gt; Mobile image</span> e <span class="path">Apresentação de slides &gt; slide &gt; Mobile image</span>.<span class="note">Campo vazio usa a mesma imagem do computador.</span></td></tr>
+          <tr><td>Texto do banner no celular</td><td><span class="path">EC Banner &gt; slide &gt; Text on mobile</span>: below põe o texto abaixo da foto, nas cores de Mobile panel colours; overlay põe sobre a foto.</td></tr>
+          <tr><td>Slide só durante a oferta</td><td><span class="path">EC Banner &gt; slide &gt; Show only while the offer is on</span>.</td></tr>
+          <tr><td>Título principal da página</td><td><span class="path">EC Banner &gt; First heading is the page H1</span>. Vem ligado só no primeiro banner.</td></tr>
+          <tr><td>Quantos produtos por vez no carrossel</td><td><span class="path">Coleção em destaque &gt; Colunas</span> (vem 4) e Contagem de produtos (vem 8).<span class="note">O carrossel só existe com mais produtos do que colunas. Com 4 colunas e 4 produtos, vira grade parada.</span></td></tr>
+          <tr><td>Esteira ocupando a tela inteira</td><td><span class="path">Coleção em destaque &gt; Produtos de largura total</span>. Vem desmarcado, na largura da página.</td></tr>
+          <tr><td>Ícones de confiança</td><td><span class="path">EC USP Icon Bar</span>: até 8 blocos, cada um com ícone, título e texto.</td></tr>
+          <tr><td>Perguntas frequentes</td><td><span class="path">EC FAQ Categories</span>: o bloco Category abre um assunto e os blocos Question entram embaixo dele.<span class="note">Show only while the offer is on esconde uma categoria sem oferta; Show only when discount levels are on esconde uma pergunta sem níveis.</span></td></tr>
+          <tr><td>Pop-up de captura</td><td><span class="path">EC Promo Popup</span>, desligada, com "Join our list".</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="colecoes">
+    <h2>Coleções</h2>
+    <p class="sub">Três modelos de coleção. O padrão serve para as categorias; o offer, para a coleção da oferta; o linen é igual ao padrão.</p>
+    <div class="tablecard">
+      <table>
+        <caption>Seções da coleção, na ordem</caption>
+        <thead><tr><th>Seção</th><th>O que faz</th></tr></thead>
+        <tbody>
+          <tr><td>1 · EC Collection top</td><td>Topo baixo. No modelo padrão, o título da coleção com o texto da categoria e o botão; no offer, os textos da oferta. Usa a imagem da coleção quando ela é horizontal; sem ela, a imagem reserva da seção.</td></tr>
+          <tr><td>2 · EC Offer strip</td><td>Duas linhas da oferta, com os níveis. Some sem oferta.</td></tr>
+          <tr><td>3 · Grade de produtos</td><td>24 por página, 4 colunas no computador e 2 no celular, foto em retrato e filtro horizontal.</td></tr>
+          <tr><td>4 · EC Offer tiers</td><td>Os níveis de desconto, com a barra de progresso do carrinho. Some sem oferta.</td></tr>
+          <tr><td>5 · EC Offer letter</td><td>A carta da oferta. Some sem oferta.</td></tr>
+          <tr><td>6 · EC USP Icon Bar</td><td>Os mesmos quatro ícones da home.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tablecard">
+      <table>
+        <caption>Ajustes das coleções</caption>
+        <thead><tr><th>Quero mudar</th><th>Onde clicar</th></tr></thead>
+        <tbody>
+          <tr><td>Foto própria no topo de cada coleção</td><td><span class="path">EC Collection top &gt; Adicionar bloco &gt; Collection image</span>: escolha a coleção e as imagens de computador e de celular.</td></tr>
+          <tr><td>Texto do topo nas categorias</td><td><span class="path">EC Collection top &gt; Category text</span> e Category button label.</td></tr>
+          <tr><td>Texto legível sobre foto clara</td><td><span class="path">EC Collection top &gt; Overlay behind the text</span>: mantenha 70 ou mais em foto clara.</td></tr>
+          <tr><td>Coleção da oferta</td><td>No admin, aplique o modelo offer na coleção, em Modelo de tema, e escolha a mesma coleção em <span class="path">EC · Offer &gt; Offer collection</span>.<span class="note">É o destino dos anúncios: confira que a oferta cabe na primeira tela do celular.</span></td></tr>
+          <tr><td>Banner por coleção</td><td>Adicione a <span class="path">EC Collection hero</span>: cada bloco liga uma coleção ao seu banner; o bloco sem coleção vira o banner padrão.</td></tr>
+          <tr><td>Pílulas de categoria</td><td>Adicione a <span class="path">EC Collection nav</span>: cada link do menu vira uma pílula, e a da coleção atual fica destacada.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="produto">
+    <h2>Página de produto</h2>
+    <p class="sub">Cada linha da coluna da direita é um bloco de <span class="path">Seções &gt; Informações do produto</span>. Arraste para mudar a ordem.</p>
+    <div class="tablecard">
+      <table>
+        <caption>Blocos, na ordem em que vêm</caption>
+        <thead><tr><th>Bloco</th><th>O que faz</th></tr></thead>
+        <tbody>
+          <tr><td>Título e Rating Stars (EC)</td><td>Nome do produto e nota com estrelas e contagem; o clique rola até as avaliações (ponto 3 de Antes de publicar).</td></tr>
+          <tr><td>Preço</td><td>Preço, preço comparado riscado e selo de promoção.</td></tr>
+          <tr><td>Icon + Text (EC), três</td><td>Os benefícios do produto. Troque pelos do seu.</td></tr>
+          <tr><td>Size Chart (EC)</td><td>Guia de medidas: tabela, imagem ou página, nota embaixo e botão CM/IN.</td></tr>
+          <tr><td>Seletor de variante</td><td>Estilo do seletor e foto da variante (abaixo).</td></tr>
+          <tr><td>EC Stock line</td><td>Estoque e data de envio. Some com a variante esgotada.</td></tr>
+          <tr><td>Icon + Text (EC), três</td><td>Entrega, envio e devolução.</td></tr>
+          <tr><td>Botões Comprar</td><td>Botão de compra.</td></tr>
+          <tr><td>Offer levels (EC)</td><td>Caixa dos níveis da oferta.</td></tr>
+          <tr><td>Payment Badges (EC)</td><td>Bandeiras de pagamento e a frase de checkout seguro.</td></tr>
+          <tr><td>Ícone com texto</td><td>Três garantias curtas.</td></tr>
+          <tr><td>Description Tab (EC)</td><td>A descrição do produto numa aba.</td></tr>
+          <tr><td>Linha recolhível, três</td><td>Shipping &amp; Delivery, Returns e Care.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Seções da página, de cima para baixo:</strong> EC Collection nav, Informações do produto, EC Reviews grid, EC Community reel, Produtos relacionados, EC USP Icon Bar, Imagem com texto (Our promise), EC FAQ Categories, EC Sticky ATC e Divulgações. Desligadas: EC Pairs Well With e EC Recently Viewed.</p>
+    <div class="tablecard">
+      <table>
+        <caption>Ajustes do produto</caption>
+        <thead><tr><th>Quero mudar</th><th>Onde clicar</th></tr></thead>
+        <tbody>
+          <tr><td>Fotos, miniaturas e zoom</td><td><span class="path">Informações do produto &gt; Mídia</span>: layout da galeria, miniaturas no celular e zoom. Vem com miniaturas em carrossel, também no celular.</td></tr>
+          <tr><td>Foto da variante no seletor</td><td><span class="path">Seletor de variante &gt; Swatch shows &gt; Photo of the variant</span>.<span class="note">Show photos on: Color option only, a recomendada, deixa o tamanho em letras. Swatch size vai até 160 px e lê bem entre 70 e 120; Photo shape é quadrada ou retrato. Precisa da foto vinculada a cada variante no cadastro do produto; onde não houver, o seletor fica como está.</span></td></tr>
+          <tr><td>Tabela de medidas</td><td><span class="path">Size Chart (EC) &gt; Table rows</span>: uma linha por tamanho, colunas separadas por |. Content type troca para imagem ou página.</td></tr>
+          <tr><td>Linha de estoque</td><td><span class="path">EC Stock line</span>: Text, Days until it ships e Date format.</td></tr>
+          <tr><td>Combos e leve mais por menos</td><td>Adicione o bloco <span class="path">Bundle Deals (EC)</span>, que segue os níveis do EC · Offer, ou o <span class="path">Bundle combo (EC)</span>, com até três combos de cor e tamanho.<span class="note">No combo, o preço é digitado: crie no admin o desconto automático que bate com ele. Os brindes do combo são só texto.</span></td></tr>
+          <tr><td>Vídeos dentro da página</td><td>Bloco <span class="path">Video Carousel (EC)</span>.</td></tr>
+          <tr><td>Avaliações</td><td>Seção <span class="path">EC Reviews grid</span>: nota, número e um bloco por avaliação, com nome, texto, estrelas, foto e compra verificada. Com app de avaliações, use o bloco do app.</td></tr>
+          <tr><td>Fotos de clientes</td><td>Seção <span class="path">EC Community reel</span>: cada item é uma foto ou um vídeo .mp4 subido em Conteúdo &gt; Arquivos, com legenda.</td></tr>
+          <tr><td>Promessa da marca</td><td>Seção <span class="path">Imagem com texto</span> "Our promise". O botão leva à página Our story.</td></tr>
+          <tr><td>Botão de compra fixo no celular</td><td>Seção <span class="path">EC Sticky ATC</span>, com Visibility em mobile.</td></tr>
+          <tr><td>Texto do botão de compra</td><td><span class="path">Configurações do tema &gt; EC · Store texts &gt; Add to cart button</span>.</td></tr>
+          <tr><td>Selo de desconto</td><td><span class="path">Configurações do tema &gt; Selos &gt; Sale badge shows</span>. Vem em Discount percentage (-30%); há também Amount saved, Default text, Custom text e Hide the badge.<span class="note">O formato do texto, o tamanho, o respiro, o raio e a borda do selo também mudam ali.</span></td></tr>
+          <tr><td>Página diferente para outro tipo de produto</td><td>No alto do editor: <span class="path">Produto &gt; Criar modelo</span>. Depois vincule o modelo ao produto no admin, em Modelo de tema.</td></tr>
+          <tr><td>Avisos legais do produto</td><td>Seção <span class="path">Divulgações</span>: mostra as divulgações cadastradas no produto; sem cadastro, não aparece.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="cores">
+    <h2>Cores, fontes e textos fixos</h2>
+    <p class="sub">Cor, fonte e cantos mudam em Configurações do tema, e a loja inteira acompanha.</p>
+    <div class="tablecard">
+      <table>
+        <caption>Os seis esquemas de cor</caption>
+        <thead><tr><th>Esquema</th><th>Onde é usado e cores de fábrica</th></tr></thead>
+        <tbody>
+          <tr><td>Esquema 1</td><td>Páginas, cabeçalho, produto, níveis da coleção e menu de categorias. Fundo #FFFFFF, texto #111111, botão #33383D.</td></tr>
+          <tr><td>Esquema 2</td><td>Cartões de produto, de coleção e de blog. Igual ao 1.</td></tr>
+          <tr><td>Esquema 3</td><td>Escuro e selo de esgotado. Fundo #111111, texto #FFFFFF.</td></tr>
+          <tr><td>Esquema 4</td><td>Selo de promoção e cor de destaque da oferta. Fundo #33383D, texto #FFFFFF.</td></tr>
+          <tr><td>Esquema 5</td><td>Faixa clara: fundador, carta, promessa e abertura da Our story. Fundo #F2F1EE, texto #111111.</td></tr>
+          <tr><td>Esquema 6</td><td>Destaque: barra do topo, topo e faixa da coleção, comunidade, FAQ e rodapé. Fundo #33383D, texto #FFFFFF.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tablecard">
+      <table>
+        <caption>Loja inteira</caption>
+        <thead><tr><th>Quero mudar</th><th>Onde clicar</th></tr></thead>
+        <tbody>
+          <tr><td>Cores da marca</td><td><span class="path">Configurações do tema &gt; Cores</span>. Mude os esquemas e a loja acompanha: botões, pílulas de variante, faixas, carrinho e as seções BaseX.</td></tr>
+          <tr><td>Uma seção com outro fundo</td><td>No painel da seção: <span class="path">Esquema de cores</span>. Só aquela seção muda.</td></tr>
+          <tr><td>Cor de destaque da oferta</td><td><span class="path">Configurações do tema &gt; Selos &gt; Esquema de cores do selo de promoção</span>, que vem no 4. Os níveis, a caixa do produto e a gaveta usam essa cor.<span class="note">Deixe a EC Offer tiers e a EC Offer split num esquema claro (1, 2 ou 5): num esquema escuro o destaque some.</span></td></tr>
+          <tr><td>Uma cor fora do esquema</td><td>Preencha o campo de cor da seção.<span class="note">Campo preenchido manda no esquema; vazio, volta a acompanhar o tema.</span></td></tr>
+          <tr><td>Cor do preço riscado</td><td><span class="path">Seções &gt; EC Brand look &gt; Compare-at price colour</span>. Vazio usa a cor do texto a 60%.</td></tr>
+          <tr><td>Fontes</td><td><span class="path">Configurações do tema &gt; Tipografia</span>, para títulos e para o corpo. Vem Assistant nos dois. Nenhuma seção tem fonte própria.</td></tr>
+          <tr><td>Caixa alta e espaçamento</td><td><span class="path">Seções &gt; EC Brand look</span>: Uppercase headings, Heading letter spacing e Uppercase buttons.</td></tr>
+          <tr><td>Cantos arredondados ou retos</td><td>Vêm em 4. <span class="path">Botões &gt; Raio dos cantos</span> vale para os botões em geral. O botão de comprar, o de finalizar compra, as pílulas de variante, a quantidade e os campos seguem <span class="path">Cartões de produtos &gt; Raio dos cantos</span>.<span class="note">Os selos seguem Selos &gt; Raio dos cantos e o Corner radius do selo de promoção.</span></td></tr>
+          <tr><td>Largura e respiro</td><td><span class="path">Configurações do tema &gt; Layout</span>: Largura da página (vem 1600) e Espaço entre as seções do modelo (vem 40).</td></tr>
+          <tr><td>Texto lavado, com cara de apagado</td><td><span class="path">Configurações do tema &gt; EC · Store texts &gt; Body text</span>. Solid deixa a cor cheia e já vem assim; Soft volta ao texto mais claro da Dawn.</td></tr>
+          <tr><td>Botão do Banner de imagem meio apagado</td><td>Preencha o link do botão. Sem link, ele fica translúcido de propósito, para avisar que não leva a lugar nenhum.</td></tr>
+          <tr><td>Textos como Adicionar ao carrinho e Esgotado</td><td><span class="path">Configurações do tema &gt; EC · Store texts</span>: página de produto, carrinho, coleção, cartão de produto e busca.<span class="note">Campo vazio mantém o texto padrão do idioma da loja.</span></td></tr>
+          <tr><td>Qualquer outro texto do tema</td><td>No admin: <span class="path">Loja virtual &gt; Temas &gt; três pontinhos &gt; Editar conteúdo padrão do tema</span>. É lá que estão os textos sem campo próprio.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sistema">
+    <h2>Páginas de sistema</h2>
+    <div class="tablecard">
+      <table>
+        <caption>Página 404, login, conta, busca e blog</caption>
+        <thead><tr><th>Quero mudar</th><th>Onde clicar</th></tr></thead>
+        <tbody>
+          <tr><td>Página 404, de página não encontrada</td><td>No alto do editor, escolha a página 404: imagem, texto pequeno acima do título, título, texto, botão e o link dele, e esquema de cores.</td></tr>
+          <tr><td>Login, criar conta e minha conta</td><td>Escolha a página no alto do editor e edite Title e Text below the title.</td></tr>
+          <tr><td>Resultados de busca</td><td><span class="path">Seções &gt; Resultados da pesquisa</span>: colunas, filtros, ordenação e o que aparece em cada cartão.</td></tr>
+          <tr><td>Blog e artigo</td><td><span class="path">Seções &gt; Posts do blog</span>.</td></tr>
+          <tr><td>Lista de coleções</td><td><span class="path">Seções &gt; Página da lista de coleções</span>.</td></tr>
+          <tr><td>Contato</td><td>Modelo de página contact, com a seção Formulário de contato.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="secoes">
+    <h2>As 43 seções BaseX</h2>
+    <p class="sub">Todas aparecem em <span class="path">Adicionar seção</span>. A EC Brand look só existe no cabeçalho; a EC Pairs Well With e a EC Sticky ATC só entram na página de produto. As que já estão nas páginas e vêm desligadas se ligam no olho.</p>
+    <h3>Novas na v2</h3>
+    <div class="grid">
+      <div class="tile"><b>EC Banner</b><span>Banner com slides, imagem de computador e de celular, texto sobre a foto ou abaixo dela; o slide pode aparecer só durante a oferta.</span><em>Home e página Our story</em></div>
+      <div class="tile"><b>EC Brand look</b><span>Acabamento do tema inteiro: caixa alta, espaçamento dos títulos e cor do preço riscado.</span><em>Cabeçalho, em todas as páginas</em></div>
+      <div class="tile"><b>EC Bundle combo</b><span>Combos de 2, 3 e 4 peças com escolha de cor e tamanho e contador até o fim da oferta.</span><em>Para adicionar; também é bloco do produto</em></div>
+      <div class="tile"><b>EC Collection hero</b><span>Banner por coleção, com faixa de título e descrição.</span><em>Para adicionar na coleção</em></div>
+      <div class="tile"><b>EC Collection nav</b><span>Pílulas de categoria a partir de um menu.</span><em>Topo da página de produto</em></div>
+      <div class="tile"><b>EC Collection top</b><span>Topo baixo da coleção: título e descrição, ou a oferta no modelo offer.</span><em>Coleções</em></div>
+      <div class="tile"><b>EC Community reel</b><span>Fotos e vídeos de clientes em carrossel.</span><em>Página de produto</em></div>
+      <div class="tile"><b>EC Offer letter</b><span>A carta da oferta, com assinatura.</span><em>Coleções</em></div>
+      <div class="tile"><b>EC Offer split</b><span>Texto da oferta e foto lado a lado. Numa página que já tem título principal, troque Heading level para H2.</span><em>Modelo de produto shoes</em></div>
+      <div class="tile"><b>EC Offer strip</b><span>Duas linhas da oferta, coladas na seção de cima.</span><em>Coleções</em></div>
+      <div class="tile"><b>EC Offer tiers</b><span>Compre mais, pague menos: quatro níveis e barra de progresso do carrinho.</span><em>Coleções; desligada na home</em></div>
+      <div class="tile"><b>EC Reviews grid</b><span>Avaliações em grade, com nota e contagem.</span><em>Página de produto; desligada na home</em></div>
+    </div>
+    <h3>Da v1, que continuam</h3>
+    <div class="grid">
+      <div class="tile"><b>EC Before After</b><span>Antes e depois com arraste.</span></div>
+      <div class="tile"><b>EC Brand Colors</b><span>Paleta e provas da marca.</span></div>
+      <div class="tile"><b>EC Brand Story Tabs</b><span>História da marca em capítulos.</span></div>
+      <div class="tile"><b>EC Bundle Deals</b><span>Leve mais, pague menos, por nível. Segue os níveis do EC · Offer e some sem eles.</span></div>
+      <div class="tile"><b>EC Bundle Hero</b><span>Combo em destaque com os níveis da oferta. Some sem eles.</span></div>
+      <div class="tile"><b>EC Collection Offer</b><span>Faixa de oferta na coleção, com contador opcional até o último dia. Some sem oferta.</span></div>
+      <div class="tile"><b>EC Collection Tabs</b><span>Abas de categoria com produtos. Maximum width deixa os cartões menores.</span></div>
+      <div class="tile"><b>EC Community Photos</b><span>Fotos de clientes rolando.</span></div>
+      <div class="tile"><b>EC Comparison Table</b><span>Você contra a concorrência.</span><em>Desligada na home</em></div>
+      <div class="tile"><b>EC Countdown Bar</b><span>Contagem regressiva, em modo Offer.</span><em>Cabeçalho</em></div>
+      <div class="tile"><b>EC FAQ Accordion</b><span>Perguntas frequentes numa lista só.</span></div>
+      <div class="tile"><b>EC FAQ Categories</b><span>Perguntas por assunto, com a categoria da oferta.</span><em>Home e página de produto</em></div>
+      <div class="tile"><b>EC Image Marquee</b><span>Imagens rolando.</span></div>
+      <div class="tile"><b>EC Image Text Icons</b><span>Imagem, texto e ícones.</span></div>
+      <div class="tile"><b>EC Logo List</b><span>Logos e selos.</span><em>Desligada na home</em></div>
+      <div class="tile"><b>EC Music Player</b><span>Player de áudio.</span></div>
+      <div class="tile"><b>EC Offer Bar</b><span>Faixa de oferta numa linha. Some sem oferta.</span></div>
+      <div class="tile"><b>EC Pairs Well With</b><span>Combina com, dentro do produto.</span><em>Desligada na página de produto</em></div>
+      <div class="tile"><b>EC Photo Reviews</b><span>Avaliações com foto.</span></div>
+      <div class="tile"><b>EC Promo Popup</b><span>Pop-up de captura.</span><em>Desligada na home</em></div>
+      <div class="tile"><b>EC Recently Viewed</b><span>Vistos recentemente.</span><em>Desligada na home e no produto</em></div>
+      <div class="tile"><b>EC Results</b><span>Números e resultados.</span></div>
+      <div class="tile"><b>EC Shop The Look</b><span>Monte o look com quatro produtos.</span></div>
+      <div class="tile"><b>EC Spec List</b><span>Ficha técnica.</span></div>
+      <div class="tile"><b>EC Sticky ATC</b><span>Botão de compra fixo ao rolar.</span><em>Página de produto, no celular</em></div>
+      <div class="tile"><b>EC Sticky Promo Bar</b><span>Barra fixa de oferta. Some sem oferta.</span><em>Desligada na home</em></div>
+      <div class="tile"><b>EC Ticker</b><span>Frase em movimento.</span><em>Desligada na home</em></div>
+      <div class="tile"><b>EC Trust Reviews</b><span>Depoimentos com prova.</span></div>
+      <div class="tile"><b>EC USP Icon Bar</b><span>Ícones de confiança.</span><em>Home, produto e coleções</em></div>
+      <div class="tile"><b>EC Video Carousel</b><span>Carrossel de vídeos.</span><em>Desligada na home</em></div>
+      <div class="tile"><b>EC Video Marquee</b><span>Vídeos rolando.</span></div>
+    </div>
+  </section>
+
+  <section id="modelos">
+    <h2>Modelos de página prontos</h2>
+    <p class="sub">Seis modelos de produto, três de coleção e três de página. Servem para dar texto e blocos diferentes sem refazer a página toda.</p>
+    <div class="tablecard">
+      <table>
+        <caption>Modelos incluídos</caption>
+        <thead><tr><th>Modelo</th><th>O que traz</th></tr></thead>
+        <tbody>
+          <tr><td>Produto · padrão</td><td>A página completa descrita acima, com tabela de medidas genérica: tamanho, peito, cintura e comprimento.</td></tr>
+          <tr><td>Produto · shoes</td><td>O padrão com três seções a mais depois do produto: The details, Comfort e a oferta (EC Offer split). Tabela de calçados: EU, US, UK e comprimento do pé.</td></tr>
+          <tr><td>Produto · sandals</td><td>O padrão com tabela de sandálias. A nota da tabela fala de palmilha de cortiça: troque se não for o caso.</td></tr>
+          <tr><td>Produto · trousers</td><td>O padrão com tabela de calças pela cintura.</td></tr>
+          <tr><td>Produto · linen</td><td>O padrão com tabela por peito e cintura, para camisas e peças leves.</td></tr>
+          <tr><td>Produto · winter</td><td>A tabela do linen e uma pergunta a mais no FAQ, sobre o tricô ("Will the knit pill?").</td></tr>
+          <tr><td>Coleção · padrão</td><td>Topo com o título da coleção, faixa da oferta, grade, níveis, carta e ícones.</td></tr>
+          <tr><td>Coleção · offer</td><td>O mesmo, com a oferta no topo. Use na coleção da oferta.</td></tr>
+          <tr><td>Coleção · linen</td><td>Igual à padrão.</td></tr>
+          <tr><td>Página · padrão</td><td>O título e o texto da página.</td></tr>
+          <tr><td>Página · our-story</td><td>Abertura (Our story · Why we started), o texto da página e o slide da oferta no fim. Veja o ponto 2 de Antes de publicar.</td></tr>
+          <tr><td>Página · contact</td><td>Página com formulário de contato.</td></tr>
+          <tr><td>index.qa-x3, index.qa-x3b e product.qa-x3</td><td>Vitrines de teste do tema. Não use na loja.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><strong>Como usar:</strong> no admin, abra o produto, a coleção ou a página e, em Modelo de tema, escolha o modelo. Para criar um novo, use <span class="path">Produto &gt; Criar modelo</span> no alto do editor e parta do padrão. Cada modelo guarda os próprios textos: mudar o padrão não muda os outros.</p>
+    </div>
+  </section>
+
+  <section id="fora">
+    <h2>O que não se muda por aqui</h2>
+    <div class="callout">
+      <p><strong>Checkout</strong> tem editor próprio, em Configurações &gt; Checkout. Logo, cores e alinhamento se mudam lá.</p>
+      <p><strong>Avaliações, cookies e ofertas por aplicativo</strong> aparecem no editor só depois que o app está instalado, como blocos de aplicativo.</p>
+      <p><strong>Preço, preço comparado, estoque e variantes</strong> ficam no cadastro do produto, no admin. O tema apenas mostra o que está cadastrado.</p>
+      <p><strong>Descontos e frete</strong> se criam no admin, em Descontos e em Configurações &gt; Frete e entrega. O tema mostra os níveis, a barra de frete grátis e os textos, mas não aplica desconto nem calcula frete.</p>
+    </div>
+    <div class="callout">
+      <p><strong>Antes de publicar:</strong> faça os quatro pontos de <a href="#antes-de-publicar">Antes de publicar a loja</a> e percorra a loja no celular, do produto até o checkout.</p>
+    </div>
+  </section>
+
+  <footer>
+    Tema BaseX Editável · versão 2 · base Dawn 15.5.0 · manual de novembro de 2026
+  </footer>
+</div>
+</body>
+</html>

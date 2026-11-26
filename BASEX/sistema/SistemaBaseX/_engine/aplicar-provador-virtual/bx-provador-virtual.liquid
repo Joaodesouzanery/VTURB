@@ -1,0 +1,2786 @@
+{% comment %}
+  ============================================================
+  BX Provador Virtual — recomendacao de tamanho
+  ------------------------------------------------------------
+  Section autocontida. Nao toca em layout/theme.liquid, nao toca
+  em assets/base.css e nao depende de JS interno do tema.
+
+  Onde colocar: no template de produto, logo abaixo do bloco de
+  informacoes. O botao se ancora sozinho perto do seletor de
+  tamanho quando encontra um.
+
+  Fonte de dados da tabela de medidas, nesta ordem:
+    1. metafield do produto  custom.tabela_medidas  (JSON)
+    2. o campo "Tabela de medidas" desta section
+    3. nada -> a section nao renderiza (melhor sumir do que
+       recomendar sem lastro)
+
+  Gerado por _engine/aplicar-provador-virtual/montar.mjs
+  NAO editar direto: editar os modulos e rodar o montador.
+  ============================================================
+{% endcomment %}
+
+{%- liquid
+  assign op_tamanho = nil
+  assign nomes_tamanho = 'tamanho,size,talla,taille,grosse,größe,misura,maat,storlek'
+  for op in product.options_with_values
+    assign nome_min = op.name | downcase
+    if nomes_tamanho contains nome_min
+      assign op_tamanho = op
+      break
+    endif
+  endfor
+
+  comment
+    Nada de tabela = nada de provador. Recomendar tamanho sem medida
+    da peca seria adivinhacao com cara de calculo.
+  endcomment
+  assign json_metafield = product.metafields.custom.tabela_medidas.value
+  assign json_section = section.settings.tabela_json
+  assign tem_dados = false
+  if json_metafield != blank
+    assign tem_dados = true
+  elsif json_section != blank
+    assign tem_dados = true
+  endif
+-%}
+
+{%- if tem_dados and op_tamanho != nil -%}
+
+<div
+  class="bx-provador color-{{ section.settings.color_scheme }}"
+  id="bx-provador-{{ section.id }}"
+  data-bx-provador
+  style="
+    --bxfit-acento: {{ section.settings.cor_acento }};
+    --bxfit-texto: {{ section.settings.cor_texto }};
+    --bxfit-fundo: {{ section.settings.cor_fundo }};
+    --bxfit-borda: {{ section.settings.cor_borda }};
+    --bxfit-raio: {{ section.settings.raio }}px;
+    --bxfit-margem: {{ section.settings.margem_topo }}px;
+  "
+  {{ section.shopify_attributes }}
+>
+  <div class="bxfit-slot"></div>
+
+  <script type="application/json" data-bx-config>
+    {
+      "produto": {{ product.title | json }},
+      "handle": {{ product.handle | json }},
+      "textoBotao": {{ section.settings.texto_botao | json }},
+      "textoTitulo": {{ section.settings.texto_titulo | json }},
+      "perfilId": {{ section.settings.perfil | json }},
+      "caimento": {{ section.settings.caimento | json }},
+      "tecido": {{ section.settings.tecido | json }},
+      "sexo": {{ section.settings.sexo | json }},
+      "unidade": {{ section.settings.unidade | json }},
+      "escalaDetalhada": {{ section.settings.escala_detalhada | json }},
+      "vesteEm": {{ section.settings.veste_em | json }},
+      "ancorar": {{ section.settings.ancorar | json }},
+      "opcaoTamanho": {
+        "nome": {{ op_tamanho.name | json }},
+        "posicao": {{ op_tamanho.position | json }},
+        "valores": {{ op_tamanho.values | json }}
+      },
+      "disponiveis": [
+        {%- assign sep = '' -%}
+        {%- for v in op_tamanho.values -%}
+          {%- assign achou = false -%}
+          {%- for var in product.variants -%}
+            {%- if var.available -%}
+              {%- if op_tamanho.position == 1 and var.option1 == v -%}{%- assign achou = true -%}{%- endif -%}
+              {%- if op_tamanho.position == 2 and var.option2 == v -%}{%- assign achou = true -%}{%- endif -%}
+              {%- if op_tamanho.position == 3 and var.option3 == v -%}{%- assign achou = true -%}{%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if achou -%}{{ sep }}{{ v | json }}{%- assign sep = ',' -%}{%- endif -%}
+        {%- endfor -%}
+      ],
+      "tabela": {% if json_metafield != blank %}{{ json_metafield | json }}{% else %}{{ json_section | json }}{% endif %}
+    }
+  </script>
+</div>
+
+{%- endif -%}
+
+{% stylesheet %}
+/* BX Provador Virtual — estilos da section.
+   Tudo prefixado com bxfit para nao colidir com o tema.
+   Nenhuma regra global, nenhum reset, nenhum !important em tag. */
+
+.bx-provador { margin-top: var(--bxfit-margem, 12px); }
+
+.bxfit-abrir {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; cursor: pointer;
+  background: transparent; color: var(--bxfit-texto, #303030);
+  border: 1px solid var(--bxfit-borda, #E8E4DE);
+  border-radius: var(--bxfit-raio, 8px);
+  font: inherit; font-size: 0.92em; line-height: 1.2;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+.bxfit-abrir:hover { border-color: var(--bxfit-acento, #1B472B); }
+.bxfit-abrir:focus-visible { outline: 2px solid var(--bxfit-acento, #1B472B); outline-offset: 2px; }
+
+.bxfit-modal[hidden] { display: none; }
+.bxfit-modal {
+  position: fixed; inset: 0; z-index: 2147483000;
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+}
+.bxfit-fundo { position: absolute; inset: 0; background: rgba(16,16,16,.55); }
+.bxfit-caixa {
+  position: relative; width: min(680px, 100%); max-height: 88vh; overflow-y: auto;
+  background: var(--bxfit-fundo, #fff); color: var(--bxfit-texto, #303030);
+  border-radius: calc(var(--bxfit-raio, 8px) + 4px);
+  padding: 28px 26px 22px;
+  box-shadow: 0 18px 60px rgba(0,0,0,.28);
+}
+.bxfit-fechar {
+  position: absolute; top: 10px; right: 12px;
+  width: 36px; height: 36px; border: 0; background: transparent; cursor: pointer;
+  font-size: 26px; line-height: 1; color: var(--bxfit-texto, #303030); opacity: .6;
+}
+.bxfit-fechar:hover { opacity: 1; }
+
+.bxfit-titulo { margin: 0 0 6px; font-size: 1.35em; line-height: 1.25; }
+.bxfit-sub { margin: 0 0 18px; opacity: .78; font-size: .95em; line-height: 1.5; }
+.bxfit-nota { margin: 16px 0 0; font-size: .8em; opacity: .62; line-height: 1.5; }
+
+.bxfit-escolhas { display: grid; gap: 10px; }
+.bxfit-escolha {
+  display: grid; gap: 3px; text-align: left; cursor: pointer;
+  padding: 16px 18px; font: inherit;
+  background: transparent; color: inherit;
+  border: 1px solid var(--bxfit-borda, #E8E4DE);
+  border-radius: var(--bxfit-raio, 8px);
+}
+.bxfit-escolha:hover { border-color: var(--bxfit-acento, #1B472B); }
+.bxfit-escolha strong { font-size: 1.02em; }
+.bxfit-escolha span { font-size: .88em; opacity: .75; }
+.bxfit-escolha em { font-size: .74em; font-style: normal; letter-spacing: .04em; text-transform: uppercase; opacity: .62; }
+.bxfit-escolha--forte { border-color: var(--bxfit-acento, #1B472B); border-width: 2px; }
+
+.bxfit-campos { display: grid; gap: 14px; }
+.bxfit-campos--linha { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+.bxfit-campo { display: grid; gap: 4px; }
+.bxfit-rotulo { font-size: .9em; font-weight: 600; }
+.bxfit-campo input {
+  width: 100%; padding: 10px 12px; font: inherit;
+  color: var(--bxfit-texto, #303030); background: var(--bxfit-fundo, #fff);
+  border: 1px solid var(--bxfit-borda, #E8E4DE); border-radius: var(--bxfit-raio, 8px);
+}
+.bxfit-campo input:focus-visible { outline: 2px solid var(--bxfit-acento, #1B472B); outline-offset: 1px; }
+.bxfit-campo small { font-size: .78em; opacity: .68; line-height: 1.45; }
+.bxfit-tag-est {
+  font-style: normal; font-size: .72em; text-transform: uppercase; letter-spacing: .05em;
+  padding: 1px 6px; border-radius: 99px; background: #F0EDE6; color: #5A5548;
+}
+
+.bxfit-formato { margin: 18px 0 0; padding: 0; border: 0; }
+.bxfit-formato legend { padding: 0; margin-bottom: 8px; font-size: .9em; font-weight: 600; }
+.bxfit-radio { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; cursor: pointer; }
+.bxfit-radio input { margin-top: 3px; }
+.bxfit-radio span { display: grid; gap: 1px; font-size: .92em; }
+.bxfit-radio small { font-size: .82em; opacity: .68; }
+
+.bxfit-erro[hidden] { display: none; }
+.bxfit-erro {
+  margin-top: 14px; padding: 10px 12px; font-size: .88em; line-height: 1.45;
+  color: #7A1F19; background: #FBEAE8; border-radius: var(--bxfit-raio, 8px);
+}
+
+.bxfit-acoes { display: flex; gap: 10px; margin-top: 22px; }
+.bxfit-principal, .bxfit-secundario {
+  flex: 1; padding: 12px 18px; font: inherit; cursor: pointer;
+  border-radius: var(--bxfit-raio, 8px); border: 1px solid var(--bxfit-acento, #1B472B);
+}
+.bxfit-principal { background: var(--bxfit-acento, #1B472B); color: #fff; }
+.bxfit-secundario { background: transparent; color: var(--bxfit-texto, #303030); border-color: var(--bxfit-borda, #E8E4DE); }
+.bxfit-principal:focus-visible, .bxfit-secundario:focus-visible { outline: 2px solid var(--bxfit-acento, #1B472B); outline-offset: 2px; }
+
+.bxfit-res-cabeca { display: grid; gap: 4px; margin-bottom: 20px; }
+.bxfit-res-label { font-size: .8em; text-transform: uppercase; letter-spacing: .06em; opacity: .65; }
+.bxfit-res-tam { font-size: 2.6em; line-height: 1; }
+.bxfit-res-ajuste { font-size: .85em; color: #7A1F19; }
+.bxfit-res-conf { font-size: .85em; opacity: .8; line-height: 1.45; }
+.bxfit-conf--baixa { color: #7A1F19; opacity: 1; }
+
+.bxfit-res-corpo { display: grid; grid-template-columns: 150px 1fr; gap: 22px; align-items: start; }
+@media (max-width: 560px) { .bxfit-res-corpo { grid-template-columns: 1fr; } .bxfit-res-svg { max-width: 160px; margin: 0 auto; } }
+.bxfit-svg { width: 100%; height: auto; display: block; }
+.bxfit-res-lista h3 { margin: 0 0 10px; font-size: 1em; }
+
+.bxfit-legenda { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.bxfit-linha { display: flex; align-items: center; gap: 8px; font-size: .9em; }
+.bxfit-bolinha { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 auto; }
+.bxfit-reg-nome { font-weight: 600; min-width: 74px; }
+.bxfit-rot { opacity: .82; }
+.bxfit-num { margin-left: auto; font-variant-numeric: tabular-nums; opacity: .7; font-size: .92em; }
+.bxfit-est {
+  font-size: .72em; text-transform: uppercase; letter-spacing: .04em;
+  padding: 1px 6px; border-radius: 99px; background: #F0EDE6; color: #5A5548;
+}
+
+.bxfit-entre { margin: 14px 0 0; font-size: .9em; line-height: 1.5; }
+.bxfit-aviso-loja { margin: 10px 0 0; font-size: .82em; color: #7A1F19; line-height: 1.45; }
+.bxfit-detalhe { margin: 12px 0 0; padding-left: 18px; font-size: .9em; line-height: 1.6; }
+.bxfit-acoes--res { margin-top: 24px; }
+.bxfit-limpar {
+  display: block; margin: 14px auto 0; padding: 4px; font: inherit; font-size: .8em;
+  background: none; border: 0; cursor: pointer; opacity: .6; text-decoration: underline;
+  color: inherit;
+}
+
+{% endstylesheet %}
+
+<script>
+/* ---------- bx-fit-dados.js ---------- */
+/* ============================================================
+   BX Provador Virtual — tabelas de referencia
+   ------------------------------------------------------------
+   So numero. Nenhuma logica. Trocar um valor aqui muda o
+   comportamento do provador sem tocar no calculo.
+
+   REGRA DE HONESTIDADE: cada bloco declara a origem.
+   [NORMA]     publicado e verificavel (EN 13402, ISO 9407, paper)
+   [INDUSTRIA] pratica consolidada de modelagem, multiplas fontes
+   [NOSSO]     calibragem nossa, sem lastro externo
+
+   O que e [NOSSO] nunca deve ser citado como se fosse norma.
+   ============================================================ */
+(function (global) {
+  'use strict';
+
+  var D = {};
+
+  /* ============================================================
+     1. FOLGA (ease) por regiao e por caimento, em centimetros
+     ------------------------------------------------------------
+     [INDUSTRIA] Identidade: folga = circunferencia da peca menos
+     circunferencia do corpo. A folga total e a soma da folga de
+     uso (minimo fisiologico) com a folga de estilo.
+
+     A pontuacao roda DIRETO em centimetro contra estas faixas,
+     que sao absolutas e publicadas. Nao existe normalizacao por
+     um "span" arbitrario: esse span seria parametro livre nosso
+     disfarcado de achado, e o resultado inteiro penderia dele.
+
+     Formato: [min, max, tolAperto, tolSobra]
+     ============================================================ */
+
+  D.folga = {
+    /* [INDUSTRIA] busto de blusa, vestido, camisa e top:
+       justo 0-7,5 | ajustado 7,5-10 | semi 10-12,5 | solto 12,5-20 | oversized >20
+       quadril de saia e calca:
+       justo <=6,4 | ajustado 7,6-10 | semi 10-12,7 | solto 12,7-20 | oversized >20
+       cintura: ajustado 2,5-5 | solto 7,6-15 */
+    generico: {
+      justo:    { busto: [2, 7.5, 3, 5],    cintura: [0, 2.5, 2.5, 5],  quadril: [2, 6.4, 3, 5],    ombro: [0, 1.5, 1.5, 2.5], coxa: [1, 4, 2, 4] },
+      ajustado: { busto: [7.5, 10, 3.8, 6], cintura: [2.5, 5, 2.5, 6],  quadril: [7.6, 10, 3.8, 6], ombro: [0, 2, 1.5, 3],     coxa: [2, 5, 2, 5] },
+      regular:  { busto: [10, 12.5, 3.8, 8], cintura: [5, 7.6, 3.8, 8], quadril: [10, 12.7, 3.8, 8], ombro: [0.5, 3, 2, 4],    coxa: [3, 7, 3, 6] },
+      solto:    { busto: [12.5, 20, 5, 12], cintura: [7.6, 15, 5, 14],  quadril: [12.7, 20, 5, 14], ombro: [1, 5, 2, 6],       coxa: [5, 12, 4, 10] },
+      oversized:{ busto: [20, 32, 6, 16],   cintura: [15, 28, 6, 18],   quadril: [20, 32, 6, 18],   ombro: [3, 9, 3, 8],       coxa: [10, 20, 5, 14] },
+    },
+
+    /* [INDUSTRIA] camisa masculina medida no torax:
+       extra-slim 9 | slim 12 | regular 16 | solta 20 */
+    camisaMasculina: {
+      justo:    { peito: [7, 10, 3, 4],   cintura: [4, 9, 4, 8] },
+      ajustado: { peito: [10, 13, 3, 5],  cintura: [8, 14, 4, 9] },
+      regular:  { peito: [14, 18, 4, 6],  cintura: [12, 20, 5, 10] },
+      solto:    { peito: [18, 24, 5, 8],  cintura: [18, 28, 6, 12] },
+    },
+
+    /* [INDUSTRIA] jaqueta e casaco pedem mais folga que blusa,
+       porque vestem por cima de outra peca.
+       jaqueta ajustado 9,5-10,8 | semi 11,1-13,7 | solto 14,9-25,4
+       casaco  ajustado 9,5-11   | semi 11-15    | solto 15-25,4 */
+    jaqueta: {
+      ajustado: { busto: [9.5, 10.8, 3, 5],  peito: [9.5, 10.8, 3, 5] },
+      regular:  { busto: [11.1, 13.7, 3, 6], peito: [11.1, 13.7, 3, 6] },
+      solto:    { busto: [14.9, 25.4, 4, 12], peito: [14.9, 25.4, 4, 12] },
+    },
+    casaco: {
+      ajustado: { busto: [9.5, 11, 3, 5],   peito: [9.5, 11, 3, 5] },
+      regular:  { busto: [11, 15, 3, 7],    peito: [11, 15, 3, 7] },
+      solto:    { busto: [15, 25.4, 4, 12], peito: [15, 25.4, 4, 12] },
+    },
+
+    /* [INDUSTRIA] calca e saia de tecido plano. A ancora e o QUADRIL,
+       nao a cintura: quadril apertado nao sobe, cintura sobra se ajusta.
+       justo <=6,4 | ajustado 7,6-10 | semi 10-12,7 | solto 12,7-20
+       Entrepernas e comprimento, entao a faixa e estreita dos dois lados:
+       calca curta demais aparece tanto quanto calca arrastando. */
+    calca: {
+      justo:    { cintura: [0, 2.5, 2.5, 5],  quadril: [2, 6.4, 3, 5],    coxa: [2, 5, 2, 4],  entrepernas: [-1, 1, 3, 3] },
+      ajustado: { cintura: [1, 3.8, 2.5, 6],  quadril: [6.4, 9, 3, 6],    coxa: [4, 7, 2, 5],  entrepernas: [-1, 2, 3, 4] },
+      regular:  { cintura: [2, 5, 3, 7],      quadril: [8, 11, 3.8, 8],   coxa: [6, 10, 3, 6], entrepernas: [-1, 3, 3, 5] },
+      solto:    { cintura: [4, 8, 3.8, 10],   quadril: [11, 18, 4, 12],   coxa: [9, 16, 4, 10], entrepernas: [-1, 4, 3, 6] },
+    },
+
+    /* [INDUSTRIA] malha de compressao trabalha com folga NEGATIVA.
+       Alvos: 10% segunda pele | 15% inicio de compressao | 20% legging.
+       Convertidos para cm sobre circunferencias tipicas. Teto pratico
+       de uso diario: 2,5 a 7,6 cm de negativa total. */
+    legging: {
+      justo:    { cintura: [-9, -5, 4, 4],  quadril: [-11, -6, 5, 4], coxa: [-7, -3, 3, 3] },
+      ajustado: { cintura: [-6, -2.5, 4, 5], quadril: [-8, -3, 5, 5], coxa: [-5, -2, 3, 4] },
+      regular:  { cintura: [-3, 0, 4, 6],   quadril: [-4, 0, 5, 6],   coxa: [-3, 0, 3, 5] },
+      solto:    { cintura: [0, 4, 4, 8],    quadril: [0, 5, 5, 8],    coxa: [0, 4, 3, 7] },
+    },
+
+    /* [INDUSTRIA] sutia pelo metodo moderno, de banda FIRME.
+       A banda sustenta cerca de 80% do peso, entao ela e menor que o
+       torax e estica no corpo: folga negativa de 2 a 6 cm. A taca vem
+       da diferenca busto menos subtoracico, e por isso a folga de busto
+       fica perto de zero. Usar as faixas de blusa aqui (7,5 a 10 cm de
+       folga no busto) recomendaria sempre uma taca grande demais e uma
+       banda frouxa, que e exatamente o erro mais comum de sutia.
+
+       ATENCAO: isto e casamento por folga, nao a conta de banda e taca.
+       Para tabela que so publica letra (75B, 80C) sem centimetro, o
+       caminho certo e a conta em D.sutia, que ainda nao esta ligada ao
+       recomendador. Enquanto nao estiver, sutia exige tabela com banda
+       e busto em centimetro. */
+    sutia: {
+      justo:    { banda: [-6, -3, 3, 3], busto: [-2, 1, 3, 3] },
+      ajustado: { banda: [-5, -2, 3, 3], busto: [-1, 2, 3, 3] },
+      regular:  { banda: [-4, -1, 3, 4], busto: [0, 3, 3, 4] },
+      solto:    { banda: [-2, 1, 3, 5],  busto: [1, 5, 3, 5] },
+    },
+
+    /* [NORMA] calcado: folga de comprimento.
+       ISO 9407 (Mondopoint) exige no minimo 5 mm.
+       Birkenstock orienta pe + 10 mm para achar a palmilha. */
+    calcado: {
+      justo:    { pe: [0.5, 0.9, 0.3, 0.5] },
+      ajustado: { pe: [0.7, 1.1, 0.3, 0.6] },
+      regular:  { pe: [0.8, 1.3, 0.3, 0.8] },
+      solto:    { pe: [1.2, 1.8, 0.4, 1.0] },
+    },
+
+    relogio: { regular: { punho: [1.0, 2.5, 1.0, 2.0] } },
+  };
+
+  /* [NORMA + INDUSTRIA] folga de USO minima: abaixo disso a peca
+     nao veste em tecido plano, qualquer que seja o estilo. */
+  D.folgaMinima = {
+    busto: 6.4, peito: 6.4, cintura: 2.5, quadril: 5.1,
+    punho: 2.5, braco: 2.0, coxa: 2.0,
+  };
+
+  D.caimentoPadrao = {
+    generico: 'regular', legging: 'ajustado', calcado: 'regular', calca: 'regular',
+    sutia: 'ajustado', relogio: 'regular', jaqueta: 'regular',
+    casaco: 'regular', camisaMasculina: 'regular',
+  };
+
+  /* ============================================================
+     2. TECIDO — classes de estiramento
+     ------------------------------------------------------------
+     [INDUSTRIA] Medicao: marque 10 cm no sentido transversal e
+     estique ao maximo confortavel.
+       estiramento% = (esticado - 10) / 10 * 100
+
+     Classes: 0-10 nao-stretch | 10-25 baixo | 25-50 moderado |
+     50-75 alto | 75-100 muito alto | >100 super stretch.
+
+     REGRA DE SEGURANCA: a folga negativa aplicada nunca pode
+     passar do estiramento do proprio tecido, e o corpo nao deve
+     consumir mais que ~50% do estiramento disponivel, senao a
+     peca nao recupera a forma.
+
+     NAO EXISTE DEFAULT. Sem o lojista declarar a classe, o
+     provador cai para casamento de faixa e nao aplica piso de
+     folga minima. Assumir "plano" em silencio reprovaria todo
+     tamanho de qualquer camiseta de viscolycra, e malha e a
+     maior parte de um catalogo de dropshipping.
+     ============================================================ */
+
+  D.tecido = {
+    plano:      { estiramento: 5,   negativaMax: 0,    label: 'sem elasticidade' },
+    poucoElast: { estiramento: 18,  negativaMax: 2.0,  label: 'pouco elastico' },
+    malha:      { estiramento: 38,  negativaMax: 5.0,  label: 'malha' },
+    elastica:   { estiramento: 62,  negativaMax: 8.0,  label: 'bem elastica' },
+    compressao: { estiramento: 110, negativaMax: 14.0, label: 'compressao' },
+  };
+
+  /* Perfis cuja faixa de folga JA nasce negativa porque a peca e feita
+     pra ficar menor que o corpo. Neles o ajuste por elasticidade nao se
+     aplica: somar o estiramento do tecido por cima da negativa embutida
+     conta a mesma folga duas vezes e o provador passa a aceitar um
+     tamanho abaixo do que devia. Foi assim que um sutia 70B apareceu
+     com a banda "larga" num torax de 74 cm, quando a banda de 70 nesse
+     torax e justamente o alvo. */
+  D.negativaEmbutida = { legging: true, sutia: true };
+
+  /* deslocamento em cm aplicado a faixa de folga, por classe */
+  D.elasticidade = {
+    plano: 0, poucoElast: 2, malha: 5, elastica: 8, compressao: 14,
+    /* apelidos antigos, mantidos para nao quebrar configuracao existente */
+    nenhuma: 0, pouca: 2, media: 5, alta: 8,
+  };
+
+  /* ============================================================
+     3. GRADE — quanto vale subir um tamanho
+     ------------------------------------------------------------
+     [NORMA] EN 13402: passo de 4 cm em busto, cintura e quadril.
+     [INDUSTRIA] tech pack: mulher +3,8 cm por tamanho ate XL e
+     +5 cm acima de XL; homem +5 cm e +6,3 acima de XL.
+
+     Serve para o desempate: se o deficit for menor que METADE do
+     passo da grade, subir de tamanho piora em vez de resolver.
+
+     NAO embutimos a tabela MCO brasileira: ela e metodo comercial
+     de modelagem, nao dado publico, e as normas ABNT NBR 16933 e
+     16060 sao pagas e nao foram obtidas. Usar EN 13402, que esta
+     verificada, evita distribuir material de terceiro sem licenca.
+     ============================================================ */
+
+  D.passoGrade = {
+    en13402: 4.0,
+    mulherLetra: 3.8, mulherLetraPlus: 5.0,
+    homemLetra: 5.0,  homemLetraPlus: 6.3,
+    comprimento: 2.5, ombro: 1.9, manga: 1.9, cava: 1.3, gola: 0.6,
+    calcaCintura: 3.8, calcaQuadril: 3.8, calcaCoxa: 2.5,
+  };
+
+  /* [NORMA] EN 13402-3: circunferencia em faixa de 4 cm, tolerancia
+     +/- 2 cm. Estatura em faixa de 8 cm, tolerancia +/- 4 cm. */
+  D.tolerancia = { circunferencia: 2.0, estatura: 4.0, faixaCircunferencia: 4.0 };
+
+  /* ============================================================
+     4. NUMERACAO a partir do busto  [INDUSTRIA]
+        IT = busto/2 | FR = busto/2 - 4 | EU/DE = busto/2 - 6
+        UK = EU - 28 | US = EU - 32 | BR ~= EU + 2
+     ============================================================ */
+
+  D.numeracao = {
+    IT: function (busto) { return busto / 2; },
+    FR: function (busto) { return busto / 2 - 4; },
+    EU: function (busto) { return busto / 2 - 6; },
+    UK: function (busto) { return busto / 2 - 6 - 28; },
+    US: function (busto) { return busto / 2 - 6 - 32; },
+    BR: function (busto) { return busto / 2 - 6 + 2; },
+  };
+
+  /* ============================================================
+     5. ESTIMATIVA DE CORPO a partir de altura e peso
+     ------------------------------------------------------------
+     LEIA ISTO ANTES DE CONFIAR NO RESULTADO.
+
+     [NORMA] So a CINTURA tem regressao publicada com coeficientes
+     abertos: Bozeman 2012, sobre o NHANES III. Para BUSTO e
+     QUADRIL nao existe equacao publica a partir de altura e peso.
+
+     E o numero que decide o desenho do produto: com o RMSE de
+     5,41 cm das mulheres, a chance da estimativa cair na faixa
+     certa de 4 cm da EN 13402 e de 28,8%. Nos homens, 37,9%.
+     Ou seja, o MELHOR modelo publicado, com altura e peso
+     MEDIDOS, erra o tamanho em cerca de duas de cada tres
+     mulheres. Com peso auto-declarado piora: mulher com IMC
+     entre 35 e 40 cai para ~23,5%.
+
+     Consequencia de projeto, nao opiniao: estimar corpo a partir
+     de altura e peso NAO sustenta sozinho uma recomendacao. A
+     estimativa serve para PRE-PREENCHER um campo que a pessoa
+     confirma ou corrige, exatamente como a Sizebay faz no passo
+     "confira suas medidas". Toda medida estimada e marcada como
+     estimada na tela.
+     ============================================================ */
+
+  D.imc = function (pesoKg, alturaCm) {
+    var m = alturaCm / 100;
+    return m > 0 ? pesoKg / (m * m) : null;
+  };
+
+  /* [NORMA] vies de auto-declaracao de peso, por faixa de IMC.
+     Magro superestima, obeso subestima. Em kg/m2. */
+  D.viesAutoRelato = function (imc) {
+    if (imc == null) return 0;
+    if (imc < 18.5) return 0.538;
+    if (imc < 25) return 0;
+    if (imc < 30) return -0.588;
+    if (imc < 35) return -1.018;
+    if (imc < 40) return -1.604;
+    return -2.258;
+  };
+
+  D.estimativa = {
+    f: {
+      /* [NORMA] Bozeman 2012, mulheres (n=2.395), cintura em cm.
+         Os termos de raca nao foram significativos e ficam de fora.
+         O termo de idade so entra a partir dos 35 anos. */
+      cintura: function (c) {
+        var imc = D.imc(c.peso, c.altura);
+        if (imc == null) return null;
+        imc += D.viesAutoRelato(imc);
+        var idade = c.idade == null ? 35 : c.idade;
+        var v = 28.81919 + 2.218007 * imc;
+        if (idade >= 35) v += -3.688953 + 0.125975 * idade;
+        return v;
+      },
+      /* [NOSSO] Sem equacao publicada para busto e quadril, derivamos
+         da cintura usando a razao mediana da populacao. E aproximacao
+         grosseira e existe apenas para pre-preencher o campo. */
+      quadril: function (c) {
+        var w = D.estimativa.f.cintura(c);
+        return w == null ? null : w * 1.28;
+      },
+      busto: function (c) {
+        var w = D.estimativa.f.cintura(c);
+        return w == null ? null : w * 1.21;
+      },
+      /* [INDUSTRIA] regra de bolso, variacao individual de 5 a 10% */
+      entrepernas: function (c) {
+        return c.altura ? c.altura * 0.4275 : null;
+      },
+    },
+    m: {
+      /* [NORMA] Bozeman 2012, homens (n=2.246) */
+      cintura: function (c) {
+        var imc = D.imc(c.peso, c.altura);
+        if (imc == null) return null;
+        imc += D.viesAutoRelato(imc);
+        var idade = c.idade == null ? 40 : c.idade;
+        return 22.61306 + 2.520738 * imc + 0.1583812 * idade;
+      },
+      /* [INDUSTRIA] drop masculino padrao (cintura menos torax) = -12 cm */
+      peito: function (c) {
+        var w = D.estimativa.m.cintura(c);
+        return w == null ? null : w + 12;
+      },
+      quadril: function (c) {
+        var w = D.estimativa.m.cintura(c);
+        return w == null ? null : w * 1.05;
+      },
+      entrepernas: function (c) {
+        return c.altura ? c.altura * 0.4275 : null;
+      },
+    },
+  };
+
+  /* [NORMA] erro esperado de cada estimativa, em cm. Alimenta a
+     confianca: medida estimada nunca produz confianca alta. */
+  D.erroEstimativa = { cintura: 5.41, quadril: 7.0, busto: 7.0, peito: 6.0, entrepernas: 4.0 };
+
+  /* probabilidade de a estimativa cair na faixa certa de 4 cm */
+  D.chanceFaixa = function (rmse) {
+    var x = D.tolerancia.circunferencia / (rmse * Math.SQRT2);
+    /* aproximacao de erf com erro < 1,5e-7 (Abramowitz e Stegun) */
+    var t = 1 / (1 + 0.3275911 * Math.abs(x));
+    var y =
+      1 -
+      ((((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t +
+        0.254829592) *
+        t *
+        Math.exp(-x * x);
+    return x >= 0 ? y : -y;
+  };
+
+  /* ============================================================
+     6. FORMATO DO CORPO — FFIT (NC State / SizeUSA, ~6.000 mulheres)
+     ------------------------------------------------------------
+     [NORMA] Limiares originais em polegada, convertidos:
+     1"=2,54 | 2"=5,08 | 3,6"=9,14 | 7"=17,78 | 9"=22,86 | 10"=25,40
+
+     O formato NAO melhora a estimativa por altura e peso. Ele faz
+     o oposto, e mais util: RESTRINGE as medidas possiveis. Por isso
+     entra como validacao da estimativa, nao como entrada dela.
+     ============================================================ */
+
+  D.formatos = {
+    ampulheta:        { rotulo: 'Ampulheta',           regra: 'busto e quadril proximos, cintura bem marcada' },
+    pera:             { rotulo: 'Pera ou triangulo',   regra: 'quadril maior que o busto' },
+    trianguloInverso: { rotulo: 'Triangulo invertido', regra: 'busto maior que o quadril' },
+    retangulo:        { rotulo: 'Retangulo',           regra: 'busto, cintura e quadril proximos' },
+    oval:             { rotulo: 'Oval',                regra: 'cintura maior que quadril e busto' },
+  };
+
+  /* [NORMA] FFIT modificado (Sokolowski 2020, corrige plus size).
+     Entradas em cm. */
+  /**
+   * Simplificacao de 5 formas das 9 do FFIT.
+   *
+   * O FFIT completo separa ampulheta superior, inferior, colher e
+   * diamante. Cinco opcoes ja e o teto do que se pergunta numa PDP sem
+   * cansar, entao ampulheta superior e inferior colapsam em pera ou
+   * triangulo invertido conforme o lado dominante.
+   *
+   * As regras sao avaliadas da mais especifica para a mais geral e
+   * cobrem o espaco inteiro: nao existe corpo que caia fora. A versao
+   * anterior deixava buraco (quadril bem maior que o busto E cintura
+   * muito marcada nao casava com nada e caia em retangulo), o que
+   * classificava uma pera classica como retangulo.
+   */
+  D.classificarFormato = function (busto, cintura, quadril) {
+    if (busto == null || cintura == null || quadril == null) return null;
+    var P = 9.14;    // 3,6 polegadas: diferenca que ja se enxerga
+    var U = 2.54;    // 1 polegada: busto e quadril praticamente iguais
+    var N = 22.86;   // 9 polegadas: cintura marcada no busto
+    var M = 25.4;    // 10 polegadas: cintura marcada no quadril
+
+    // 1. cintura e a maior medida
+    if (cintura >= quadril && cintura >= busto) return 'oval';
+    // 2. busto e quadril quase iguais E cintura bem marcada
+    if (Math.abs(busto - quadril) <= U && (busto - cintura >= N || quadril - cintura >= M)) {
+      return 'ampulheta';
+    }
+    // 3. quadril claramente maior
+    if (quadril - busto >= P) return 'pera';
+    // 4. busto claramente maior
+    if (busto - quadril >= P) return 'trianguloInverso';
+    // 5. o resto
+    return 'retangulo';
+  };
+
+  /* restricoes que o formato impoe, para conferir a estimativa */
+  D.restricaoFormato = {
+    pera:             function (b, c, q) { return q >= b + 9.14; },
+    trianguloInverso: function (b, c, q) { return b >= q + 9.14; },
+    retangulo:        function (b, c, q) { return Math.abs(b - q) < 9.14; },
+    ampulheta:        function (b, c, q) { return Math.abs(b - q) <= 2.54 && (b - c >= 22.86 || q - c >= 25.4); },
+    oval:             function (b, c, q) { return c >= q && c >= b; },
+  };
+
+  /* ============================================================
+     7. SUTIA  [INDUSTRIA]
+     ------------------------------------------------------------
+     Metodo moderno, de banda justa. O metodo legado de somar 4
+     polegadas ao subtoracico fica de fora de proposito: produz
+     banda frouxa e taca pequena, e e a causa mais comum de sutia
+     mal recomendado.
+
+     ATENCAO: a taca sai de busto menos SUBTORACICO, nunca de
+     busto menos BANDA. A banda ja e o subtoracico arredondado,
+     entao usar banda injeta ate 2,5 cm de erro justo na conta
+     que deveria ser a mais precisa do formulario.
+     ============================================================ */
+
+  D.sutia = {
+    tacaCm: [
+      { ate: 11, letra: 'A' }, { ate: 13, letra: 'B' }, { ate: 15, letra: 'C' },
+      { ate: 17, letra: 'D' }, { ate: 19, letra: 'E' }, { ate: 21, letra: 'F' },
+      { ate: 23, letra: 'G' }, { ate: 25, letra: 'H' },
+    ],
+    passoTacaCm: 2,
+    bandaEu: function (subtoracicoCm) {
+      var b = Math.round(subtoracicoCm / 5) * 5;
+      return Math.min(110, Math.max(60, b));
+    },
+    bandaEuParaUs: function (eu) { return (eu + 10) / 2.5; },
+    bandaUsParaEu: function (us) { return 2.5 * us - 10; },
+    letraPorSistema: {
+      EU: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+      UK: ['A', 'B', 'C', 'D', 'DD', 'E', 'F', 'FF'],
+      US: ['A', 'B', 'C', 'D', 'DD', 'DDD', 'G', 'H'],
+    },
+    passoBandaEu: 5,
+    /* banda -1 passo => taca +1 letra. Mesmo volume de taca. */
+    toleranciaBandaCm: 2.5,
+    /* [NOSSO] top de biquini de amarrar tolera mais na banda */
+    toleranciaBandaAjustavelCm: 5.0,
+  };
+
+  /* ============================================================
+     8. CALCADO  [NORMA]
+     ============================================================ */
+
+  D.calcadoTab = {
+    mondopointPasso: 5,
+    pontoParis: 0.667,
+    barleycorn: 0.847,
+    euDoPe: function (peCm) { return (peCm + 2 * 0.667) / 0.667; },
+    peDoEu: function (eu) { return eu * 0.667 - 2 * 0.667; },
+    brParaEu: function (br) { return br + 1; },
+    birkenstock: {
+      35: 22.5, 36: 23.0, 37: 24.0, 38: 24.5, 39: 25.0, 40: 26.0,
+      41: 26.5, 42: 27.0, 43: 28.0, 44: 28.5, 45: 29.0, 46: 30.0,
+    },
+    folgaBirkenstockCm: 1.0,
+    folgaMinimaCm: 0.5,
+    passoLarguraCm: 0.32,
+    larguras: ['4A', '2A', 'B', 'D', '2E', '4E', '6E'],
+  };
+
+  /* ============================================================
+     9. RELOGIO e ANEL  [INDUSTRIA]
+     ============================================================ */
+
+  D.relogio = {
+    caixaPorPulso: [
+      { ate: 15.2, caixa: [34, 36] }, { ate: 16.5, caixa: [36, 38] },
+      { ate: 17.8, caixa: [38, 40] }, { ate: 19.1, caixa: [40, 42] },
+      { ate: 99, caixa: [42, 46] },
+    ],
+    ocupacaoIdeal: [0.6, 0.75],
+    razaoPulseira: 0.5,
+    mediaPulsoCm: { m: [17.8, 18.4], f: [15.2, 16.5] },
+    mmPorElo: [2, 3],
+    mmPorFuroFecho: 2,
+    pulseiraFemininaMm: [165, 180],
+  };
+
+  D.anel = {
+    euDaCircunferencia: function (mm) { return mm; },
+    brDaCircunferencia: function (mm) { return Math.round(mm - 40); },
+    circunferenciaDoDiametro: function (mm) { return mm * Math.PI; },
+    passoUsMm: 2.55,
+    ancora: [
+      { us: 5, diametro: 15.7, circunferencia: 49.3, uk: 'J1/2', eu: 49, br: 9 },
+      { us: 6, diametro: 16.5, circunferencia: 51.8, uk: 'L1/2', eu: 52, br: 12 },
+      { us: 7, diametro: 17.3, circunferencia: 54.3, uk: 'N1/2', eu: 54, br: 14 },
+      { us: 8, diametro: 18.1, circunferencia: 56.9, uk: 'P1/2', eu: 57, br: 17 },
+      { us: 9, diametro: 19.0, circunferencia: 59.7, uk: 'R1/2', eu: 60, br: 20 },
+      { us: 10, diametro: 20.0, circunferencia: 62.8, uk: 'U', eu: 63, br: 23 },
+    ],
+  };
+
+  /* ============================================================
+     10. DESEMPATE e PESOS
+     ------------------------------------------------------------
+     [NOSSO] Os pesos sao calibragem nossa, nao numero de norma.
+     Regiao que nao cede pesa mais: ombro apertado condena a peca,
+     cintura folgada nao. Estao expostos como setting justamente
+     porque sao decisao de produto, nao constante escondida.
+     ============================================================ */
+
+  D.pesos = {
+    generico: { busto: 1.4, peito: 1.4, ombro: 1.5, cintura: 1.0, quadril: 1.1, coxa: 0.8, comprimento: 0.5 },
+    legging: { quadril: 1.5, cintura: 1.2, coxa: 1.0, entrepernas: 0.6 },
+    calca: { quadril: 1.5, cintura: 1.3, coxa: 1.0, entrepernas: 0.7 },
+    calcado: { pe: 2.0, comprimento: 2.0, largura: 0.8 },
+    sutia: { banda: 1.6, busto: 1.4 },
+    relogio: { punho: 1.5, caixa: 1.0 },
+    camisaMasculina: { peito: 1.5, pescoco: 1.4, cintura: 0.9, manga: 0.7 },
+  };
+
+  /* [INDUSTRIA] quando duas medidas apontam tamanhos diferentes */
+  D.desempate = {
+    legging: { manda: 'quadril' },
+    calca: { manda: 'quadril' },
+    generico: { manda: 'busto' },
+    calcado: { manda: 'pe' },
+    camisaMasculina: { manda: 'peito' },
+    sutia: { manda: 'banda' },
+  };
+
+  global.BXDados = D;
+  if (typeof module !== 'undefined' && module.exports) module.exports = D;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* ---------- bx-fit-core.js ---------- */
+/* ============================================================
+   BX Provador Virtual — nucleo de calculo
+   ------------------------------------------------------------
+   Puro. Nao toca no DOM, nao le a pagina, nao faz rede.
+   Entra medida, sai recomendacao. Da pra rodar no node e testar.
+
+   Principio: a recomendacao e sempre a comparacao entre uma
+   MEDIDA DO CORPO e uma MEDIDA DA PECA, regiao por regiao.
+   A diferenca entre as duas e a FOLGA. Cada tipo de caimento
+   tem uma faixa de folga aceitavel. O tamanho recomendado e o
+   que poe mais regioes dentro da faixa.
+
+   Tudo que e numero de industria (faixas de folga, elasticidade,
+   estimativa de corpo, conversao de grade) mora em bx-fit-dados.js,
+   nunca aqui. Assim da pra corrigir a tabela sem mexer na logica.
+   ============================================================ */
+(function (global) {
+  'use strict';
+
+  var D = global.BXDados || {};
+  var Core = {};
+
+  /* ================= 1. unidades ================= */
+
+  var POL = 2.54;
+
+  Core.paraCm = function (v, unidade) {
+    if (v == null || v === '') return null;
+    var n = Core.numero(v);
+    if (n == null) return null;
+    return unidade === 'in' || unidade === 'pol' ? n * POL : n;
+  };
+
+  Core.cmParaPol = function (cm) {
+    return cm == null ? null : cm / POL;
+  };
+
+  /**
+   * Pe-e-polegada para cm. Loja americana publica altura como 5'7" e ate
+   * como faixa 5'1"-5'5". Sem isso o parser le 5.1 e joga a compradora
+   * pro menor tamanho da grade, sempre. Achado num teste em loja real.
+   */
+  Core.pesPolegadas = function (v) {
+    var m = String(v).match(
+      /(\d+)\s*(?:'|ft|feet|pes?)\s*(\d+(?:[.,]\d+)?)?\s*(?:"|''|in|pol)?/i
+    );
+    if (!m) return null;
+    var pes = parseFloat(m[1]);
+    var pol = m[2] ? parseFloat(String(m[2]).replace(',', '.')) : 0;
+    if (!isFinite(pes) || pes < 3 || pes > 8) return null;
+    return (pes * 12 + pol) * POL;
+  };
+
+  /** aceita "72", "72,5", "28 in", "71-76", "5'7\"", "5'1\"-5'5\"" */
+  Core.numero = function (v) {
+    if (typeof v === 'number') return isFinite(v) ? v : null;
+    if (v == null) return null;
+    var s = String(v).trim();
+
+    // pes-e-polegada vem antes de tudo: "5'1\"-5'5\"" tem hifen no meio e
+    // seria lido como a faixa numerica 5 a 5 se caisse na regra de faixa.
+    if (/\d\s*(?:'|ft\b|feet\b)/i.test(s)) {
+      var partes = s.split(/\s*[-–]\s*(?=\d)/);
+      var convs = partes
+        .map(function (p) { return Core.pesPolegadas(p); })
+        .filter(function (n) { return n != null; });
+      if (convs.length) {
+        return convs.reduce(function (a, b) { return a + b; }, 0) / convs.length;
+      }
+    }
+
+    // Polegada em fracao: loja americana escreve 8 3/4" e 9 5/8".
+    // Sem isso o parser le 8 e o sapato encolhe tres quartos de polegada.
+    var fr = Core.fracao(s);
+    if (fr != null) return fr;
+
+    s = s.replace(',', '.');
+    var faixa = s.match(/^(-?\d+(?:\.\d+)?)\s*[-–a]\s*(-?\d+(?:\.\d+)?)/i);
+    if (faixa) return (parseFloat(faixa[1]) + parseFloat(faixa[2])) / 2;
+    var m2 = s.match(/-?\d+(?:\.\d+)?/);
+    return m2 ? parseFloat(m2[0]) : null;
+  };
+
+  /**
+   * "8 3/4" -> 8.75 | "3/4" -> 0.75 | "8 3/4 - 9" -> 8.875 (media).
+   * Devolve null quando nao ha fracao, pra nao atrapalhar o caminho normal.
+   */
+  Core.fracao = function (v) {
+    var s = String(v).replace(/["”“]/g, ' ');
+    if (s.indexOf('/') === -1) return null;
+    var partes = s.split(/\s*[-–]\s*(?=\d)/);
+    var vals = [];
+    partes.forEach(function (p) {
+      var m = p.match(/(?:(\d+)\s+)?(\d+)\s*\/\s*(\d+)/);
+      if (m) {
+        var den = parseFloat(m[3]);
+        if (!den) return;
+        vals.push((m[1] ? parseFloat(m[1]) : 0) + parseFloat(m[2]) / den);
+      } else {
+        var n = p.match(/\d+(?:\.\d+)?/);
+        if (n) vals.push(parseFloat(n[0]));
+      }
+    });
+    if (!vals.length) return null;
+    return vals.reduce(function (a, b) { return a + b; }, 0) / vals.length;
+  };
+
+  /** "68-72" -> {min:68, max:72}; "70" -> {min:70, max:70} */
+  Core.faixa = function (v) {
+    if (v == null || v === '') return null;
+    var s0 = String(v).trim();
+
+    if (/\d\s*(?:'|ft\b|feet\b)/i.test(s0)) {
+      var ps = s0.split(/\s*[-–]\s*(?=\d)/)
+        .map(function (p) { return Core.pesPolegadas(p); })
+        .filter(function (n) { return n != null; });
+      if (ps.length) {
+        return { min: Math.min.apply(null, ps), max: Math.max.apply(null, ps) };
+      }
+    }
+
+    if (s0.indexOf('/') !== -1) {
+      var fs = s0.split(/\s*[-–]\s*(?=\d)/)
+        .map(function (x) { return Core.fracao(x); })
+        .filter(function (n) { return n != null; });
+      if (fs.length) {
+        return { min: Math.min.apply(null, fs), max: Math.max.apply(null, fs) };
+      }
+    }
+
+    var s = s0.replace(',', '.');
+    var m = s.match(/(-?\d+(?:\.\d+)?)\s*[-–a]\s*(-?\d+(?:\.\d+)?)/i);
+    if (m) {
+      var a = parseFloat(m[1]), b = parseFloat(m[2]);
+      return { min: Math.min(a, b), max: Math.max(a, b) };
+    }
+    var n = Core.numero(s);
+    return n == null ? null : { min: n, max: n };
+  };
+
+  /* ================= 2. tabela de medidas ================= */
+
+  /**
+   * Normaliza a tabela que o lojista cadastrou.
+   *
+   * A armadilha que mais aparece: medida DEITADA (flat, o produto na mesa,
+   * de um lado ao outro) e METADE da circunferencia. Quem cadastra 52 de
+   * busto deitado esta dizendo 104 de circunferencia. Tratar os dois como
+   * a mesma coisa erra o tamanho em dois numeros inteiros, sempre pra menos.
+   *
+   * @param {object} bruto  { tipo:'peca'|'corpo', unidade:'cm'|'in',
+   *                          medicao:'circunferencia'|'deitada',
+   *                          tamanhos:[{ tamanho:'M', busto:52, cintura:44 }] }
+   * @returns {object} { tipo, tamanhos:[{tamanho, medidas:{busto:{min,max}}}] }
+   */
+  Core.normalizarTabela = function (bruto) {
+    if (!bruto || !bruto.tamanhos || !bruto.tamanhos.length) return null;
+    var un = bruto.unidade === 'in' || bruto.unidade === 'pol' ? 'in' : 'cm';
+    var dobra = bruto.medicao === 'deitada' || bruto.medicao === 'flat';
+    var tipo = bruto.tipo === 'corpo' ? 'corpo' : 'peca';
+
+    var tamanhos = bruto.tamanhos
+      .map(function (linha) {
+        var medidas = {};
+        Object.keys(linha).forEach(function (k) {
+          if (k === 'tamanho' || k === 'size' || k === 'label') return;
+          var f = Core.faixa(linha[k]);
+          if (!f) return;
+          var mult = (un === 'in' ? POL : 1) * (dobra && ehCircular(k) ? 2 : 1);
+          medidas[chave(k)] = { min: f.min * mult, max: f.max * mult };
+        });
+        var rot = linha.rotulos && linha.rotulos.length
+          ? linha.rotulos
+          : String(linha.tamanho || '').split(/\s*[\/|]\s*/).map(function (x) {
+              return x.trim();
+            }).filter(Boolean);
+        return {
+          tamanho: String(linha.tamanho || linha.size || linha.label || '').trim(),
+          // "4 / S" e um tamanho so escrito em dois sistemas. Guardar os
+          // dois deixa o casamento com a variante da loja funcionar tanto
+          // se a loja rotula por numero quanto se rotula por letra.
+          rotulos: rot,
+          medidas: medidas,
+        };
+      })
+      .filter(function (t) {
+        return t.tamanho && Object.keys(t.medidas).length;
+      });
+
+    return tamanhos.length ? { tipo: tipo, tamanhos: tamanhos } : null;
+  };
+
+  /* medidas que sao volta completa no corpo (dobram quando vem deitadas) */
+  var CIRCULARES = [
+    'busto', 'peito', 'torax', 'cintura', 'quadril', 'coxa', 'braco',
+    'punho', 'pescoco', 'panturrilha', 'gancho', 'banda',
+  ];
+  /* medidas que sao comprimento (nunca dobram) */
+  var LINEARES = [
+    'comprimento', 'ombro', 'manga', 'entrepernas', 'altura', 'largura',
+    'pe', 'caixa', 'espessura', 'alca', 'profundidade',
+  ];
+
+  function chave(k) {
+    return String(k)
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, '_');
+  }
+
+  function ehCircular(k) {
+    var c = chave(k);
+    for (var i = 0; i < LINEARES.length; i++) {
+      if (c.indexOf(LINEARES[i]) !== -1) return false;
+    }
+    for (var j = 0; j < CIRCULARES.length; j++) {
+      if (c.indexOf(CIRCULARES[j]) !== -1) return true;
+    }
+    return false; // na duvida, nao dobra: errar pra menos e menos danoso
+  }
+
+  Core._chave = chave;
+  Core._ehCircular = ehCircular;
+
+  /* ================= 3. corpo ================= */
+
+  /**
+   * Completa as medidas do corpo que o comprador nao informou, a partir do
+   * que ele informou (altura, peso, idade, sexo, formato). Nunca sobrescreve
+   * medida declarada: o numero que a pessoa mediu vale mais que estimativa.
+   *
+   * As equacoes vem de BXDados.estimativa. Se nao houver equacao para uma
+   * medida, ela fica ausente, e o calculo simplesmente ignora aquela regiao
+   * em vez de inventar. Regiao inventada e pior que regiao faltando.
+   */
+  Core.completarCorpo = function (entrada, perfil) {
+    var corpo = {};
+    Object.keys(entrada || {}).forEach(function (k) {
+      var n = Core.numero(entrada[k]);
+      if (n != null) corpo[chave(k)] = n;
+    });
+
+    var eq = (D.estimativa || {})[corpo.sexo || (entrada && entrada.sexo) || 'f'];
+    if (!eq) return { corpo: corpo, estimadas: [] };
+
+    var estimadas = [];
+    var precisa = (perfil && perfil.medidas_do_corpo) || Object.keys(eq);
+
+    precisa.forEach(function (m) {
+      var c = chave(m);
+      if (corpo[c] != null) return;
+      var f = eq[c];
+      if (typeof f !== 'function') return;
+      var v = f(corpo);
+      if (v != null && isFinite(v)) {
+        corpo[c] = v;
+        estimadas.push(c);
+      }
+    });
+
+    return { corpo: corpo, estimadas: estimadas };
+  };
+
+  /* ================= 4. folga e nota ================= */
+
+  /**
+   * Nota de 0 a 1 para uma folga, dada a faixa desejada.
+   * 1 dentro da faixa; cai suave pra fora, e cai mais rapido quando aperta
+   * do que quando sobra, porque peca apertada volta e peca folgada fica.
+   */
+  Core.notaFolga = function (folga, faixa) {
+    if (!faixa) return null;
+    var min = faixa[0], max = faixa[1];
+    if (folga >= min && folga <= max) return 1;
+    var falta = folga < min ? min - folga : folga - max;
+    var tol = folga < min ? (faixa[2] || 4) : (faixa[3] || 8);
+    var n = 1 - falta / tol;
+    return n < 0 ? 0 : n;
+  };
+
+  /* ----- escala de caimento -----
+     Tres referencias de mercado, reconciliadas:
+       Sizebay   : inteiro -2..+2, 5 rotulos (APERTADO..FOLGADO), 7 com is3dFeel
+       Fit Finder: ordinal -3..+3 (very_tight .. very_loose)
+       True Fit  : 0..7 por ponto de medida, com 3-4 = ideal
+     Usamos -3..+3 internamente (o mais granular) e exibimos 5 rotulos por
+     padrao, 7 quando o lojista liga a escala detalhada. Nenhum deles mostra
+     porcentagem de confianca ao comprador, e nos tambem nao vamos mostrar. */
+
+  Core.ROTULOS5 = ['apertado', 'justo', 'ideal', 'largo', 'folgado'];
+  Core.ROTULOS7 = [
+    'apertado', 'justo', 'levemente justo', 'ideal',
+    'levemente folgado', 'largo', 'folgado',
+  ];
+
+  /**
+   * Converte a folga em cm no inteiro -3..+3.
+   * 0 = dentro da faixa ideal. Negativo aperta, positivo sobra.
+   */
+  Core.escala = function (folga, faixa) {
+    if (!faixa) return null;
+    var min = faixa[0], max = faixa[1];
+    var tolAperto = faixa[2] || 4, tolSobra = faixa[3] || 8;
+    if (folga >= min && folga <= max) return 0;
+    if (folga < min) {
+      var falta = min - folga;
+      if (falta <= tolAperto / 2) return -1;
+      if (falta <= tolAperto) return -2;
+      return -3;
+    }
+    var sobra = folga - max;
+    if (sobra <= tolSobra / 2) return 1;
+    if (sobra <= tolSobra) return 2;
+    return 3;
+  };
+
+  /** rotulo humano a partir do inteiro -3..+3 */
+  Core.rotulo = function (n, detalhada) {
+    if (n == null) return null;
+    if (detalhada) return Core.ROTULOS7[Math.max(0, Math.min(6, n + 3))];
+    // na escala de 5, -3 e -2 colapsam em "apertado" e +2/+3 em "folgado"
+    var mapa = { '-3': 0, '-2': 0, '-1': 1, 0: 2, 1: 3, 2: 4, 3: 4 };
+    return Core.ROTULOS5[mapa[String(n)]];
+  };
+
+  /** compat: rotulo direto da folga */
+  Core.rotuloFolga = function (folga, faixa, detalhada) {
+    return Core.rotulo(Core.escala(folga, faixa), detalhada);
+  };
+
+  /**
+   * Preferencia de caimento declarada pelo comprador, ordinal -3..+3
+   * (very_tight .. very_loose no Fit Finder). Desloca a faixa alvo:
+   * quem gosta de roupa larga tem a faixa empurrada pra cima.
+   */
+  Core.aplicarPreferencia = function (faixa, pref) {
+    if (!faixa || !pref) return faixa;
+    var passo = ((faixa[1] - faixa[0]) || 2) * 0.5;
+    var d = pref * passo;
+    return [faixa[0] + d, faixa[1] + d, faixa[2], faixa[3]];
+  };
+
+  /**
+   * Elasticidade: malha com elastano tolera folga negativa. Sem isso,
+   * legging de compressao seria sempre reprovada em todo tamanho.
+   */
+  Core.ajustarPorElasticidade = function (faixa, elasticidade) {
+    var g = (D.elasticidade || {})[elasticidade];
+    if (!g || !faixa) return faixa;
+    return [faixa[0] - g, faixa[1] - g * 0.5, faixa[2], faixa[3]];
+  };
+
+  /**
+   * Faixas de validacao, iguais as que a API do True Fit aceita.
+   * Fora disso o dado e erro de digitacao, e calcular em cima dele
+   * produz recomendacao confiante e errada.
+   */
+  Core.LIMITES = {
+    altura: [60, 260],   // cm
+    peso: [22, 500],     // kg
+    idade: [2, 125],     // anos
+    busto: [50, 200], cintura: [40, 200], quadril: [50, 220],
+    punho: [10, 25], pe: [15, 40],
+  };
+
+  Core.validar = function (entrada) {
+    var erros = [];
+    Object.keys(entrada || {}).forEach(function (k) {
+      var lim = Core.LIMITES[chave(k)];
+      if (!lim) return;
+      var v = Core.numero(entrada[k]);
+      if (v == null) return;
+      if (v < lim[0] || v > lim[1]) {
+        erros.push({ campo: chave(k), valor: v, esperado: lim });
+      }
+    });
+    return erros;
+  };
+
+
+  /**
+   * Ordena os tamanhos pela MEDIDA DOMINANTE da propria tabela, nunca
+   * pela ordem em que o lojista digitou as variantes.
+   *
+   * No Shopify a ordem dos option values e a que a pessoa digitou, e
+   * "M, P, G, GG" ou uma ordem alfabetica vinda de importador sao comuns.
+   * Como a sugestao de tamanho vizinho ("acima" e "abaixo") e a regra de
+   * meio-passo dependem da ordem, confiar na ordem digitada troca o
+   * vizinho de cima pelo de baixo em silencio.
+   *
+   * Devolve tambem se a grade e monotonica. Grade nao monotonica (linha
+   * duplicada, cabecalho repetido no meio, tamanho repetido) desliga a
+   * sugestao de vizinho e vira aviso pro lojista, em vez de recomendacao
+   * errada com cara de certa.
+   */
+  Core.ordenarGrade = function (tamanhos, dominante) {
+    if (!tamanhos || tamanhos.length < 2) {
+      return { tamanhos: tamanhos || [], monotonica: true, dominante: dominante || null };
+    }
+    var chaveDom = dominante;
+    if (!chaveDom) {
+      var cont = {};
+      tamanhos.forEach(function (t) {
+        Object.keys(t.medidas || {}).forEach(function (k) {
+          cont[k] = (cont[k] || 0) + 1;
+        });
+      });
+      // a dominante e a medida presente em mais tamanhos; empate vai pra
+      // primeira em ordem alfabetica, so pra ser deterministico
+      chaveDom = Object.keys(cont).sort(function (a, b) {
+        return cont[b] - cont[a] || (a < b ? -1 : 1);
+      })[0];
+    }
+    if (!chaveDom) return { tamanhos: tamanhos, monotonica: true, dominante: null };
+
+    var comValor = tamanhos.map(function (t, i) {
+      var m = t.medidas[chaveDom];
+      return { t: t, i: i, v: m ? (m.min + m.max) / 2 : null };
+    });
+    if (comValor.some(function (x) { return x.v == null; })) {
+      return { tamanhos: tamanhos, monotonica: false, dominante: chaveDom, motivo: 'tamanho sem a medida dominante' };
+    }
+
+    var ord = comValor.slice().sort(function (a, b) { return a.v - b.v || a.i - b.i; });
+
+    var mono = true;
+    for (var k = 1; k < ord.length; k++) {
+      if (ord[k].v <= ord[k - 1].v) { mono = false; break; }
+    }
+
+    return {
+      tamanhos: ord.map(function (x) { return x.t; }),
+      monotonica: mono,
+      dominante: chaveDom,
+      motivo: mono ? null : 'dois tamanhos com a mesma medida ou medida que nao cresce',
+    };
+  };
+
+  /* ================= 5. recomendacao ================= */
+
+  /**
+   * @param {object} corpo   medidas do corpo em cm
+   * @param {object} tabela  saida de normalizarTabela
+   * @param {object} perfil  perfil do produto
+   * @param {object} opcoes  { caimento, elasticidade, preferencia:-3..+3,
+   *                           disponiveis:[], escalaDetalhada:bool,
+   *                           vesteEm:'pequeno'|'grande'|null }
+   *
+   * Saida no formato que o mercado consolidou (True Fit): melhor tamanho
+   * mais o de cima e o de baixo, e um mapa de caimento por regiao.
+   */
+  Core.recomendar = function (corpo, tabela, perfil, opcoes) {
+    opcoes = opcoes || {};
+    if (!tabela || !tabela.tamanhos.length) {
+      return { ok: false, motivo: 'sem tabela de medidas' };
+    }
+
+    var perfilId = (perfil && perfil.id) || 'generico';
+    var caimento =
+      opcoes.caimento ||
+      (perfil && perfil.caimento_padrao) ||
+      (D.caimentoPadrao || {})[perfilId] ||
+      'regular';
+    var faixasPerfil = (D.folga || {})[perfilId] || (D.folga || {}).generico || {};
+    var faixas = faixasPerfil[caimento] || {};
+    var pesos = (perfil && perfil.pesos) || (D.pesos || {})[perfilId] || (D.pesos || {}).generico || {};
+
+    var grade = Core.ordenarGrade(
+      tabela.tamanhos,
+      (D.desempate || {})[perfilId] && (D.desempate || {})[perfilId].manda
+    );
+
+    var avaliados = grade.tamanhos
+      .filter(function (t) {
+        if (!opcoes.disponiveis || !opcoes.disponiveis.length) return true;
+        var meus = [t.tamanho].concat(t.rotulos || []).map(function (x) {
+          return String(x).trim().toLowerCase();
+        });
+        return opcoes.disponiveis.some(function (d) {
+          return meus.indexOf(String(d).trim().toLowerCase()) !== -1;
+        });
+      })
+      .map(function (t) {
+        var regioes = [];
+        var soma = 0, pesoTotal = 0, pior = 0;
+
+        var mapa = (perfil && perfil.mapa) || {};
+        Object.keys(t.medidas).forEach(function (reg) {
+          // A tabela da loja e o corpo raramente usam a mesma palavra: a
+          // tabela de um sapato diz "comprimento" (da palmilha) e o corpo
+          // diz "pe". Sem essa ponte o calculo nao acha regiao em comum e
+          // devolve "sem dados" numa tabela que estava perfeita.
+          var regCorpo = mapa[reg] || reg;
+          var doCorpo = corpo[regCorpo];
+          if (doCorpo == null) return;
+
+          var m = t.medidas[reg];
+          var daPeca = (m.min + m.max) / 2;
+          var valor, alvo;
+
+          if (tabela.tipo === 'corpo') {
+            // A tabela ja diz "este tamanho serve em quem tem X".
+            // A folga do molde ja esta embutida: compara direto, e a faixa
+            // aceitavel e a propria faixa publicada pela loja.
+            valor = doCorpo;
+            alvo = [m.min, m.max, 4, 4];
+          } else {
+            valor = daPeca - doCorpo;
+            // a faixa de folga tambem e indexada pela regiao do CORPO
+            // (a tabela de calcado diz "comprimento", a faixa diz "pe")
+            var base = faixas[reg] || faixas[regCorpo];
+            // Sem classe de tecido declarada nao aplicamos deslocamento
+            // nenhum E nao aplicamos o piso de folga minima mais abaixo.
+            // Assumir "plano" em silencio reprovaria todo tamanho de uma
+            // camiseta de viscolycra, e malha e a maior parte do catalogo.
+            //
+            // Perfil com folga negativa embutida (legging, sutia) tambem
+            // nao recebe o deslocamento: a negativa ja esta na faixa, e
+            // somar o estiramento por cima conta a mesma folga duas vezes.
+            var embutida = (D.negativaEmbutida || {})[perfilId];
+            alvo = opcoes.tecido && !embutida
+              ? Core.ajustarPorElasticidade(base, opcoes.tecido)
+              : base;
+            alvo = Core.aplicarPreferencia(alvo, opcoes.preferencia);
+          }
+          if (!alvo) return;
+
+          var n = Core.escala(valor, alvo);
+          if (n == null) return;
+
+          // Piso fisiologico: em tecido plano declarado, folga abaixo do
+          // minimo de uso significa que a peca simplesmente nao fecha,
+          // por mais que a media geral do tamanho pareca boa.
+          var impossivel = false;
+          if (opcoes.tecido === 'plano' && tabela.tipo !== 'corpo') {
+            var piso = (D.folgaMinima || {})[regCorpo];
+            if (piso != null && valor < piso) impossivel = true;
+          }
+
+          var p = pesos[reg] == null ? (pesos[regCorpo] == null ? 1 : pesos[regCorpo]) : pesos[reg];
+          // nota 1 no ideal, caindo com o afastamento; regiao onde a peca
+          // nao fecha nao pontua nada, por melhor que seja a media do tamanho
+          var nota = impossivel ? 0 : 1 - Math.abs(n) / 3;
+          var estimada = (corpo._estimadas || []).indexOf(regCorpo) !== -1;
+          soma += nota * p;
+          pesoTotal += p;
+          if (Math.abs(n) > Math.abs(pior)) pior = n;
+
+          regioes.push({
+            regiao: reg,
+            regiaoCorpo: regCorpo,
+            corpo: arred(doCorpo),
+            peca: arred(daPeca),
+            folga: tabela.tipo === 'corpo' ? null : arred(valor),
+            nivel: n,
+            rotulo: Core.rotulo(n, opcoes.escalaDetalhada),
+            estimada: estimada,
+            impossivel: impossivel,
+          });
+        });
+
+        return {
+          tamanho: t.tamanho,
+          rotulos: t.rotulos || [],
+          nota: pesoTotal ? soma / pesoTotal : 0,
+          pior: pior,
+          regioes: regioes,
+          comparadas: regioes.length,
+          serve: !regioes.some(function (r) { return r.impossivel; }),
+          temEstimada: regioes.some(function (r) { return r.estimada; }),
+        };
+      })
+      .filter(function (a) {
+        return a.comparadas > 0;
+      });
+
+    if (!avaliados.length) {
+      return { ok: false, motivo: 'nenhuma regiao em comum entre corpo e tabela' };
+    }
+
+    // Tamanho unico: nao existe recomendacao a fazer, existe uma resposta
+    // binaria. Pontuar uma grade de um item so e teatro.
+    if (avaliados.length === 1) {
+      var u = avaliados[0];
+      return {
+        ok: true,
+        tamanhoUnico: true,
+        tamanho: u.tamanho,
+        serve: u.serve && Math.abs(u.pior) <= 2,
+        regioes: u.regioes,
+        nivelGeral: u.pior,
+        confianca: u.temEstimada ? 'baixa' : Core.confianca(u, [u], perfil && perfil.minRegioes),
+        grade: { monotonica: true, dominante: grade.dominante },
+      };
+    }
+
+    // Nenhum tamanho fecha: dizer isso, com o numero, e melhor que
+    // empurrar o "menos pior" como se fosse recomendacao.
+    var servem = avaliados.filter(function (a) { return a.serve; });
+    if (!servem.length) {
+      var maior = avaliados.slice().sort(function (a, b) { return b.nota - a.nota; })[0];
+      var falta = (maior.regioes || [])
+        .filter(function (r) { return r.impossivel; })
+        .map(function (r) {
+          return r.regiao + ' ' + Math.abs(r.folga || 0).toFixed(1) + ' cm mais justo que voce';
+        });
+      return {
+        ok: false,
+        motivo: 'sem tamanho adequado',
+        detalhe: falta,
+        maisProximo: maior.tamanho,
+        regioes: maior.regioes,
+      };
+    }
+
+    var ordem = servem.slice().sort(function (a, b) {
+      // Desempata pela PIOR regiao: um tamanho com media boa mas ombro
+      // impossivel nao pode ganhar de um equilibrado. Ombro nao cede.
+      return b.nota - a.nota || Math.abs(a.pior) - Math.abs(b.pior);
+    });
+
+    var melhor = ordem[0];
+    var iMelhor = avaliados.indexOf(melhor);
+    // Vizinho so faz sentido em grade que cresce. Se a tabela repete
+    // tamanho ou nao cresce, nao ha "o de cima": some a sugestao e o
+    // lojista recebe o aviso, em vez de uma seta apontando pro lado errado.
+    var abaixo = grade.monotonica ? avaliados[iMelhor - 1] || null : null;
+    var acima = grade.monotonica ? avaliados[iMelhor + 1] || null : null;
+    var segundo = ordem[1] || null;
+
+    // Aviso por artigo. A Zalando publicou (KDD 2021) que este aviso simples,
+    // sem nenhum dado pessoal, reduziu devolucao mais que o recomendador
+    // personalizado inteiro. Efeito colateral medido: pedidos com dois
+    // tamanhos sobem 11,1% com "veste pequeno" e 19,0% com "veste grande".
+    var sugerido = melhor.tamanho;
+    var motivoAjuste = null;
+    if (opcoes.vesteEm === 'pequeno' && acima) {
+      sugerido = acima.tamanho;
+      motivoAjuste = 'esta peca veste menor que o normal';
+    } else if (opcoes.vesteEm === 'grande' && abaixo) {
+      sugerido = abaixo.tamanho;
+      motivoAjuste = 'esta peca veste maior que o normal';
+    }
+
+    return {
+      ok: true,
+      tamanho: sugerido,
+      calculado: melhor.tamanho,
+      motivoAjuste: motivoAjuste,
+      nivelGeral: melhor.pior,
+      regioes: melhor.regioes,
+      tambemServe: segundo && segundo.nota >= 0.66 ? segundo.tamanho : null,
+      acima: acima ? acima.tamanho : null,
+      abaixo: abaixo ? abaixo.tamanho : null,
+      entreTamanhos: !!(segundo && Math.abs(melhor.nota - segundo.nota) < 0.08),
+      confianca: Core.confianca(melhor, ordem, perfil && perfil.minRegioes),
+      grade: {
+        monotonica: grade.monotonica,
+        dominante: grade.dominante,
+        aviso: grade.monotonica ? null : 'a tabela desta loja nao cresce de tamanho em tamanho: ' + grade.motivo,
+      },
+      todos: avaliados.map(function (a) {
+        return { tamanho: a.tamanho, nota: arred(a.nota, 2), pior: a.pior, serve: a.serve };
+      }),
+    };
+  };
+
+  /**
+   * Confianca interna, em palavra e nunca em porcentagem: nem Sizebay nem
+   * Fit Finder mostram score ao comprador, e um numero inventado passaria
+   * uma precisao que a estimativa de corpo nao tem.
+   */
+  Core.confianca = function (melhor, ordem, minRegioes) {
+    var segundo = ordem[1];
+    var margem = segundo ? melhor.nota - segundo.nota : 1;
+    // Quantas regioes bastam depende do produto. Calcado decide com UMA
+    // medida (comprimento do pe) e exigir duas condenava todo calcado a
+    // confianca baixa. Roupa precisa de duas ou mais.
+    var min = minRegioes || 2;
+    if (melhor.nota < 0.55 || melhor.comparadas < min) return 'baixa';
+    // Medida estimada a partir de altura e peso tem RMSE de ~5,4 cm em
+    // mulheres, o que da 28,8% de chance de cair na faixa certa de 4 cm
+    // da EN 13402. Um resultado apoiado nisso nunca pode se apresentar
+    // como confianca alta, por melhor que a media pareca.
+    if (melhor.temEstimada) return margem < 0.08 ? 'baixa' : 'media';
+    if (margem < 0.08) return 'media';
+    if (melhor.nota >= 0.85 && melhor.comparadas >= min + 1) return 'alta';
+    return 'media';
+  };
+
+  function arred(n, casas) {
+    if (n == null) return null;
+    var f = Math.pow(10, casas == null ? 1 : casas);
+    return Math.round(n * f) / f;
+  }
+
+  Core._arred = arred;
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = Core;
+  global.BXCore = Core;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* ---------- bx-fit-silhueta.js ---------- */
+/* ============================================================
+   BX Provador Virtual — silhueta com regioes de caimento
+   ------------------------------------------------------------
+   Desenha um contorno ABSTRATO (sem rosto, sem tom de pele, sem
+   proporcao realista) e pinta cada regiao pelo nivel de caimento.
+
+   Por que abstrato, e nao um avatar parecido com a pessoa:
+   estudo do Journal of Marketing Research (Iowa State, 2023, seis
+   experimentos, 8.000+ clientes) mediu que provador com avatar
+   realista AUMENTA venda em quem tem IMC baixo e DIMINUI em quem
+   tem IMC alto, junto com queda de autoestima e da avaliacao do
+   produto. A recomendacao dos proprios autores e criar distancia
+   entre a pessoa e a imagem. Um contorno neutro faz exatamente
+   isso. Nao e escolha estetica, e escolha de conversao.
+
+   Convencao de cor: azul sobra, vermelho aperta. E a mesma do
+   CLO3D e do Browzwear, que ja treinaram o olho do mercado.
+   Inverter faria o comprador ler ao contrario.
+   ============================================================ */
+(function (global) {
+  'use strict';
+
+  var S = {};
+
+  /* -3 aperta .......... 0 ideal .......... +3 sobra
+     Cores escolhidas para manter contraste de texto legivel por cima
+     e para nao depender de matiz sozinha (o rotulo escrito acompanha,
+     senao quem nao distingue vermelho de verde fica sem informacao). */
+  S.CORES = {
+    '-3': { fill: '#C0392B', texto: '#FFFFFF', nome: 'aperta muito' },
+    '-2': { fill: '#D9534F', texto: '#FFFFFF', nome: 'aperta' },
+    '-1': { fill: '#E0A030', texto: '#26210F', nome: 'justo' },
+    '0':  { fill: '#2F855A', texto: '#FFFFFF', nome: 'ideal' },
+    '1':  { fill: '#5B8DB8', texto: '#FFFFFF', nome: 'sobra um pouco' },
+    '2':  { fill: '#3C6E9F', texto: '#FFFFFF', nome: 'sobra' },
+    '3':  { fill: '#2C5580', texto: '#FFFFFF', nome: 'sobra muito' },
+  };
+
+  S.NEUTRO = { fill: '#E3E0D9', texto: '#4A4740', nome: 'sem dado' };
+
+  S.cor = function (nivel) {
+    if (nivel == null) return S.NEUTRO;
+    return S.CORES[String(nivel)] || S.NEUTRO;
+  };
+
+  /* ============================================================
+     Formas. Cada silhueta e uma lista de regioes com um path.
+     viewBox fixo 0 0 200 380 para o corpo, para as regioes
+     casarem entre os perfis.
+     ============================================================ */
+
+  /* Silhueta montada com formas simples em vez de um unico path
+     comprido. Path longo escrito a mao quebra facil: a primeira
+     versao renderizou uma cunha no lugar de um corpo, e so o teste
+     visual pegou. Formas separadas sao conferiveis uma a uma. */
+
+  var CABECA = 'M100 12a20 20 0 1 0 0.01 0z';
+
+  /* Tronco em coordenadas ABSOLUTAS e espelhadas em x=100. A versao
+     anterior usava curvas relativas e saiu torta: um lado estufava e
+     o outro nao. Simetria escrita a mao so se confere olhando, e foi
+     o teste visual que pegou. */
+  var TRONCO =
+    'M100 44' +
+    'C118 44 136 52 142 76' +
+    'C146 94 136 110 132 128' +
+    'C130 146 140 162 144 180' +
+    'C146 194 144 204 142 212' +
+    'L58 212' +
+    'C56 204 54 194 56 180' +
+    'C60 162 70 146 68 128' +
+    'C64 110 54 94 58 76' +
+    'C64 52 82 44 100 44Z';
+
+  var PERNAS = 'M62 208h34v156H66zM104 208h34l-4 156h-30z';
+
+  var PE =
+    'M70 12c26 0 44 21 46 50c2 27-4 52-6 78c-2 31-2 63-4 96' +
+    'c-1 22-14 46-36 46s-35-24-36-46c-2-33-2-65-4-96' +
+    'c-2-26-8-51-6-78C26 33 44 12 70 12z';
+
+  var PULSO = 'M14 62h192a16 16 0 0 1 16 16v48a16 16 0 0 1-16 16H14a16 16 0 0 1-16-16V78a16 16 0 0 1 16-16z';
+
+  var BUSTO_CX = 'M24 24h152a18 18 0 0 1 18 18v112a18 18 0 0 1-18 18H24a18 18 0 0 1-18-18V42a18 18 0 0 1 18-18z';
+
+  /* As faixas de regiao sao mais largas que o corpo de proposito:
+     quem apara a borda e o clipPath, entao a cor acompanha a curva
+     do tronco sem precisar de um path por regiao. */
+  var L = 30, W = 140;
+  function faixa(y, h) { return 'M' + L + ' ' + y + 'h' + W + 'v' + h + 'H' + L + 'z'; }
+
+  S.formas = {
+    superior: {
+      viewBox: '0 0 200 224',
+      base: [CABECA, TRONCO],
+      clip: [TRONCO],
+      regioes: [
+        { id: 'ombro',   rotulo: 'Ombro',   path: faixa(44, 24) },
+        { id: 'busto',   rotulo: 'Busto',   path: faixa(68, 42) },
+        { id: 'cintura', rotulo: 'Cintura', path: faixa(110, 38) },
+        { id: 'quadril', rotulo: 'Quadril', path: faixa(148, 64) },
+      ],
+    },
+    inferior: {
+      viewBox: '0 0 200 376',
+      base: [CABECA, TRONCO, PERNAS],
+      clip: [TRONCO, PERNAS],
+      regioes: [
+        { id: 'cintura',     rotulo: 'Cintura',     path: faixa(110, 38) },
+        { id: 'quadril',     rotulo: 'Quadril',     path: faixa(148, 60) },
+        { id: 'coxa',        rotulo: 'Coxa',        path: faixa(208, 76) },
+        { id: 'entrepernas', rotulo: 'Comprimento', path: faixa(284, 84) },
+      ],
+    },
+    corpo: {
+      viewBox: '0 0 200 376',
+      base: [CABECA, TRONCO, PERNAS],
+      clip: [TRONCO, PERNAS],
+      regioes: [
+        { id: 'ombro',   rotulo: 'Ombro',   path: faixa(44, 24) },
+        { id: 'busto',   rotulo: 'Busto',   path: faixa(68, 42) },
+        { id: 'cintura', rotulo: 'Cintura', path: faixa(110, 38) },
+        { id: 'quadril', rotulo: 'Quadril', path: faixa(148, 60) },
+        { id: 'coxa',    rotulo: 'Coxa',    path: faixa(208, 80) },
+      ],
+    },
+    sutia: {
+      viewBox: '0 0 200 196',
+      base: [BUSTO_CX], clip: [BUSTO_CX],
+      regioes: [
+        { id: 'busto', rotulo: 'Taca',  path: 'M0 24h200v78H0z' },
+        { id: 'banda', rotulo: 'Banda', path: 'M0 102h200v70H0z' },
+      ],
+    },
+    pe: {
+      viewBox: '0 0 140 300',
+      base: [PE], clip: [PE],
+      regioes: [
+        { id: 'pe',      rotulo: 'Comprimento', path: 'M0 12h140v226H0z' },
+        { id: 'largura', rotulo: 'Largura',     path: 'M0 88h140v58H0z' },
+      ],
+    },
+    pulso: {
+      viewBox: '0 0 220 200',
+      base: [PULSO], clip: [PULSO],
+      regioes: [
+        { id: 'caixa', rotulo: 'Caixa',    path: 'M76 40h68v120H76z' },
+        { id: 'punho', rotulo: 'Pulseira', path: 'M0 60h76v80H0z' },
+      ],
+    },
+  };
+
+  /* ============================================================
+     Render
+     ============================================================ */
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /**
+   * @param {string} forma      chave de S.formas
+   * @param {Array}  regioes    saida de Core.recomendar().regioes
+   * @param {object} op         { unidade:'cm'|'in', titulo, mostrarNumero }
+   * @returns {string} SVG
+   */
+  S.render = function (forma, regioes, op) {
+    op = op || {};
+    var f = S.formas[forma] || S.formas.superior;
+
+    var porId = {};
+    (regioes || []).forEach(function (r) {
+      // a chave da tabela pode ser a da peca; o desenho usa a do corpo
+      porId[r.regiaoCorpo || r.regiao] = r;
+      porId[r.regiao] = porId[r.regiao] || r;
+    });
+
+    var partes = f.regioes.map(function (reg) {
+      var dado = porId[reg.id];
+      var c = S.cor(dado ? dado.nivel : null);
+      var titulo = reg.rotulo + ': ' + (dado ? c.nome : 'sem medida');
+      return (
+        '<path d="' + reg.path + '" fill="' + c.fill + '" fill-opacity="' +
+        (dado ? '0.92' : '0.38') + '" class="bxfit-reg" data-reg="' + esc(reg.id) + '">' +
+        '<title>' + esc(titulo) + '</title></path>'
+      );
+    });
+
+    var base = [].concat(f.base);
+    var clip = [].concat(f.clip || f.base);
+    var idClip = 'bxfit-clip-' + forma;
+    var d = function (arr, attrs) {
+      return arr.map(function (p) { return '<path d="' + p + '" ' + attrs + '/>'; }).join('');
+    };
+
+    return (
+      '<svg viewBox="' + f.viewBox + '" class="bxfit-svg" role="img" ' +
+      'aria-label="' + esc(op.titulo || 'Mapa de caimento por regiao do corpo') + '" ' +
+      'xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><clipPath id="' + idClip + '">' + d(clip, '') + '</clipPath></defs>' +
+      d(base, 'fill="#F2F0EB"') +
+      '<g clip-path="url(#' + idClip + ')">' + partes.join('') + '</g>' +
+      d(base, 'fill="none" stroke="#4A4740" stroke-width="2.5" stroke-linejoin="round"') +
+      '</svg>'
+    );
+  };
+
+  /**
+   * Lista textual ao lado do desenho.
+   *
+   * A cor sozinha nao pode carregar a informacao: quem nao distingue
+   * vermelho de verde ficaria sem nada. E, como a section calcula folga
+   * em centimetro e nao simula tecido, o numero aparece junto. Mostrar a
+   * cor sem o numero sugeriria uma simulacao que nao existe.
+   */
+  S.legenda = function (regioes, op) {
+    op = op || {};
+    if (!regioes || !regioes.length) return '';
+    var linhas = regioes.map(function (r) {
+      var c = S.cor(r.nivel);
+      var num = '';
+      if (op.mostrarNumero !== false && r.folga != null) {
+        var v = op.unidade === 'in' ? (r.folga / 2.54).toFixed(1) + '"' : r.folga.toFixed(1) + ' cm';
+        num = '<span class="bxfit-num">' + esc((r.folga > 0 ? '+' : '') + v) + '</span>';
+      }
+      return (
+        '<li class="bxfit-linha">' +
+        '<span class="bxfit-bolinha" style="background:' + c.fill + '"></span>' +
+        '<span class="bxfit-reg-nome">' + esc(nomeBonito(r.regiaoCorpo || r.regiao)) + '</span>' +
+        '<span class="bxfit-rot">' + esc(r.rotulo || c.nome) + '</span>' +
+        num +
+        (r.estimada ? '<span class="bxfit-est" title="medida estimada a partir da sua altura e peso">estimada</span>' : '') +
+        '</li>'
+      );
+    });
+    return '<ul class="bxfit-legenda">' + linhas.join('') + '</ul>';
+  };
+
+  var NOMES = {
+    busto: 'Busto', peito: 'Peito', cintura: 'Cintura', quadril: 'Quadril',
+    ombro: 'Ombro', coxa: 'Coxa', entrepernas: 'Comprimento', comprimento: 'Comprimento',
+    pe: 'Pe', largura: 'Largura', punho: 'Pulso', caixa: 'Caixa', banda: 'Banda',
+    manga: 'Manga', braco: 'Braco', pescoco: 'Pescoco',
+  };
+
+  function nomeBonito(k) {
+    return NOMES[k] || String(k).charAt(0).toUpperCase() + String(k).slice(1);
+  }
+
+  S._nomeBonito = nomeBonito;
+
+  /** escolhe a silhueta a partir do perfil do produto */
+  S.formaDoPerfil = function (perfilId) {
+    return (
+      {
+        legging: 'inferior', calca: 'inferior', short: 'inferior', saia: 'inferior',
+        superior: 'superior', top: 'superior', camisa: 'superior', jaqueta: 'superior',
+        vestido: 'corpo', macacao: 'corpo', generico: 'superior',
+        sutia: 'sutia', calcado: 'pe', relogio: 'pulso',
+      }[perfilId] || 'superior'
+    );
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = S;
+  global.BXSilhueta = S;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* ---------- bx-fit-theme.js ---------- */
+/* ============================================================
+   BX Provador Virtual — adaptador de tema
+   ------------------------------------------------------------
+   Unica parte do provador que toca no DOM do tema da loja.
+   Objetivo: descobrir o seletor de tamanho e marcar um valor
+   nele de um jeito que o tema entenda, sem conhecer o tema.
+
+   Validado contra o markup real de Dawn 15.5, Shrine PRO 1.3.3
+   e Vex TT 6.2. Nao depende de JS interno do tema (o do Shrine
+   e ofuscado, entao qualquer API interna esta fora de questao).
+
+   Ancora universal: todo tema Shopify tem
+   form[action*="/cart/add"] e os controles de opcao carregam
+   form="product-form-{id}" ou vivem dentro desse form.
+   ============================================================ */
+(function (global) {
+  'use strict';
+
+  var BXTheme = {};
+
+  /* ---------- utilidades ---------- */
+
+  function norm(s) {
+    return String(s == null ? '' : s)
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+  }
+
+  function visivel(el) {
+    if (!el) return false;
+    if (el.type === 'radio') {
+      // radio de swatch costuma ser visualmente escondido, mas o label aparece.
+      return !!(el.offsetParent || (el.labels && el.labels.length));
+    }
+    return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+  }
+
+  /**
+   * Texto visivel de um elemento, sem o ruido que os temas escondem para
+   * leitor de tela. Shrine cola <span class="visually-hidden">Esgotado</span>
+   * grudado no numero, entao "38" vira "38Esgotado" e nenhum casamento por
+   * texto funciona. Remover o no e mais confiavel que tentar limpar a string.
+   */
+  function limpo(el) {
+    if (!el) return '';
+    var c = el.cloneNode(true);
+    Array.prototype.forEach.call(
+      c.querySelectorAll(
+        '.visually-hidden, .visualy-hidden, .sr-only, .screen-reader-text, [hidden], [aria-hidden="true"]'
+      ),
+      function (n) {
+        n.parentNode.removeChild(n);
+      }
+    );
+    return c.textContent || '';
+  }
+
+  /**
+   * Texto que o comprador enxerga para um controle.
+   * Necessario porque nem todo tema poe o tamanho no atributo value.
+   * O Vex TT, no caminho de dropdown, usa value="{option_value.id}",
+   * um id numerico. Ali o unico jeito de saber que aquele radio e o "M"
+   * e ler o label. Ignorar isso faz o provador marcar o tamanho errado
+   * em silencio, que e pior do que nao marcar nada.
+   */
+  function textoDoControle(el) {
+    if (!el) return '';
+    if (el.tagName === 'OPTION') return limpo(el);
+    var t = '';
+    if (el.labels && el.labels.length) {
+      t = Array.prototype.map
+        .call(el.labels, function (l) {
+          return limpo(l);
+        })
+        .join(' ');
+    }
+    if (!t && el.id) {
+      var l2 = document.querySelector('label[for="' + CSS.escape(el.id) + '"]');
+      if (l2) t = limpo(l2);
+    }
+    if (!t) {
+      var l3 = el.closest('label');
+      if (l3) t = limpo(l3);
+    }
+    if (!t && el.nextElementSibling) t = limpo(el.nextElementSibling);
+    return String(t).replace(/\s+/g, ' ').trim();
+  }
+
+  /** o controle representa este valor? confere value e, se falhar, o label. */
+  function casaValor(el, alvoNorm) {
+    if (norm(el.value) === alvoNorm) return true;
+    return norm(textoDoControle(el)) === alvoNorm;
+  }
+
+  BXTheme._texto = textoDoControle;
+  BXTheme._casa = casaValor;
+
+  /* ---------- 1. achar o formulario do produto ---------- */
+
+  /**
+   * ARMADILHA: nunca use form.id aqui.
+   * HTMLFormElement tem named getter: como todo formulario de produto da
+   * Shopify carrega <input name="id"> (o id da variante), form.id devolve
+   * esse INPUT, nao a string do atributo id. Usar form.id faz o seletor
+   * [form="..."] virar "[object HTMLInputElement]" e o provador simplesmente
+   * nao acha o seletor de tamanho em nenhuma loja de verdade.
+   */
+  function idDoForm(f) {
+    return f ? f.getAttribute('id') : null;
+  }
+  BXTheme._idDoForm = idDoForm;
+
+  BXTheme.acharForm = function (raiz) {
+    var doc = raiz || document;
+    var cands = Array.prototype.slice.call(
+      doc.querySelectorAll('form[action*="/cart/add"]')
+    );
+    if (!cands.length) return null;
+    // Prefere o form que tem seletor de opcao dentro ou apontando pra ele.
+    for (var i = 0; i < cands.length; i++) {
+      var f = cands[i];
+      var fid = idDoForm(f);
+      if (fid && doc.querySelector('[form="' + CSS.escape(fid) + '"]')) return f;
+      if (f.querySelector('input[type="radio"], select')) return f;
+    }
+    return cands[0];
+  };
+
+  /* ---------- 2. achar os controles de uma opcao ---------- */
+
+  /**
+   * Devolve todos os controles que representam a opcao `nomeOpcao`.
+   * Estrategias em ordem de confianca, da mais especifica pra mais frouxa.
+   *
+   * @param {string} nomeOpcao  nome exato vindo do Liquid (ex: "Tamanho")
+   * @param {number} posicao    option.position do Liquid (1..3)
+   * @param {string[]} valores  valores validos da opcao, vindos do Liquid
+   */
+  BXTheme.acharControles = function (nomeOpcao, posicao, valores) {
+    var form = BXTheme.acharForm();
+    var escopo = form || document;
+    var formId = idDoForm(form);
+    var alvo = norm(nomeOpcao);
+    var achados = [];
+
+    function coleta(lista, via) {
+      var arr = Array.prototype.slice.call(lista);
+      if (arr.length) achados.push({ via: via, els: arr });
+    }
+
+    // Busca tanto dentro do form quanto em elementos com form="<id>",
+    // porque Dawn e Shrine deixam o variant-picker FORA do <form>.
+    function busca(raiz, sel) {
+      try {
+        return Array.prototype.slice.call(raiz.querySelectorAll(sel));
+      } catch (e) {
+        // seletor invalido em algum navegador antigo: nao derruba o provador
+        return [];
+      }
+    }
+
+    function q(sel) {
+      var a = busca(escopo, sel);
+      function junta(lista) {
+        lista.forEach(function (el) {
+          if (a.indexOf(el) === -1) a.push(el);
+        });
+      }
+      // Dawn e Shrine deixam o variant-picker FORA do <form>, ligado pelo
+      // atributo form="{id}". O atributo tem que vir DEPOIS do seletor de
+      // tipo, senao o CSS e invalido e o querySelectorAll lanca excecao.
+      if (formId) {
+        var f = '[form="' + CSS.escape(formId) + '"]';
+        junta(busca(document, sel + f));
+        junta(busca(document, f + ' ' + sel));
+      }
+      // wrappers conhecidos, soltos na pagina
+      busca(
+        document,
+        'variant-selects, variant-radios, variant-picker, .product-form__input, [data-variant-picker]'
+      ).forEach(function (w) {
+        junta(busca(w, sel));
+      });
+      return a;
+    }
+
+    // (a) Dawn 15+: data-option-name no proprio input/option
+    coleta(
+      q('[data-option-name]').filter(function (el) {
+        return norm(el.getAttribute('data-option-name')) === alvo;
+      }),
+      'data-option-name'
+    );
+
+    // (b) select nomeado options[Nome] (Dawn dropdown)
+    coleta(
+      q('select').filter(function (el) {
+        var n = el.getAttribute('name') || '';
+        return norm(n) === 'options[' + alvo + ']' || norm(n).indexOf(alvo) === 0;
+      }),
+      'select[name]'
+    );
+
+    // (c) radios cujo name comeca com o nome da opcao
+    //     Dawn: name="Tamanho-2"   Shrine: name="Tamanho"
+    coleta(
+      q('input[type="radio"]').filter(function (el) {
+        var n = norm(el.getAttribute('name') || '');
+        return n === alvo || n.indexOf(alvo + '-') === 0 || n.indexOf(alvo) === 0;
+      }),
+      'radio[name]'
+    );
+
+    // (d) Vex TT e parentes: data-option-position no input
+    if (posicao) {
+      coleta(
+        q('[data-option-position="' + posicao + '"]'),
+        'data-option-position'
+      );
+      // (d2) Vex dropdown: name="{form_id}-option{position}"
+      coleta(
+        q('input[type="radio"]').filter(function (el) {
+          return new RegExp('-option' + posicao + '$').test(
+            el.getAttribute('name') || ''
+          );
+        }),
+        'radio[name -optionN]'
+      );
+      // (d3) id no padrao "{sectionId}-{position}-{index}" (Dawn, Shrine)
+      coleta(
+        q('input[type="radio"]').filter(function (el) {
+          return new RegExp('-' + posicao + '-\\d+$').test(el.id || '');
+        }),
+        'radio[id posicao]'
+      );
+    }
+
+    // (e) ultimo recurso: agrupa por name e aceita o grupo cujo conjunto
+    //     de rotulos visiveis bate exatamente com os valores do Liquid.
+    //     Casa por texto tambem, porque tema que usa id numerico no value
+    //     (Vex) nunca bateria so por value.
+    if (valores && valores.length) {
+      var porNome = {};
+      q('input[type="radio"]').forEach(function (el) {
+        var n = el.getAttribute('name') || '';
+        (porNome[n] = porNome[n] || []).push(el);
+      });
+      Object.keys(porNome).forEach(function (n) {
+        var rotulos = porNome[n].map(function (e) {
+          return norm(e.value) || norm(textoDoControle(e));
+        });
+        var porTexto = porNome[n].map(function (e) {
+          return norm(textoDoControle(e));
+        });
+        var bate = valores.filter(function (v) {
+          var nv = norm(v);
+          return rotulos.indexOf(nv) !== -1 || porTexto.indexOf(nv) !== -1;
+        }).length;
+        if (bate === valores.length && porNome[n].length === valores.length) {
+          coleta(porNome[n], 'radio[rotulos batem]');
+        }
+      });
+    }
+
+    return achados;
+  };
+
+  /* ---------- 3. marcar um valor ---------- */
+
+  /**
+   * Marca `valor` no seletor da opcao. Devolve {ok, via} pra podermos
+   * logar honestamente quando nao deu, em vez de fingir que deu.
+   */
+  BXTheme.selecionar = function (nomeOpcao, posicao, valores, valor) {
+    var grupos = BXTheme.acharControles(nomeOpcao, posicao, valores);
+    var alvo = norm(valor);
+
+    for (var g = 0; g < grupos.length; g++) {
+      var via = grupos[g].via;
+      var els = grupos[g].els;
+
+      // select: seta value e dispara change
+      var sel = els.filter(function (e) {
+        return e.tagName === 'SELECT';
+      })[0];
+      if (sel) {
+        var opt = Array.prototype.slice.call(sel.options).filter(function (o) {
+          return casaValor(o, alvo);
+        })[0];
+        if (opt && !opt.disabled) {
+          sel.value = opt.value;
+          disparar(sel);
+          return { ok: true, via: via + ' (select)', marcado: textoDoControle(opt) || opt.value };
+        }
+      }
+
+      // <option> solto (o data-option-name do Dawn cai aqui)
+      var optSolto = els.filter(function (e) {
+        return e.tagName === 'OPTION' && casaValor(e, alvo);
+      })[0];
+      if (optSolto && optSolto.parentElement) {
+        var pai = optSolto.parentElement;
+        pai.value = optSolto.value;
+        disparar(pai);
+        return { ok: true, via: via + ' (option)', marcado: textoDoControle(optSolto) || optSolto.value };
+      }
+
+      // radio: click() e melhor que .checked porque dispara input+change
+      // e acorda handler preso ao label.
+      var radio = els.filter(function (e) {
+        return e.type === 'radio' && casaValor(e, alvo);
+      })[0];
+      if (radio) {
+        if (radio.disabled) return { ok: false, via: via, motivo: 'esgotado' };
+        if (radio.checked) return { ok: true, via: via + ' (ja marcado)', marcado: textoDoControle(radio) || radio.value };
+        try {
+          radio.click();
+        } catch (e) {
+          radio.checked = true;
+        }
+        if (!radio.checked) radio.checked = true;
+        disparar(radio);
+        return { ok: true, via: via + ' (radio)', marcado: textoDoControle(radio) || radio.value };
+      }
+    }
+
+    return { ok: false, motivo: 'controle nao encontrado' };
+  };
+
+  function disparar(el) {
+    ['input', 'change'].forEach(function (t) {
+      el.dispatchEvent(new Event(t, { bubbles: true }));
+    });
+    // Alguns temas escutam no custom element, nao no input.
+    var w = el.closest(
+      'variant-selects, variant-radios, variant-picker, [data-variant-picker]'
+    );
+    if (w && w !== el) {
+      w.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+
+  /* ---------- 4. onde ancorar o botao ---------- */
+
+  /**
+   * Acha o melhor ponto pra inserir o link "descubra seu tamanho":
+   * logo abaixo do grupo de tamanho. Se nao achar, devolve null e a
+   * section se renderiza no lugar onde foi posicionada no tema.
+   */
+  BXTheme.acharAncora = function (nomeOpcao, posicao, valores) {
+    var grupos = BXTheme.acharControles(nomeOpcao, posicao, valores);
+    if (!grupos.length) return null;
+    var el = grupos[0].els[0];
+    if (!el) return null;
+    var box = el.closest(
+      'fieldset, .product-form__input, .product-form__input__type, variant-selects > *, [data-variant-picker] > *'
+    );
+    return box || el.parentElement;
+  };
+
+  /* ---------- 5. diagnostico ---------- */
+
+  BXTheme.diagnostico = function (nomeOpcao, posicao, valores) {
+    var form = BXTheme.acharForm();
+    var grupos = BXTheme.acharControles(nomeOpcao, posicao, valores);
+    return {
+      form: form ? idDoForm(form) || '(sem id)' : null,
+      grupos: grupos.map(function (g) {
+        return {
+          via: g.via,
+          n: g.els.length,
+          valores: g.els.map(function (e) {
+            return e.value;
+          }),
+          visiveis: g.els.filter(visivel).length,
+        };
+      }),
+    };
+  };
+
+  global.BXTheme = BXTheme;
+})(typeof window !== 'undefined' ? window : this);
+
+/* ---------- bx-fit-ui.js ---------- */
+/* ============================================================
+   BX Provador Virtual — interface
+   ------------------------------------------------------------
+   Junta nucleo + dados + silhueta + adaptador de tema numa
+   experiencia de PDP. Nao calcula nada: so pergunta, mostra e
+   marca a variante.
+
+   Fluxo (copiado da economia de perguntas que a Sizebay validou
+   em producao, e do achado da Metail de que 3 campos ja dao
+   92-94% e 5 dao 96%):
+
+     1. como voce prefere        -> medir ou estimar
+     2a. medir   -> 2 ou 3 circunferencias, com instrucao
+     2b. estimar -> altura, peso, idade, formato do corpo
+     3. confira suas medidas     -> pode corrigir tudo
+     4. resultado                -> tamanho, silhueta, folga em cm
+
+   O passo 3 nao e enfeite. A melhor regressao publicada para
+   cintura tem RMSE de 5,41 cm em mulheres, o que da 28,8% de
+   chance de cair na faixa certa de 4 cm da EN 13402. Estimativa
+   pre-preenche um campo; quem confirma e a pessoa.
+   ============================================================ */
+(function (global) {
+  'use strict';
+
+  var Core = global.BXCore, D = global.BXDados;
+  var Silh = global.BXSilhueta, Tema = global.BXTheme;
+
+  var CHAVE = 'bx-provador-perfil';
+
+  function $(sel, raiz) { return (raiz || document).querySelector(sel); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  /* ---------- perfil salvo entre produtos ---------- */
+
+  function lerPerfil() {
+    // Navegacao privada e browser com dados de site bloqueados fazem o
+    // acessor lancar, nao so devolver vazio. Sem try o provador morre
+    // antes de abrir.
+    try {
+      var s = localStorage.getItem(CHAVE);
+      return s ? JSON.parse(s) : null;
+    } catch (e) { return null; }
+  }
+
+  function salvarPerfil(p) {
+    try { localStorage.setItem(CHAVE, JSON.stringify(p)); } catch (e) {}
+  }
+
+  function limparPerfil() {
+    try { localStorage.removeItem(CHAVE); } catch (e) {}
+  }
+
+  /* ---------- analytics ---------- */
+
+  function evento(nome, dados) {
+    try {
+      if (global.dataLayer && global.dataLayer.push) {
+        global.dataLayer.push(Object.assign({ event: 'bx_provador_' + nome }, dados || {}));
+      }
+      if (global.Shopify && global.Shopify.analytics && global.Shopify.analytics.publish) {
+        global.Shopify.analytics.publish('bx_provador_' + nome, dados || {});
+      }
+    } catch (e) {}
+  }
+
+  /* ============================================================
+     Componente
+     ============================================================ */
+
+  function Provador(raiz, cfg) {
+    this.raiz = raiz;
+    this.cfg = cfg;
+    this.estado = { passo: 'inicio', entrada: lerPerfil() || {}, resultado: null };
+    this.montar();
+  }
+
+  Provador.prototype.montar = function () {
+    var self = this;
+    this.raiz.innerHTML =
+      '<button type="button" class="bxfit-abrir" aria-haspopup="dialog">' +
+      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8">' +
+      '<path d="M4 7h16M4 12h16M4 17h10"/></svg>' +
+      '<span>' + esc(this.cfg.textoBotao) + '</span></button>' +
+      '<div class="bxfit-modal" hidden role="dialog" aria-modal="true" aria-label="' +
+      esc(this.cfg.textoBotao) + '"><div class="bxfit-fundo"></div>' +
+      '<div class="bxfit-caixa"><button type="button" class="bxfit-fechar" aria-label="Fechar">&times;</button>' +
+      '<div class="bxfit-conteudo"></div></div></div>';
+
+    this.modal = $('.bxfit-modal', this.raiz);
+    this.conteudo = $('.bxfit-conteudo', this.raiz);
+
+    $('.bxfit-abrir', this.raiz).addEventListener('click', function () { self.abrir(); });
+    $('.bxfit-fechar', this.raiz).addEventListener('click', function () { self.fechar(); });
+    $('.bxfit-fundo', this.raiz).addEventListener('click', function () { self.fechar(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !self.modal.hidden) self.fechar();
+    });
+  };
+
+  Provador.prototype.abrir = function () {
+    this.modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    this.anterior = document.activeElement;
+    // Se ja existe perfil salvo, pula direto pro resultado: quem ja
+    // respondeu uma vez nao deve responder de novo a cada produto.
+    var e = this.estado.entrada;
+    this.ir(e && (e.busto || e.cintura || e.pe || e.altura) ? 'resultado' : 'inicio');
+    evento('abriu', { produto: this.cfg.produto });
+  };
+
+  Provador.prototype.fechar = function () {
+    this.modal.hidden = true;
+    document.body.style.overflow = '';
+    if (this.anterior && this.anterior.focus) this.anterior.focus();
+  };
+
+  Provador.prototype.ir = function (passo) {
+    this.estado.passo = passo;
+    this.render();
+    var foco = this.conteudo.querySelector('input, select, button');
+    if (foco) foco.focus();
+  };
+
+  /* ---------- telas ---------- */
+
+  Provador.prototype.render = function () {
+    var p = this.estado.passo;
+    if (p === 'inicio') return this.telaInicio();
+    if (p === 'medir') return this.telaMedir();
+    if (p === 'estimar') return this.telaEstimar();
+    if (p === 'conferir') return this.telaConferir();
+    if (p === 'resultado') return this.telaResultado();
+  };
+
+  Provador.prototype.telaInicio = function () {
+    var self = this;
+    var perfil = this.cfg.perfil.id;
+    var eCalcado = perfil === 'calcado';
+
+    this.conteudo.innerHTML =
+      '<h2 class="bxfit-titulo">' + esc(this.cfg.textoTitulo) + '</h2>' +
+      '<p class="bxfit-sub">' + (eCalcado
+        ? 'Meça o pé ou diga a sua altura. Leva menos de um minuto.'
+        : 'Duas maneiras. A primeira acerta mais.') + '</p>' +
+      '<div class="bxfit-escolhas">' +
+      '<button type="button" class="bxfit-escolha bxfit-escolha--forte" data-ir="medir">' +
+      '<strong>Tenho uma fita métrica</strong>' +
+      '<span>' + (eCalcado ? 'Meço o pé numa folha de papel' : 'Meço o corpo agora') + '</span>' +
+      '<em>mais preciso</em></button>' +
+      '<button type="button" class="bxfit-escolha" data-ir="estimar">' +
+      '<strong>Não tenho fita agora</strong>' +
+      '<span>Uso altura e peso e você confere depois</span>' +
+      '<em>aproximado</em></button></div>' +
+      '<p class="bxfit-nota">Nada do que você digitar sai deste navegador. Não enviamos nem guardamos em servidor nenhum.</p>';
+
+    Array.prototype.forEach.call(this.conteudo.querySelectorAll('[data-ir]'), function (b) {
+      b.addEventListener('click', function () { self.ir(b.getAttribute('data-ir')); });
+    });
+  };
+
+  var INSTRUCOES = {
+    busto: 'na parte mais cheia do busto, com a fita reta nas costas',
+    peito: 'na parte mais larga do peito, por baixo dos braços',
+    cintura: 'na parte mais fina, acima do umbigo',
+    quadril: 'na parte mais larga do quadril',
+    banda: 'logo abaixo do busto, com a fita firme',
+    pe: 'pise numa folha, marque o calcanhar e o dedo maior, meça entre as marcas',
+    punho: 'na volta do pulso, onde o relógio fica',
+    entrepernas: 'do gancho até o osso do tornozelo, em pé',
+  };
+
+  Provador.prototype.telaMedir = function () {
+    var self = this;
+    var campos = this.cfg.perfil.medidas_do_corpo || ['busto', 'cintura', 'quadril'];
+    var e = this.estado.entrada;
+
+    this.conteudo.innerHTML =
+      '<h2 class="bxfit-titulo">Suas medidas</h2>' +
+      '<p class="bxfit-sub">Em centímetros. Se não souber alguma, deixe em branco.</p>' +
+      '<div class="bxfit-campos">' +
+      campos.map(function (c) {
+        return '<label class="bxfit-campo"><span class="bxfit-rotulo">' +
+          esc(Silh._nomeBonito(c)) + '</span>' +
+          '<input type="number" inputmode="decimal" step="0.5" min="10" max="260" name="' + esc(c) + '" ' +
+          'value="' + (e[c] == null ? '' : esc(e[c])) + '" placeholder="cm">' +
+          '<small>' + esc(INSTRUCOES[c] || '') + '</small></label>';
+      }).join('') +
+      '</div>' +
+      '<div class="bxfit-erro" hidden></div>' +
+      '<div class="bxfit-acoes">' +
+      '<button type="button" class="bxfit-secundario" data-ir="inicio">Voltar</button>' +
+      '<button type="button" class="bxfit-principal" data-calcular>Ver meu tamanho</button></div>';
+
+    this.ligarAcoes();
+  };
+
+  Provador.prototype.telaEstimar = function () {
+    var self = this;
+    var e = this.estado.entrada;
+    var formatos = Object.keys(D.formatos);
+
+    this.conteudo.innerHTML =
+      '<h2 class="bxfit-titulo">Sobre você</h2>' +
+      '<p class="bxfit-sub">Com isso a gente chuta suas medidas. Você confere na tela seguinte.</p>' +
+      '<div class="bxfit-campos bxfit-campos--linha">' +
+      '<label class="bxfit-campo"><span class="bxfit-rotulo">Altura</span>' +
+      '<input type="number" inputmode="decimal" name="altura" min="60" max="260" step="1" value="' +
+      (e.altura == null ? '' : esc(e.altura)) + '" placeholder="cm"><small>em centímetros</small></label>' +
+      '<label class="bxfit-campo"><span class="bxfit-rotulo">Peso</span>' +
+      '<input type="number" inputmode="decimal" name="peso" min="22" max="300" step="0.5" value="' +
+      (e.peso == null ? '' : esc(e.peso)) + '" placeholder="kg"><small>em quilos</small></label>' +
+      '<label class="bxfit-campo"><span class="bxfit-rotulo">Idade</span>' +
+      '<input type="number" inputmode="numeric" name="idade" min="14" max="110" step="1" value="' +
+      (e.idade == null ? '' : esc(e.idade)) + '" placeholder="anos"><small>em anos</small></label>' +
+      '</div>' +
+      '<fieldset class="bxfit-formato"><legend>O seu corpo se parece mais com</legend>' +
+      formatos.map(function (f) {
+        return '<label class="bxfit-radio"><input type="radio" name="formato" value="' + esc(f) + '"' +
+          (e.formato === f ? ' checked' : '') + '><span>' + esc(D.formatos[f].rotulo) +
+          '<small>' + esc(D.formatos[f].regra) + '</small></span></label>';
+      }).join('') + '</fieldset>' +
+      '<div class="bxfit-erro" hidden></div>' +
+      '<div class="bxfit-acoes">' +
+      '<button type="button" class="bxfit-secundario" data-ir="inicio">Voltar</button>' +
+      '<button type="button" class="bxfit-principal" data-estimar>Continuar</button></div>';
+
+    this.ligarAcoes();
+  };
+
+  Provador.prototype.telaConferir = function () {
+    var self = this;
+    var c = this.estado.corpo || {};
+    var est = this.estado.estimadas || [];
+    var campos = (this.cfg.perfil.medidas_do_corpo || ['busto', 'cintura', 'quadril'])
+      .filter(function (k) { return c[k] != null; });
+
+    this.conteudo.innerHTML =
+      '<h2 class="bxfit-titulo">Confira antes de continuar</h2>' +
+      '<p class="bxfit-sub">A gente chutou pela sua altura e peso. Chute erra: se você souber a medida de verdade, troque aqui.</p>' +
+      '<div class="bxfit-campos">' +
+      campos.map(function (k) {
+        var e = est.indexOf(k) !== -1;
+        return '<label class="bxfit-campo"><span class="bxfit-rotulo">' + esc(Silh._nomeBonito(k)) +
+          (e ? ' <em class="bxfit-tag-est">chute</em>' : '') + '</span>' +
+          '<input type="number" inputmode="decimal" step="0.5" name="' + esc(k) + '" value="' +
+          esc(Math.round(c[k])) + '"><small>' + esc(INSTRUCOES[k] || '') + '</small></label>';
+      }).join('') +
+      '</div>' +
+      '<div class="bxfit-acoes">' +
+      '<button type="button" class="bxfit-secundario" data-ir="estimar">Voltar</button>' +
+      '<button type="button" class="bxfit-principal" data-calcular>Ver meu tamanho</button></div>';
+
+    this.ligarAcoes();
+  };
+
+  Provador.prototype.telaResultado = function () {
+    var self = this;
+    var r = this.estado.resultado;
+
+    if (!r) { this.calcular(); r = this.estado.resultado; }
+    if (!r) return this.ir('inicio');
+
+    if (!r.ok) {
+      this.conteudo.innerHTML =
+        '<h2 class="bxfit-titulo">Não achamos um tamanho que sirva</h2>' +
+        '<p class="bxfit-sub">' + esc(
+          r.motivo === 'sem tamanho adequado'
+            ? 'Nenhum tamanho desta peça fecha nas suas medidas.'
+            : 'Faltou informação para calcular.') + '</p>' +
+        (r.detalhe && r.detalhe.length
+          ? '<ul class="bxfit-detalhe">' + r.detalhe.map(function (d) {
+              return '<li>No maior tamanho, ' + esc(d) + '.</li>';
+            }).join('') + '</ul>'
+          : '') +
+        '<div class="bxfit-acoes"><button type="button" class="bxfit-secundario" data-ir="inicio">Refazer</button></div>';
+      this.ligarAcoes();
+      evento('sem_tamanho', { produto: this.cfg.produto });
+      return;
+    }
+
+    var forma = Silh.formaDoPerfil(this.cfg.perfil.id);
+    var detalhada = !!this.cfg.escalaDetalhada;
+    var conf = { alta: 'Bate bem com as suas medidas.', media: 'Serve, com alguma folga de leitura.', baixa: 'Leia com reserva: faltou medida ou o resultado ficou apertado entre dois tamanhos.' };
+
+    this.conteudo.innerHTML =
+      '<div class="bxfit-res">' +
+      '<div class="bxfit-res-cabeca">' +
+      '<span class="bxfit-res-label">' + (r.tamanhoUnico ? (r.serve ? 'Deve servir' : 'Pode não servir') : 'Seu tamanho') + '</span>' +
+      '<strong class="bxfit-res-tam">' + esc(r.tamanho) + '</strong>' +
+      (r.motivoAjuste ? '<span class="bxfit-res-ajuste">' + esc(r.motivoAjuste) + '</span>' : '') +
+      '<span class="bxfit-res-conf bxfit-conf--' + esc(r.confianca) + '">' + esc(conf[r.confianca] || '') + '</span>' +
+      '</div>' +
+      '<div class="bxfit-res-corpo">' +
+      '<div class="bxfit-res-svg">' + Silh.render(forma, r.regioes, { titulo: 'Caimento por região' }) + '</div>' +
+      '<div class="bxfit-res-lista">' +
+      '<h3>Como fica em você</h3>' +
+      Silh.legenda(r.regioes, { unidade: this.cfg.unidade }) +
+      (r.entreTamanhos && r.tambemServe
+        ? '<p class="bxfit-entre">Você está entre dois tamanhos. O <strong>' + esc(r.tambemServe) +
+          '</strong> também serve, e fica mais folgado.</p>' : '') +
+      (r.grade && r.grade.aviso ? '<p class="bxfit-aviso-loja">' + esc(r.grade.aviso) + '</p>' : '') +
+      '</div></div>' +
+      '<div class="bxfit-acoes bxfit-acoes--res">' +
+      '<button type="button" class="bxfit-secundario" data-ir="inicio">Refazer</button>' +
+      (r.tamanhoUnico ? '' : '<button type="button" class="bxfit-principal" data-aplicar>Escolher ' + esc(r.tamanho) + '</button>') +
+      '</div>' +
+      '<button type="button" class="bxfit-limpar" data-limpar>Esquecer minhas medidas</button>' +
+      '</div>';
+
+    this.ligarAcoes();
+    evento('resultado', {
+      produto: this.cfg.produto, tamanho: r.tamanho,
+      confianca: r.confianca, entre_tamanhos: !!r.entreTamanhos,
+    });
+  };
+
+  /* ---------- acoes ---------- */
+
+  Provador.prototype.ligarAcoes = function () {
+    var self = this;
+    Array.prototype.forEach.call(this.conteudo.querySelectorAll('[data-ir]'), function (b) {
+      b.addEventListener('click', function () { self.ir(b.getAttribute('data-ir')); });
+    });
+    var est = this.conteudo.querySelector('[data-estimar]');
+    if (est) est.addEventListener('click', function () { self.estimar(); });
+    var calc = this.conteudo.querySelector('[data-calcular]');
+    if (calc) calc.addEventListener('click', function () { self.coletar(); self.calcular(); self.ir('resultado'); });
+    var ap = this.conteudo.querySelector('[data-aplicar]');
+    if (ap) ap.addEventListener('click', function () { self.aplicar(); });
+    var lp = this.conteudo.querySelector('[data-limpar]');
+    if (lp) lp.addEventListener('click', function () {
+      limparPerfil(); self.estado.entrada = {}; self.estado.corpo = null;
+      self.estado.resultado = null; self.ir('inicio');
+    });
+  };
+
+  Provador.prototype.coletar = function () {
+    var self = this;
+    Array.prototype.forEach.call(this.conteudo.querySelectorAll('input'), function (i) {
+      if (i.type === 'radio') { if (i.checked) self.estado.entrada[i.name] = i.value; return; }
+      var v = i.value === '' ? null : parseFloat(String(i.value).replace(',', '.'));
+      if (v != null && isFinite(v)) self.estado.entrada[i.name] = v;
+      else delete self.estado.entrada[i.name];
+    });
+    salvarPerfil(this.estado.entrada);
+  };
+
+  Provador.prototype.erro = function (msg) {
+    var box = this.conteudo.querySelector('.bxfit-erro');
+    if (!box) return;
+    box.hidden = false;
+    box.textContent = msg;
+  };
+
+  Provador.prototype.estimar = function () {
+    this.coletar();
+    var e = this.estado.entrada;
+
+    var problemas = Core.validar(e);
+    if (problemas.length) {
+      var p = problemas[0];
+      return this.erro(
+        Silh._nomeBonito(p.campo) + ' de ' + p.valor + ' está fora do esperado (' +
+        p.esperado[0] + ' a ' + p.esperado[1] + '). Confira se digitou na unidade certa.'
+      );
+    }
+    if (!e.altura || !e.peso) return this.erro('Precisamos da altura e do peso para estimar.');
+
+    e.sexo = this.cfg.sexo || 'f';
+    var res = Core.completarCorpo(e, this.cfg.perfil);
+    this.estado.corpo = res.corpo;
+    this.estado.estimadas = res.estimadas;
+
+    // Se a pessoa declarou o formato do corpo e a estimativa contradiz,
+    // o formato manda: ele e observacao dela sobre o proprio corpo, a
+    // estimativa e uma media populacional.
+    if (e.formato && D.restricaoFormato[e.formato]) {
+      var c = this.estado.corpo;
+      if (!D.restricaoFormato[e.formato](c.busto, c.cintura, c.quadril)) {
+        var ajuste = { pera: [0, 0, 10], trianguloInverso: [10, 0, 0], oval: [0, 8, 0] }[e.formato];
+        if (ajuste) {
+          c.busto = (c.busto || 0) + ajuste[0];
+          c.quadril = (c.quadril || 0) + ajuste[2];
+          c.cintura = (c.cintura || 0) + ajuste[1];
+        }
+      }
+    }
+    this.ir('conferir');
+  };
+
+  Provador.prototype.calcular = function () {
+    var e = this.estado.entrada;
+    var corpo = this.estado.corpo && Object.keys(this.estado.corpo).length
+      ? this.estado.corpo
+      : {};
+
+    // medida digitada sempre vence estimativa
+    Object.keys(e).forEach(function (k) {
+      if (typeof e[k] === 'number') corpo[k] = e[k];
+    });
+    corpo._estimadas = (this.estado.estimadas || []).filter(function (k) {
+      return typeof e[k] !== 'number';
+    });
+
+    this.estado.resultado = Core.recomendar(corpo, this.cfg.tabela, this.cfg.perfil, {
+      caimento: this.cfg.caimento,
+      tecido: this.cfg.tecido,
+      preferencia: this.cfg.preferencia,
+      disponiveis: this.cfg.disponiveis,
+      escalaDetalhada: this.cfg.escalaDetalhada,
+      vesteEm: this.cfg.vesteEm,
+    });
+  };
+
+  Provador.prototype.aplicar = function () {
+    var r = this.estado.resultado;
+    if (!r || !r.ok) return;
+    var o = this.cfg.opcaoTamanho;
+    var res = Tema.selecionar(o.nome, o.posicao, o.valores, r.tamanho);
+    evento('aplicou', { produto: this.cfg.produto, tamanho: r.tamanho, ok: res.ok, via: res.via });
+    if (res.ok) { this.fechar(); }
+    else {
+      // Nao fingir sucesso: se nao deu pra marcar, dizer o que fazer.
+      this.erro('Selecione o tamanho ' + r.tamanho + ' na página. ' +
+        (res.motivo === 'esgotado' ? 'Ele está esgotado no momento.' : ''));
+    }
+  };
+
+  global.BXProvador = Provador;
+})(typeof window !== 'undefined' ? window : this);
+
+/* ---------- bx-fit-boot.js ---------- */
+/* ============================================================
+   BX Provador Virtual — inicializacao
+   ------------------------------------------------------------
+   Le a configuracao que o Liquid deixou na pagina, normaliza a
+   tabela de medidas, ancora o botao perto do seletor de tamanho
+   e sobe o componente.
+
+   Reage a shopify:section:load, senao o provador some quando o
+   lojista mexe na section dentro do editor de tema.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var PERFIS = {
+    generico:        { id: 'generico',        medidas_do_corpo: ['busto', 'cintura', 'quadril'], minRegioes: 2 },
+    camisaMasculina: { id: 'camisaMasculina', medidas_do_corpo: ['peito', 'cintura', 'pescoco'], minRegioes: 2,
+                       mapa: { torax: 'peito', chest: 'peito' } },
+    jaqueta:         { id: 'jaqueta',         medidas_do_corpo: ['busto', 'peito', 'cintura'],   minRegioes: 1 },
+    casaco:          { id: 'casaco',          medidas_do_corpo: ['busto', 'peito', 'cintura'],   minRegioes: 1 },
+    calca:           { id: 'calca',           medidas_do_corpo: ['cintura', 'quadril', 'coxa', 'entrepernas'], minRegioes: 2,
+                       mapa: { gancho: 'entrepernas', comprimento: 'entrepernas' } },
+    saia:            { id: 'calca',            medidas_do_corpo: ['cintura', 'quadril'],                        minRegioes: 2 },
+    legging:         { id: 'legging',         medidas_do_corpo: ['cintura', 'quadril', 'coxa'],  minRegioes: 2 },
+    sutia:           { id: 'sutia',           medidas_do_corpo: ['banda', 'busto'],              minRegioes: 2 },
+    calcado:         { id: 'calcado',         medidas_do_corpo: ['pe'],                          minRegioes: 1,
+                       mapa: { comprimento: 'pe', palmilha: 'pe' } },
+    relogio:         { id: 'relogio',         medidas_do_corpo: ['punho'],                       minRegioes: 1,
+                       mapa: { caixa: 'punho' } },
+  };
+
+  function iniciar(raiz) {
+    if (!raiz || raiz.__bxPronto) return;
+    var tag = raiz.querySelector('[data-bx-config]');
+    if (!tag) return;
+
+    var cfg;
+    try { cfg = JSON.parse(tag.textContent); } catch (e) { return; }
+
+    var bruta = cfg.tabela;
+    if (typeof bruta === 'string') {
+      try { bruta = JSON.parse(bruta); } catch (e) { bruta = null; }
+    }
+    var tabela = bruta ? window.BXCore.normalizarTabela(bruta) : null;
+    // Sem tabela normalizavel o provador nao aparece. Um botao que abre
+    // e nao consegue responder e pior que botao nenhum.
+    if (!tabela || !tabela.tamanhos.length) return;
+
+    cfg.tabela = tabela;
+    cfg.perfil = PERFIS[cfg.perfilId] || PERFIS.generico;
+    cfg.preferencia = 0;
+
+    var slot = raiz.querySelector('.bxfit-slot');
+    new window.BXProvador(slot, cfg);
+    raiz.__bxPronto = true;
+
+    // Encosta o botao no seletor de tamanho, se o tema tiver um.
+    // Se nao achar, a section fica onde o lojista a posicionou, que
+    // e um lugar valido, so menos conveniente.
+    if (cfg.ancorar) {
+      try {
+        var o = cfg.opcaoTamanho;
+        var ancora = window.BXTheme.acharAncora(o.nome, o.posicao, o.valores);
+        if (ancora && ancora.parentNode && !ancora.contains(raiz)) {
+          ancora.parentNode.insertBefore(raiz, ancora.nextSibling);
+        }
+      } catch (e) {}
+    }
+  }
+
+  function varrer() {
+    var todos = document.querySelectorAll('[data-bx-provador]');
+    Array.prototype.forEach.call(todos, iniciar);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', varrer);
+  } else {
+    varrer();
+  }
+
+  document.addEventListener('shopify:section:load', function (e) {
+    var alvo = e.target && e.target.querySelector
+      ? e.target.querySelector('[data-bx-provador]')
+      : null;
+    if (alvo) { alvo.__bxPronto = false; iniciar(alvo); }
+  });
+})();
+
+</script>
+
+{% schema %}
+{
+  "name": "BX Provador Virtual",
+  "tag": "section",
+  "class": "bx-provador-section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "header", "content": "Tabela de medidas" },
+    {
+      "type": "paragraph",
+      "content": "O provador só aparece quando existe tabela de medidas E o produto tem uma opção chamada Tamanho. Sem os dois, ele some da página em vez de recomendar no chute."
+    },
+    {
+      "type": "textarea",
+      "id": "tabela_json",
+      "label": "Tabela de medidas (JSON)",
+      "info": "Deixe vazio para usar o metafield custom.tabela_medidas do produto, que é o caminho recomendado por ser por produto."
+    },
+    { "type": "header", "content": "O produto" },
+    {
+      "type": "select",
+      "id": "perfil",
+      "label": "Tipo de produto",
+      "options": [
+        { "value": "generico", "label": "Roupa em geral" },
+        { "value": "camisaMasculina", "label": "Camisa masculina" },
+        { "value": "jaqueta", "label": "Jaqueta" },
+        { "value": "casaco", "label": "Casaco" },
+        { "value": "calca", "label": "Calça, short e bermuda" },
+        { "value": "saia", "label": "Saia" },
+        { "value": "legging", "label": "Legging e fitness" },
+        { "value": "sutia", "label": "Sutiã e top" },
+        { "value": "calcado", "label": "Calçado e sandália" },
+        { "value": "relogio", "label": "Relógio" }
+      ],
+      "default": "generico"
+    },
+    {
+      "type": "select",
+      "id": "tecido",
+      "label": "Elasticidade do tecido",
+      "info": "OBRIGATÓRIO acertar. Marcar um tecido de malha como sem elasticidade faz o provador reprovar todos os tamanhos.",
+      "options": [
+        { "value": "", "label": "Não sei (o provador fica mais cauteloso)" },
+        { "value": "plano", "label": "Sem elasticidade (linho, sarja, jeans rígido)" },
+        { "value": "poucoElast", "label": "Pouco elástico (até 3% elastano)" },
+        { "value": "malha", "label": "Malha (4 a 9% elastano)" },
+        { "value": "elastica", "label": "Bem elástica (10 a 17%)" },
+        { "value": "compressao", "label": "Compressão (18% ou mais)" }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "caimento",
+      "label": "Caimento pretendido",
+      "options": [
+        { "value": "justo", "label": "Justo" },
+        { "value": "ajustado", "label": "Ajustado" },
+        { "value": "regular", "label": "Regular" },
+        { "value": "solto", "label": "Solto" },
+        { "value": "oversized", "label": "Oversized" }
+      ],
+      "default": "regular"
+    },
+    {
+      "type": "select",
+      "id": "veste_em",
+      "label": "Esta peça veste fora do normal?",
+      "info": "A Zalando publicou que este aviso simples, sozinho, reduziu devolução mais que o recomendador personalizado inteiro. Se as avaliações repetem que veste pequeno, marque aqui.",
+      "options": [
+        { "value": "", "label": "Veste normal" },
+        { "value": "pequeno", "label": "Veste menor que o normal" },
+        { "value": "grande", "label": "Veste maior que o normal" }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "sexo",
+      "label": "Modelagem",
+      "options": [
+        { "value": "f", "label": "Feminina" },
+        { "value": "m", "label": "Masculina" }
+      ],
+      "default": "f"
+    },
+    { "type": "header", "content": "Aparência e textos" },
+    { "type": "text", "id": "texto_botao", "label": "Texto do botão", "default": "Descubra o seu tamanho" },
+    { "type": "text", "id": "texto_titulo", "label": "Título dentro da janela", "default": "Qual tamanho serve em você" },
+    {
+      "type": "checkbox",
+      "id": "ancorar",
+      "label": "Encostar o botão no seletor de tamanho",
+      "info": "Desligue se o botão ficar num lugar estranho no seu tema.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "escala_detalhada",
+      "label": "Escala de 7 níveis em vez de 5",
+      "info": "Acrescenta levemente justo e levemente folgado.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "unidade",
+      "label": "Unidade mostrada",
+      "options": [
+        { "value": "cm", "label": "Centímetros" },
+        { "value": "in", "label": "Polegadas" }
+      ],
+      "default": "cm"
+    },
+    { "type": "color", "id": "cor_acento", "label": "Cor de destaque", "default": "#1B472B" },
+    { "type": "color", "id": "cor_texto", "label": "Cor do texto", "default": "#303030" },
+    { "type": "color", "id": "cor_fundo", "label": "Cor de fundo", "default": "#FFFFFF" },
+    { "type": "color", "id": "cor_borda", "label": "Cor das bordas", "default": "#E8E4DE" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Esquema de cores", "default": "scheme-1" },
+    { "type": "range", "id": "raio", "label": "Arredondamento", "min": 0, "max": 24, "step": 2, "unit": "px", "default": 8 },
+    { "type": "range", "id": "margem_topo", "label": "Espaço acima", "min": 0, "max": 48, "step": 4, "unit": "px", "default": 12 }
+  ],
+  "presets": [{ "name": "BX Provador Virtual" }]
+}
+{% endschema %}

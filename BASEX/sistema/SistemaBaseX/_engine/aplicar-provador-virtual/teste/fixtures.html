@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><title>Fixtures de tema — BX Provador</title></head>
+<body>
+
+<!-- =========================================================
+     1. DAWN 15.5 — picker_type "button" (radio + label)
+     name="{{ option.name }}-{{ option.position }}"
+     value = texto do tamanho
+     data-option-name presente
+     variant-selects FORA do <form>, ligado por form="..."
+     ========================================================= -->
+<div id="caso-dawn-button">
+  <variant-selects id="variant-selects-tmpl-dawn">
+    <fieldset class="js product-form__input product-form__input--pill">
+      <legend class="form__label">Tamanho</legend>
+      <input type="radio" id="tmpl-dawn-2-0" name="Tamanho-2" value="P" form="product-form-tmpl-dawn" checked data-option-name="Tamanho" data-option-value-id="101">
+      <label for="tmpl-dawn-2-0">P</label>
+      <input type="radio" id="tmpl-dawn-2-1" name="Tamanho-2" value="M" form="product-form-tmpl-dawn" data-option-name="Tamanho" data-option-value-id="102">
+      <label for="tmpl-dawn-2-1">M</label>
+      <input type="radio" id="tmpl-dawn-2-2" name="Tamanho-2" value="G" form="product-form-tmpl-dawn" data-option-name="Tamanho" data-option-value-id="103">
+      <label for="tmpl-dawn-2-2">G</label>
+    </fieldset>
+  </variant-selects>
+  <form id="product-form-tmpl-dawn" action="/cart/add" method="post">
+    <input type="hidden" name="id" value="900101">
+    <button type="submit">Comprar</button>
+  </form>
+</div>
+
+<!-- =========================================================
+     2. DAWN 15.5 — picker_type "dropdown"
+     select name="options[Tamanho]"
+     ========================================================= -->
+<div id="caso-dawn-dropdown">
+  <variant-selects id="variant-selects-tmpl-dawn2">
+    <div class="product-form__input product-form__input--dropdown">
+      <label class="form__label" for="Option-tmpl-dawn2-1">Tamanho</label>
+      <div class="select">
+        <select id="Option-tmpl-dawn2-1" class="select__select" name="options[Tamanho]" form="product-form-tmpl-dawn2">
+          <option id="tmpl-dawn2-1-0" value="38" selected="selected" data-option-name="Tamanho">38</option>
+          <option id="tmpl-dawn2-1-1" value="40" data-option-name="Tamanho">40</option>
+          <option id="tmpl-dawn2-1-2" value="42" data-option-name="Tamanho">42</option>
+        </select>
+      </div>
+    </div>
+  </variant-selects>
+  <form id="product-form-tmpl-dawn2" action="/cart/add" method="post">
+    <input type="hidden" name="id" value="900201">
+  </form>
+</div>
+
+<!-- =========================================================
+     3. SHRINE PRO 1.3.3 — "pills"
+     name="{{ option.name }}{{ custom_name_identifier }}"  -> "Tamanho"
+     id="{{ section.id }}-{{ option.position }}-{{ index }}"
+     ========================================================= -->
+<div id="caso-shrine-pills">
+  <variant-selects id="variant-selects-shr">
+    <div class="product-form__input product-form__input__type">
+      <legend>Tamanho</legend>
+      <input type="radio" id="shr-1-0" name="Tamanho" value="34" form="product-form-shr" checked class="product-form__input__radio">
+      <label for="shr-1-0">34<span class="visually-hidden">Esgotado</span></label>
+      <input type="radio" id="shr-1-1" name="Tamanho" value="36" form="product-form-shr" class="product-form__input__radio">
+      <label for="shr-1-1">36<span class="visually-hidden">Esgotado</span></label>
+      <input type="radio" id="shr-1-2" name="Tamanho" value="38" form="product-form-shr" class="product-form__input__radio">
+      <label for="shr-1-2">38<span class="visually-hidden">Esgotado</span></label>
+    </div>
+  </variant-selects>
+  <form id="product-form-shr" action="/cart/add" method="post">
+    <input type="hidden" name="id" value="900301">
+  </form>
+</div>
+
+<!-- =========================================================
+     4. VEX TT 6.2 — dropdown dentro de popover
+     ARMADILHA: value = option_value.id (numero), NAO o texto.
+     name="{{ form_id }}-option{{ position }}"
+     data-option-position presente
+     O texto do tamanho so existe no <label>.
+     ========================================================= -->
+<div id="caso-vex-dropdown">
+  <div class="variant-picker">
+    <span>Tamanho</span>
+    <x-popover id="pop-vex" class="popover">
+      <div data-option-selector class="popover-listbox">
+        <label class="popover-listbox__option" for="product-form-vex-option2-77001">
+          <input class="sr-only" type="radio" id="product-form-vex-option2-77001" form="product-form-vex" name="product-form-vex-option2" data-option-position="2" value="77001" checked>
+          <span>36</span>
+        </label>
+        <label class="popover-listbox__option" for="product-form-vex-option2-77002">
+          <input class="sr-only" type="radio" id="product-form-vex-option2-77002" form="product-form-vex" name="product-form-vex-option2" data-option-position="2" value="77002">
+          <span>37</span>
+        </label>
+        <label class="popover-listbox__option" for="product-form-vex-option2-77003">
+          <input class="sr-only" type="radio" id="product-form-vex-option2-77003" form="product-form-vex" name="product-form-vex-option2" data-option-position="2" value="77003">
+          <span>38</span>
+        </label>
+      </div>
+    </x-popover>
+  </div>
+  <form id="product-form-vex" action="/cart/add" method="post">
+    <input type="hidden" name="id" value="900401">
+  </form>
+</div>
+
+<!-- =========================================================
+     5. VEX TT 6.2 — "block" (option-value.liquid)
+     value = texto, data-option-position presente
+     name = variavel `name` do tema, imprevisivel
+     ========================================================= -->
+<div id="caso-vex-block">
+  <div class="variant-picker">
+    <span>Tamanho</span>
+    <input class="sr-only" type="radio" name="opt-tam-xyz" id="option-value-1-vexb-opt-tam-xyz-pp" value="PP" form="product-form-vexb" data-option-position="1" checked>
+    <label class="block-swatch" for="option-value-1-vexb-opt-tam-xyz-pp">PP</label>
+    <input class="sr-only" type="radio" name="opt-tam-xyz" id="option-value-1-vexb-opt-tam-xyz-p" value="P" form="product-form-vexb" data-option-position="1">
+    <label class="block-swatch" for="option-value-1-vexb-opt-tam-xyz-p">P</label>
+    <input class="sr-only" type="radio" name="opt-tam-xyz" id="option-value-1-vexb-opt-tam-xyz-m" value="M" form="product-form-vexb" data-option-position="1">
+    <label class="block-swatch" for="option-value-1-vexb-opt-tam-xyz-m">M</label>
+  </div>
+  <form id="product-form-vexb" action="/cart/add" method="post">
+    <input type="hidden" name="id" value="900501">
+  </form>
+</div>
+
+<!-- =========================================================
+     6. TEMA DESCONHECIDO — nada de data-*, name generico,
+     dois grupos de opcao na mesma pagina (Cor e Tamanho).
+     Testa se o adaptador escolhe o grupo certo e nao a Cor.
+     ========================================================= -->
+<div id="caso-generico">
+  <form id="product-form-gen" action="/cart/add" method="post">
+    <div class="opt">
+      <span>Cor</span>
+      <input type="radio" name="grupo-a" id="ga-0" value="Preto" checked><label for="ga-0">Preto</label>
+      <input type="radio" name="grupo-a" id="ga-1" value="Bege"><label for="ga-1">Bege</label>
+    </div>
+    <div class="opt">
+      <span>Tamanho</span>
+      <input type="radio" name="grupo-b" id="gb-0" value="P" checked><label for="gb-0">P</label>
+      <input type="radio" name="grupo-b" id="gb-1" value="M"><label for="gb-1">M</label>
+      <input type="radio" name="grupo-b" id="gb-2" value="G"><label for="gb-2">G</label>
+    </div>
+    <input type="hidden" name="id" value="900601">
+  </form>
+</div>
+
+<!-- =========================================================
+     7. TAMANHO ESGOTADO — o adaptador nao pode fingir sucesso
+     ========================================================= -->
+<div id="caso-esgotado">
+  <form id="product-form-esg" action="/cart/add" method="post">
+    <div class="opt">
+      <span>Tamanho</span>
+      <input type="radio" name="Tamanho" id="esg-0" value="P" checked><label for="esg-0">P</label>
+      <input type="radio" name="Tamanho" id="esg-1" value="M" disabled><label for="esg-1">M</label>
+    </div>
+    <input type="hidden" name="id" value="900701">
+  </form>
+</div>
+
+<script src="../section/bx-fit-theme.js"></script>
+</body>
+</html>

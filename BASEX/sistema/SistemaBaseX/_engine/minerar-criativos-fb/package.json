@@ -1,0 +1,22 @@
+{
+  "name": "minerar-criativos-fb",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Mineração de criativos da Biblioteca de Anúncios da Meta: pelo navegador (padrão, de graça) ou pelo Apify (opcional), com filtros, scoring e thumbnails",
+  "scripts": {
+    "preflight": "node preflight.mjs",
+    "scrape": "node scrape.mjs",
+    "filter": "node filter.mjs",
+    "score": "node score.mjs",
+    "thumbnails": "node thumbnails.mjs",
+    "all": "node preflight.mjs && node scrape.mjs && node filter.mjs && node score.mjs && node thumbnails.mjs"
+  },
+  "dependencies": {
+    "apify-client": "^2.9.7",
+    "dotenv": "^16.4.7",
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

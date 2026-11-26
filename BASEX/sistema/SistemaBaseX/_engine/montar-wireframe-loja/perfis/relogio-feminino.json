@@ -1,0 +1,713 @@
+{
+  "nicho": "Relógio Feminino",
+  "slug": "relogio-feminino",
+  "marca": "Your Brand",
+  "referencias": [
+    "padrão visual levantado nas lojas que já vendem neste nicho"
+  ],
+  "paleta": {
+    "brand": "#5B483B",
+    "branco": "#FFFFFF",
+    "ink": "#323232",
+    "soft": "#F9F7F1",
+    "gain": "#2F7A4F",
+    "gainbg": "#ECF4EF",
+    "line": "#E7E2DA"
+  },
+  "urls": {
+    "home": "yourbrand.com",
+    "collection": "yourbrand.com/collections/watches",
+    "pdp": "yourbrand.com/products/orion-32mm"
+  },
+  "capa": {
+    "titulo": "O esqueleto da sua loja.",
+    "subtitulo": "Quatro telas desenhadas antes de uma linha de código: página inicial, coleção, página de produto e carrinho. Cada bloco tem uma função de venda. Nada entra por enfeite."
+  },
+  "como_ler": "Wireframe é o desenho da estrutura antes do acabamento. Aqui você decide o que aparece, em que ordem e o que a cliente vê primeiro. Cor, foto e tipografia entram depois, na fase de identidade visual. Aprovar a estrutura agora evita refazer a loja inteira lá na frente.",
+  "oferta_texto": "O desenho serve a uma decisão comercial que é específica deste nicho: relógio feminino raramente sai sozinho do carrinho. Ele sai como presente, ou sai junto de uma pulseira que combina. É o segundo item que paga o anúncio. O herói é o Orion 32mm a €89,90 em vez de €149,90. Dois relógios saem com 15% e três com 25%, e a leitura da faixa é sempre a mesma: leve o segundo para presentear. Frete grátis acima de €69, impostos de importação já inclusos e dois anos de garantia no movimento, que é o que responde à dúvida de sempre, se aquilo é relógio de verdade ou bijuteria cara.",
+  "paleta_texto": "Uma loja bem resolvida usa no máximo quatro cores. Aqui elas saem do código visual das lojas que já vendem neste nicho, não de gosto pessoal. O padrão do nicho é botão principal em rgb(91 72 59), texto em rgb(50 50 50) e o resto em branco quente. É esse taupe que carrega tudo que tem peso: faixa, botão, título, preço e selo. O branco quente apoia um bloco e some, e se você reparar que ele existe já está forte demais. O verde entra só onde a cliente sente que ganhou, na economia em euros, na barra do carrinho e no frete liberado. Nunca em botão, título ou faixa. As referências ensinaram mais uma coisa, e ela mudou a oferta em vez da paleta: nenhuma delas grita desconto. As lojas do nicho marcam desconto em preto, branco ou bege, porque em relógio o preço percebido é o produto, e desconto gritado derruba a peça junto. Por isso os selos aqui param em 40%, 35% e 30%, em vez dos 60% que aparecem em roupa, e quem carrega o peso é o preço cheio riscado ao lado do preço de venda.",
+  "swatches": [
+    {
+      "nome": "Taupe quente",
+      "hex": "#5B483B",
+      "papel": "a cor da marca: faixa, botão, título, preço"
+    },
+    {
+      "nome": "Branco",
+      "hex": "#FFFFFF",
+      "papel": "fundo de tudo"
+    },
+    {
+      "nome": "Grafite",
+      "hex": "#323232",
+      "papel": "texto corrido"
+    },
+    {
+      "nome": "Branco quente",
+      "hex": "#F9F7F1",
+      "papel": "secundária, uso raro: apoiar sem competir"
+    },
+    {
+      "nome": "Verde",
+      "hex": "#2F7A4F",
+      "papel": "só sinal de ganho: economia, barra do carrinho, frete liberado"
+    }
+  ],
+  "legenda": [
+    {
+      "css": "background:repeating-linear-gradient(135deg,#EDEBE7 0 5px,#F7F6F3 5px 10px);border:1px solid #D8D5D0",
+      "texto": "Retângulo hachurado: uma imagem vai entrar ali (relógio no pulso, macro do mostrador, caixa de presente)."
+    },
+    {
+      "css": "background:#D8D5D0",
+      "texto": "Barra cinza: um texto vai entrar ali. O tamanho da barra indica o tamanho aproximado do texto."
+    },
+    {
+      "css": "background:#323232",
+      "texto": "Número em grafite: a ordem de leitura. É a sequência em que a cliente absorve a página."
+    },
+    {
+      "css": "background:#5B483B",
+      "texto": "Faixa taupe: a oferta. Ela reaparece em toda tela porque é o motor da conversão."
+    },
+    {
+      "css": "background:#5B483B;border-radius:8px",
+      "texto": "Bloco cheio: botão de ação. Um por tela, sem competição."
+    },
+    {
+      "css": "background:#2F7A4F",
+      "texto": "Selo verde: economia e frete liberado. É o único lugar do site onde entra verde."
+    }
+  ],
+  "porque_importa": "O wireframe abaixo não está em cinza genérico. Ele já usa as cores tiradas das lojas que vendem no seu nicho, para você enxergar o clima da loja desde agora. O acabamento final refina os tons, mas a direção é esta. A estrutura vem antes do visual porque uma loja pode ficar linda e vender mal: o que faz vender é a ordem dos blocos, a oferta visível sem rolar a tela e o botão de compra sempre ao alcance do polegar.",
+  "visao_geral_lead": "Antes de entrar em cada tela, o conjunto. Em cima, as três páginas como a cliente vê no computador. Embaixo, as mesmas páginas no celular, mais o carrinho. Depois deste panorama, cada tela aparece grande e com as decisões explicadas.",
+  "caminho_cliente": "Ela chega do anúncio direto na página de produto ou na inicial, passa pela coleção para escolher o acabamento e o tamanho da caixa, volta ao produto e fecha no carrinho. As quatro telas repetem a mesma oferta, então em qualquer ponto de entrada ela vê a mesma regra.",
+  "visao_geral": [
+    {
+      "titulo": "PÁGINA INICIAL",
+      "chave": "home",
+      "url": "yourbrand.com"
+    },
+    {
+      "titulo": "COLEÇÃO",
+      "chave": "collection",
+      "url": "yourbrand.com/collections/watches"
+    },
+    {
+      "titulo": "PRODUTO",
+      "chave": "pdp",
+      "url": "yourbrand.com/products/orion-32mm"
+    }
+  ],
+  "oferta": {
+    "faixa": "2 WATCHES -15% · 3 WATCHES -25% · FREE SHIPPING OVER €69 · DUTIES INCLUDED",
+    "degraus": "BUY 2 WATCHES -15% · BUY 3 WATCHES -25%",
+    "garantia": "2-year movement warranty · 30-day returns",
+    "frete_gratis": "€69",
+    "heroi": {
+      "nome": "Orion 32mm",
+      "preco": "€89,90",
+      "de": "€149,90",
+      "save": "save €60"
+    },
+    "labels": {
+      "subtotal": "subtotal",
+      "economia": "you save",
+      "total": "total",
+      "checkout": "CHECKOUT"
+    },
+    "carrinho_estados": [
+      {
+        "titulo_en": "YOUR CART (1)",
+        "itens": 1,
+        "desconto": 0,
+        "subtotal": 89.9,
+        "economia": 0.0,
+        "total": 89.9,
+        "msg": "Add one more and save 15%. Most customers gift the second one.",
+        "variante_en": "gold / 32 mm",
+        "sugestao_en": "matching mesh bracelet",
+        "frete_en": "free shipping unlocked",
+        "degraus": [
+          {
+            "label_en": "1 watch",
+            "on": true
+          },
+          {
+            "label_en": "2 watches -15%",
+            "on": false
+          },
+          {
+            "label_en": "3 watches -25%",
+            "on": false
+          }
+        ]
+      },
+      {
+        "titulo_en": "YOUR CART (2)",
+        "itens": 2,
+        "desconto": 0.15,
+        "subtotal": 179.8,
+        "economia": 26.97,
+        "total": 152.83,
+        "msg": "15% off applied. Add one more to reach 25%.",
+        "variante_en": "gold / 32 mm",
+        "sugestao_en": "matching mesh bracelet",
+        "frete_en": "free shipping unlocked",
+        "degraus": [
+          {
+            "label_en": "1 watch",
+            "on": true
+          },
+          {
+            "label_en": "2 watches -15%",
+            "on": true
+          },
+          {
+            "label_en": "3 watches -25%",
+            "on": false
+          }
+        ]
+      },
+      {
+        "titulo_en": "YOUR CART (3)",
+        "itens": 3,
+        "desconto": 0.25,
+        "subtotal": 269.7,
+        "economia": 67.42,
+        "total": 202.28,
+        "msg": "Maximum discount unlocked: 25%. Every watch ships in its own gift box.",
+        "variante_en": "gold / 32 mm",
+        "frete_en": "free shipping unlocked",
+        "degraus": [
+          {
+            "label_en": "1 watch",
+            "on": true
+          },
+          {
+            "label_en": "2 watches -15%",
+            "on": true
+          },
+          {
+            "label_en": "3 watches -25%",
+            "on": true
+          }
+        ]
+      }
+    ]
+  },
+  "carrinho_lead": "Na maioria das lojas o carrinho só soma. No seu, ele negocia. A cada relógio adicionado uma barra mostra quanto falta para o próximo desconto, e a frase que acompanha nunca fala do gasto, fala do presente.",
+  "carrinho_mecanica": [
+    "Com um relógio, a barra mostra que falta um para os 15%. A frase lembra que a maioria leva o segundo para presentear, porque nesse nicho a segunda unidade quase nunca é para ela mesma.",
+    "Com dois relógios, o desconto entra na hora e a economia aparece em euros, que é o número que ela guarda na cabeça.",
+    "Com três, a barra completa e o carrinho para de empurrar. Insistir depois do teto irrita e derruba a conversão. No lugar do empurrão entra a caixa de presente, que é o argumento que fecha.",
+    "A sugestão de pulseira aparece só enquanto existe degrau a destravar. No último estado ela some.",
+    "O frete grátis a partir de €69 não é degrau, é sinal de confiança: qualquer relógio já passa do valor. Ele existe para o pedido que começa por uma pulseira de €29, onde o frete vira o motivo de somar o relógio."
+  ],
+  "carrinho_detalhe": "A linha de economia fica sempre visível no resumo, acima do total. A cliente precisa ver o quanto ganhou antes de ver o quanto paga. Invertida, a mesma tela converte menos.",
+  "telas": {
+    "home": {
+      "titulo": "A primeira tela vende o pulso, não o relógio solto.",
+      "lead": "Relógio fotografado em fundo branco parece catálogo de fornecedor, e é o erro que mais entrega loja de drop neste nicho. As lojas que mais vendem neste nicho abrem a home com a peça no pulso, dentro de uma cena real. Escala e proporção são a primeira dúvida de quem compra relógio feminino online, e só a foto no corpo responde.",
+      "desktop": [
+        {
+          "tipo": "band",
+          "texto": "2 WATCHES -15% · 3 WATCHES -25% · FREE SHIPPING OVER €69 · DUTIES INCLUDED"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "hero",
+          "n": 1,
+          "rotulo": "hero · relógio no pulso em cena real, nunca em fundo branco",
+          "placeholder_en": "HERO · WATCH ON A REAL WRIST, IN A REAL ROOM",
+          "cta": "SHOP WATCHES"
+        },
+        {
+          "tipo": "band",
+          "texto": "BUY 2 WATCHES -15% · BUY 3 WATCHES -25%"
+        },
+        {
+          "tipo": "categorias",
+          "n": 2,
+          "rotulo": "categorias · o ecossistema que faz o segundo item sair",
+          "itens_en": [
+            "WATCHES",
+            "BRACELETS",
+            "NECKLACES",
+            "GIFT SETS"
+          ]
+        },
+        {
+          "tipo": "vitrine",
+          "n": 3,
+          "rotulo": "mais vendidos · o modelo que puxa o volume",
+          "cols": 4,
+          "badge": "-40%",
+          "linha2": true,
+          "badge2": "-35%"
+        },
+        {
+          "tipo": "look",
+          "n": 4,
+          "rotulo": "monte o pulso · relógio e pulseira empilhados no mesmo braço",
+          "placeholder_en": "STACKED WRIST · WATCH PLUS BRACELET, SAME FINISH",
+          "cta": "SHOP THE SET"
+        },
+        {
+          "tipo": "feature",
+          "n": 5,
+          "rotulo": "o que tem dentro · responde a dúvida de sempre, se é relógio de verdade",
+          "itens_en": [
+            "JAPANESE QUARTZ MOVEMENT",
+            "316L STEEL · SKIN SAFE, NEVER GREEN",
+            "3 ATM · SAFE IN RAIN AND AT THE SINK"
+          ]
+        },
+        {
+          "tipo": "feature",
+          "n": 6,
+          "rotulo": "presente · a ocasião de compra que domina o nicho",
+          "itens_en": [
+            "GIFT BOX WITH EVERY WATCH",
+            "HANDWRITTEN NOTE, FREE",
+            "SHIPS READY TO GIVE"
+          ]
+        },
+        {
+          "tipo": "ugc",
+          "n": 7,
+          "rotulo": "clientes reais · medida do pulso na legenda de cada foto",
+          "itens_en": []
+        },
+        {
+          "tipo": "trust",
+          "n": 8,
+          "rotulo": "confiança",
+          "itens_en": [
+            "2-year warranty",
+            "duties included",
+            "30-day returns"
+          ]
+        },
+        {
+          "tipo": "vip",
+          "n": 9,
+          "rotulo": "clube · desconto de entrada em troca do que ela procura",
+          "cta": "SUBSCRIBE"
+        }
+      ],
+      "decisoes": [
+        "1. Peça no pulso dentro de uma cena, não em fundo branco. Escala é a primeira dúvida de quem compra relógio online, e nenhuma foto de packshot resolve isso.",
+        "2. As categorias abrem com relógio, pulseira e colar juntos. Esse ecossistema é o que sobe o ticket, e é o que separa a loja de relógio da loja de um produto só.",
+        "3. Mais vendidos logo depois, para quem não quer navegar e só quer o que já funcionou com outras clientes.",
+        "4. O pulso montado é o que faz o segundo item sair. A cliente não combina relógio com pulseira sozinha, e combinar é o trabalho da loja.",
+        "5. Movimento, aço e resistência à água respondem à objeção número um do nicho, que é achar que por €89 aquilo é bijuteria que escurece o pulso em duas semanas.",
+        "6. O bloco de presente existe porque presente é a ocasião de compra que domina relógio feminino, e é ela que sustenta a oferta de dois.",
+        "7. Cliente real com a medida do pulso na legenda. Quem tem pulso de 14 cm precisa ver alguém de 14 cm para confiar na proporção.",
+        "8 e 9. Impostos inclusos e garantia tiram o medo da compra internacional, que é o que trava o carrinho na Europa. O clube captura quem não comprou hoje, perguntando o que ela procura antes de dar o desconto."
+      ],
+      "nota_mobile": "O hero encurta e a oferta sobe. A vitrine vira carrossel com o terceiro card cortado na borda, e os selos de confiança sobem para antes do rodapé.",
+      "mobile": [
+        {
+          "tipo": "band",
+          "texto": "2 WATCHES -15% · FREE SHIPPING OVER €69"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "m_hero",
+          "n": 1,
+          "rotulo": "hero curto · pulso ocupando a tela",
+          "cta": "SHOP WATCHES"
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "BUY 2 WATCHES -15% · BUY 3 WATCHES -25%"
+        },
+        {
+          "tipo": "m_vitrine",
+          "n": 2,
+          "rotulo": "vitrine · desliza pro lado",
+          "badge": "-40%"
+        },
+        {
+          "tipo": "m_look",
+          "n": 3,
+          "rotulo": "monte o pulso",
+          "cta": "SHOP THE SET"
+        },
+        {
+          "tipo": "m_trust",
+          "itens_en": [
+            "2-year warranty",
+            "duties included",
+            "30-day returns"
+          ]
+        },
+        {
+          "tipo": "m_vip",
+          "cta": "SUBSCRIBE"
+        }
+      ],
+      "decisoes_mobile": [
+        "A oferta aparece duas vezes antes da primeira rolagem, na faixa do topo e logo abaixo do hero.",
+        "O carrossel corta o terceiro card de propósito. Card inteiro parece fim de lista e a cliente para de deslizar.",
+        "Impostos inclusos fica entre os três selos porque, no celular, é ali que ela decide se confia numa loja que ainda não conhece."
+      ]
+    },
+    "collection": {
+      "titulo": "Onde ela escolhe o acabamento, e onde a maioria das lojas perde a venda.",
+      "lead": "Em relógio feminino a escolha tem três critérios reais, e eles saem do código das lojas do nicho: acabamento (dourado, prateado, misto), mostrador (madrepérola, branco, preto) e tamanho da caixa. As lojas do nicho trabalham exatamente essas opções no catálogo. Loja que filtra só por preço obriga a cliente a abrir doze produtos para descobrir qual é dourado, e ela desiste antes.",
+      "desktop": [
+        {
+          "tipo": "band",
+          "texto": "2 WATCHES -15% · 3 WATCHES -25% · FREE SHIPPING OVER €69 · DUTIES INCLUDED"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "capa_colecao",
+          "n": 1,
+          "rotulo": "capa da coleção · a linha com nome próprio",
+          "placeholder_en": "COLLECTION COVER · THE ORION LINE"
+        },
+        {
+          "tipo": "band",
+          "texto": "BUY 2 WATCHES -15% · BUY 3 WATCHES -25%"
+        },
+        {
+          "tipo": "abas",
+          "n": 2,
+          "rotulo": "abas de categoria",
+          "abas": [
+            "all",
+            "watches",
+            "bracelets",
+            "necklaces",
+            "gift sets"
+          ],
+          "cta": "sort by ∨"
+        },
+        {
+          "tipo": "grade_filtro",
+          "n": 3,
+          "rotulo": "grade · relógio no pulso no card, com o mostrador em macro no hover",
+          "filtros": [
+            {
+              "nome": "CASE SIZE",
+              "valores": [
+                "26 MM",
+                "32 MM",
+                "36 MM"
+              ]
+            },
+            {
+              "nome": "FINISH",
+              "valores": [
+                "GOLD",
+                "SILVER",
+                "TWO-TONE",
+                "ROSE GOLD"
+              ]
+            },
+            {
+              "nome": "DIAL",
+              "valores": [
+                "MOTHER OF PEARL",
+                "WHITE",
+                "BLACK",
+                "CHAMPAGNE"
+              ]
+            },
+            {
+              "nome": "BAND",
+              "valores": [
+                "MESH",
+                "STEEL",
+                "LEATHER"
+              ]
+            },
+            {
+              "nome": "PRICE",
+              "valores": []
+            }
+          ],
+          "badge": "-40%",
+          "badge2": "-35%",
+          "faixa_meio": "EVERY WATCH SHIPS IN A GIFT BOX · ADD A SECOND AND SAVE 15%",
+          "cta": "LOAD MORE"
+        },
+        {
+          "tipo": "texto_colecao",
+          "n": 4,
+          "rotulo": "texto da coleção · o único bloco de leitura, embaixo"
+        }
+      ],
+      "decisoes": [
+        "1. A capa nomeia a linha. Coleção sem nome vira lista de produtos, e lista de produtos não cria desejo em peça que se compra por estética.",
+        "2. A oferta reaparece no topo da coleção, para quem entrou pelo anúncio e pulou a página inicial.",
+        "3. Filtro por acabamento é obrigatório aqui, e vem antes de tudo. Quem quer dourado não considera prateado, e obrigar a abrir produto por produto para descobrir a cor é onde a coleção perde a venda.",
+        "3. Tamanho de caixa como filtro resolve o medo de comprar grande demais. Em pulso fino, 36 mm parece relógio de homem, e essa é a devolução mais cara do nicho.",
+        "3. O card mostra o relógio no pulso, não só o packshot. É a proporção que decide a compra e quase nenhuma loja do nicho coloca isso na grade.",
+        "3. Faixa de oferta no meio da grade, depois da segunda fileira, quando o olho já cansou de rolar. Ela lembra da caixa de presente, que é o argumento do segundo item.",
+        "4. O texto da coleção vai para o fim. Ele serve à busca do Google e não atrapalha quem já quer comprar."
+      ],
+      "nota_mobile": "Grade de duas colunas, filtro e ordenação virando botão fixo no rodapé. O acabamento vira o primeiro chip, porque é o primeiro corte que ela faz.",
+      "mobile": [
+        {
+          "tipo": "band",
+          "texto": "2 WATCHES -15% · FREE SHIPPING OVER €69"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "m_capa",
+          "n": 1,
+          "rotulo": "capa curta"
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "BUY 2 WATCHES -15% · BUY 3 WATCHES -25%"
+        },
+        {
+          "tipo": "m_filtros",
+          "chips": [
+            "filter",
+            "sort",
+            "gold",
+            "silver",
+            "26 mm",
+            "32 mm"
+          ]
+        },
+        {
+          "tipo": "m_grade",
+          "n": 2,
+          "rotulo": "grade de 2 colunas",
+          "badge": "-40%",
+          "cta": "LOAD MORE"
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "FILTER & SORT"
+        }
+      ],
+      "decisoes_mobile": [
+        "Os chips de acabamento já vêm abertos na tela, sem precisar abrir o painel de filtro. Um toque separa dourado de prateado.",
+        "Duas colunas mantêm o relógio grande o suficiente para ler o mostrador. Três colunas transformam a grade em miniatura e derrubam o clique.",
+        "Filtrar e ordenar viram botão fixo no rodapé, ao alcance do polegar, e acompanham a rolagem."
+      ]
+    },
+    "pdp": {
+      "titulo": "A página que transforma um relógio em presente.",
+      "lead": "Aqui a cliente já quer. A função da página é provar que a peça é de verdade, mostrar o tamanho no pulso dela e transformar uma compra em duas. As duas dúvidas que travam a compra são sempre as mesmas: fica grande demais no meu pulso, e isso vai escurecer a pele em duas semanas. A página responde as duas antes de pedir o clique.",
+      "desktop": [
+        {
+          "tipo": "band",
+          "texto": "2 WATCHES -15% · 3 WATCHES -25% · FREE SHIPPING OVER €69 · DUTIES INCLUDED"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "pdp_topo",
+          "galeria": {
+            "n": 1,
+            "rotulo": "5 a 8 ângulos · inclui o pulso em escala e o macro do mostrador",
+            "placeholder_en": "GALLERY · ON WRIST, DIAL MACRO, CLASP, GIFT BOX, SCALE NEXT TO A HAND"
+          },
+          "info": {
+            "padding": "0",
+            "n_badge": 2,
+            "rotulo_badge": "badge de material",
+            "badge": "316L steel · japanese quartz · 3 atm",
+            "n_titulo": 3,
+            "rotulo_titulo": "título direto e prova social",
+            "prova": "1.284 reviews",
+            "n_preco": 4,
+            "rotulo_preco": "ancoragem de preço",
+            "n_chips": 5,
+            "rotulo_chips": "acabamento e tamanho da caixa · com aviso de estoque",
+            "chips": [
+              "26 MM",
+              "32 MM",
+              "36 MM"
+            ],
+            "urgencia": "Low stock in gold · ships in 24 to 48h",
+            "n_cta": 6,
+            "rotulo_cta": "botão de compra e oferta logo abaixo",
+            "cta": "ADD TO CART",
+            "acordeoes": [
+              "movement & materials",
+              "shipping & duties",
+              "size guide",
+              "2-year warranty"
+            ]
+          }
+        },
+        {
+          "tipo": "dobra",
+          "n": 7,
+          "rotulo": "abaixo da dobra · a página continua vendendo",
+          "colunas_dobra": [
+            {
+              "rotulo": "descrição rica",
+              "texto": "what the movement is and why it holds time"
+            },
+            {
+              "rotulo": "avaliações com foto",
+              "texto": "wrist size in every caption"
+            },
+            {
+              "rotulo": "presente",
+              "texto": "the box, the note, ready to give"
+            }
+          ]
+        },
+        {
+          "tipo": "size_chart",
+          "n": 8,
+          "rotulo": "tabela de medidas · caixa, espessura, pulseira, pulso que serve e peso",
+          "colunas": [
+            "CASE",
+            "THICKNESS",
+            "BAND WIDTH",
+            "FITS WRIST",
+            "WEIGHT"
+          ],
+          "linhas": [
+            [
+              "26 MM · petite",
+              "6.5 mm",
+              "12 mm",
+              "13 to 15.5 cm",
+              "42 g"
+            ],
+            [
+              "32 MM · classic",
+              "7 mm",
+              "14 mm",
+              "14 to 17.5 cm",
+              "58 g"
+            ],
+            [
+              "36 MM · statement",
+              "7.5 mm",
+              "16 mm",
+              "15.5 to 19 cm",
+              "71 g"
+            ]
+          ],
+          "nota": "Wrap a strip of paper around your wrist bone, mark it and read the length in cm. Between two sizes, go down: on a slim wrist a large case slides and reads as a mens watch. The mesh band shortens at the clasp, so a smaller case still fits."
+        },
+        {
+          "tipo": "complete",
+          "n": 9,
+          "rotulo": "complete o pulso · a pulseira do mesmo acabamento deste relógio",
+          "badge": "-30%"
+        }
+      ],
+      "decisoes": [
+        "1. Entre 5 e 8 ângulos, com o pulso em escala entre os primeiros e a caixa de presente entre os últimos. Escala e presente são as duas coisas que a foto de catálogo nunca mostra.",
+        "2. O badge de material abre a página porque responde à dúvida de qualidade antes de ela rolar a tela. Aço 316L e movimento japonês em três palavras valem mais que um parágrafo depois.",
+        "4. Preço cheio riscado, preço de venda e economia em euros no mesmo bloco. O selo fica discreto de propósito: em relógio, desconto gritado derruba o preço percebido da peça.",
+        "5. Acabamento e tamanho de caixa junto do seletor, com o aviso de estoque logo abaixo, onde a mão já está.",
+        "6. A oferta fica colada no botão. Quem decidiu levar um vê na hora que o segundo sai 15% mais barato, e o segundo quase sempre é presente.",
+        "8. A tabela de medidas fica na própria página, com caixa, espessura, largura da pulseira, pulso que serve e peso. Relógio grande demais em pulso fino é a devolução mais cara do nicho, e devolução internacional come a margem da operação inteira.",
+        "8. A regra de desempate manda descer, não subir. É o inverso de roupa, e quase toda loja copia a regra de roupa sem pensar.",
+        "9. Completar o pulso no fim da página é o caminho natural para o segundo item, e é ele que leva o carrinho ao primeiro degrau."
+      ],
+      "nota_mobile": "Galeria em tela cheia, botão de compra fixo no rodapé acompanhando a rolagem. A tabela de medidas encurta para caixa e pulso, que são as duas colunas que decidem.",
+      "mobile": [
+        {
+          "tipo": "band",
+          "texto": "2 WATCHES -15% · FREE SHIPPING OVER €69"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "m_galeria",
+          "n": 1,
+          "rotulo": "galeria em tela cheia · desliza"
+        },
+        {
+          "tipo": "m_pdp",
+          "n": 2,
+          "rotulo": "acabamento e tamanho da caixa",
+          "prova": "1.284 reviews",
+          "chips": [
+            "26 MM",
+            "32 MM",
+            "36 MM"
+          ]
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "BUY 2 WATCHES -15% · BUY 3 WATCHES -25%"
+        },
+        {
+          "tipo": "m_acordeao",
+          "acordeoes": [
+            "movement & materials",
+            "shipping & duties",
+            "size guide",
+            "2-year warranty"
+          ]
+        },
+        {
+          "tipo": "m_size",
+          "n": 3,
+          "rotulo": "tabela de medidas",
+          "colunas": [
+            "CASE",
+            "FITS WRIST"
+          ],
+          "linhas": [
+            [
+              "26 MM",
+              "13 to 15.5 cm"
+            ],
+            [
+              "32 MM",
+              "14 to 17.5 cm"
+            ],
+            [
+              "36 MM",
+              "15.5 to 19 cm"
+            ]
+          ]
+        },
+        {
+          "tipo": "m_reviews",
+          "n": 4,
+          "rotulo": "avaliações com foto · pulso real"
+        },
+        {
+          "tipo": "m_stickybuy",
+          "n": 5,
+          "cta": "ADD TO CART"
+        }
+      ],
+      "decisoes_mobile": [
+        "A tabela encurta para caixa e pulso. As outras três colunas viram o acordeão de guia de tamanho, porque no celular tabela larga quebra e ninguém lê.",
+        "O botão de compra fica fixo no rodapé com o preço ao lado, então ela nunca precisa rolar de volta para comprar.",
+        "As avaliações com foto vêm antes do botão fixo sumir da vista, no ponto em que ela decide se confia na peça."
+      ]
+    }
+  },
+  "proximos_lead": "A estrutura está desenhada. O próximo passo é você validar a ordem dos blocos, porque mudar agora custa minutos e mudar depois custa a loja inteira remontada.",
+  "proximos_passos": [
+    "Você revisa as quatro telas e diz o que quer mudar de ordem, tirar ou acrescentar.",
+    "Nós fechamos a identidade visual: paleta, tipografia e o tratamento das fotos, aplicados sobre este esqueleto.",
+    "Montagem da loja com a estrutura aprovada, já com a oferta e o carrinho configurados.",
+    "Cadastro dos produtos com foto no pulso, macro do mostrador, tabela de medidas e avaliações com a medida do pulso na legenda.",
+    "Revisão final no celular antes de abrir, porque é de lá que vem quase todo o tráfego."
+  ],
+  "pedido_final": "Aprovar este wireframe, ou marcar os pontos que quer diferente. Enquanto isso a construção segue nas partes que não dependem da sua resposta."
+}

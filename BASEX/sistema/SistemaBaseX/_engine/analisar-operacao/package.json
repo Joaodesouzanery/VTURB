@@ -1,0 +1,17 @@
+{
+  "name": "analisar-operacao",
+  "version": "1.0.0",
+  "description": "Engine da skill 75. Analisar Operação - parsing de .xlsx (Meta Ads), placar de ROI e histórico rotativo por loja.",
+  "type": "module",
+  "private": true,
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
+  "scripts": {
+    "preflight": "node preflight.mjs",
+    "parse": "node parse-xlsx.mjs",
+    "score": "node score-engine.mjs",
+    "rotate": "node history-rotate.mjs"
+  }
+}

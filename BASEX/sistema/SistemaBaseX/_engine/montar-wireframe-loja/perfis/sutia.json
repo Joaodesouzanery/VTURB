@@ -1,0 +1,766 @@
+{
+  "nicho": "Sutiã",
+  "slug": "sutia",
+  "marca": "Your Brand",
+  "referencias": [
+    "padrão visual levantado nas lojas que já vendem neste nicho"
+  ],
+  "paleta": {
+    "brand": "#562828",
+    "branco": "#FFFFFF",
+    "ink": "#1C1C1C",
+    "soft": "#FDF4F6",
+    "gain": "#C31818",
+    "gainbg": "#FDEEEE",
+    "line": "#E7E1E3"
+  },
+  "urls": {
+    "home": "yourbrand.com",
+    "collection": "yourbrand.com/collections/wireless-bras",
+    "pdp": "yourbrand.com/products/24-7-lift-wireless-bra"
+  },
+  "capa": {
+    "titulo": "O esqueleto da sua loja.",
+    "subtitulo": "Quatro telas desenhadas antes de uma linha de código: página inicial, coleção, página de produto e carrinho. Cada bloco tem uma função de venda. Nada entra por enfeite."
+  },
+  "como_ler": "Wireframe é o desenho da estrutura antes do acabamento. Aqui você decide o que aparece, em que ordem e o que a cliente vê primeiro. Cor, foto e tipografia entram depois, na fase de identidade visual. Aprovar a estrutura agora evita refazer a loja inteira lá na frente.",
+  "legenda": [
+    {
+      "css": "background:repeating-linear-gradient(135deg,#EDE7E8 0 5px,#F9F5F6 5px 10px);border:1px solid #DCD3D5",
+      "texto": "Retângulo hachurado: uma imagem vai entrar ali (foto no corpo, foto por baixo da camiseta, avaliação de cliente)."
+    },
+    {
+      "css": "background:#D8D2D3",
+      "texto": "Barra cinza: um texto vai entrar ali. O tamanho da barra indica o tamanho aproximado do texto."
+    },
+    {
+      "css": "background:#1C1C1C",
+      "texto": "Número em grafite: a ordem de leitura. É a sequência em que a cliente absorve a página."
+    },
+    {
+      "css": "background:#562828",
+      "texto": "Faixa vinho: a oferta. Ela reaparece em toda tela porque é o motor da conversão."
+    },
+    {
+      "css": "background:#562828;border-radius:8px",
+      "texto": "Bloco cheio: botão de ação. Um por tela, sem competição."
+    },
+    {
+      "css": "background:#C31818",
+      "texto": "Selo vermelho: desconto e economia. É o único lugar do site onde entra vermelho."
+    }
+  ],
+  "oferta_texto": "O desenho serve a uma decisão comercial: sutiã não se compra um. Quem finalmente acha o modelo que serve leva a mesma peça em preto, nude e blush, e é por isso que a oferta do nicho inteiro é leve 3 pague 2. O herói sai de €69,95 por €29,95, a terceira peça é grátis, o frete é grátis acima de €59 e a troca de tamanho é gratuita em 60 dias. A troca grátis não é gentileza: tamanho errado é a maior causa de devolução em roupa íntima, e anunciar a troca fácil derruba a hesitação de quem nunca comprou sem provar.",
+  "paleta_texto": "Uma loja bem resolvida usa no máximo quatro cores. Aqui elas vêm do código visual das lojas que já vendem sutiã em euro: um vinho profundo carrega tudo que precisa de peso, o branco domina o fundo, o texto corrido é grafite e o rosé quase branco apoia um bloco sem competir. Vinho com nude é o que dá ar de lingerie boa sem depender de foto sensual.",
+  "swatches": [
+    {
+      "nome": "Vinho profundo",
+      "hex": "#562828",
+      "papel": "a cor da marca: faixa, botão, título, preço"
+    },
+    {
+      "nome": "Branco",
+      "hex": "#FFFFFF",
+      "papel": "fundo de tudo"
+    },
+    {
+      "nome": "Grafite",
+      "hex": "#1C1C1C",
+      "papel": "texto corrido"
+    },
+    {
+      "nome": "Rosé lavado",
+      "hex": "#FDF4F6",
+      "papel": "secundária, uso raro: apoiar sem competir"
+    },
+    {
+      "nome": "Vermelho",
+      "hex": "#C31818",
+      "papel": "só sinal de ganho: desconto, economia, barra do carrinho"
+    }
+  ],
+  "porque_importa": "O wireframe abaixo não está em cinza genérico. Ele já usa as cores tiradas do código das lojas que vendem neste nicho, para você enxergar o clima da loja desde agora. O acabamento final refina os tons, mas a direção é esta. O sinal de ganho aqui é vermelho, e não verde, porque em sutiã a compra é por impulso e o desconto precisa ser lido de longe. Ele aparece só no selo, na economia e na barra do carrinho, nunca em botão, título ou faixa.",
+  "visao_geral_lead": "Antes de entrar em cada tela, o conjunto. Em cima, as três páginas como a cliente vê no computador. Embaixo, as mesmas páginas no celular, mais o carrinho. Depois deste panorama, cada tela aparece grande e com as decisões explicadas.",
+  "caminho_cliente": "Ela chega do anúncio direto na página de produto ou na inicial, passa pela coleção para filtrar pelo tamanho dela, volta ao produto e fecha no carrinho. As quatro telas repetem a mesma oferta, então em qualquer ponto de entrada ela vê a mesma regra.",
+  "visao_geral": [
+    {
+      "titulo": "PÁGINA INICIAL",
+      "chave": "home",
+      "url": "yourbrand.com"
+    },
+    {
+      "titulo": "COLEÇÃO",
+      "chave": "collection",
+      "url": "yourbrand.com/collections/wireless-bras"
+    },
+    {
+      "titulo": "PRODUTO",
+      "chave": "pdp",
+      "url": "yourbrand.com/products/24-7-lift-wireless-bra"
+    }
+  ],
+  "oferta": {
+    "faixa": "BUY 2 BRAS, GET 1 FREE · FREE SHIPPING OVER €59 · 60-DAY FIT GUARANTEE",
+    "degraus": "BUY 2, GET 1 FREE · ADD 3 BRAS TO ACTIVATE",
+    "garantia": "60-day fit guarantee · free size exchange",
+    "frete_gratis": "€59",
+    "heroi": {
+      "nome": "24/7 Lift Wireless Bra",
+      "preco": "€29,95",
+      "de": "€69,95",
+      "save": "save €40"
+    },
+    "labels": {
+      "subtotal": "subtotal",
+      "economia": "you save",
+      "total": "total",
+      "checkout": "CHECKOUT"
+    },
+    "carrinho_estados": [
+      {
+        "titulo_en": "YOUR CART (1)",
+        "itens": 1,
+        "desconto": 0,
+        "subtotal": 29.95,
+        "economia": 0.0,
+        "total": 29.95,
+        "msg": "Add 2 more bras and the third one is free. €29,05 to go for free shipping.",
+        "variante_en": "black / 75B",
+        "sugestao_en": "same bra in nude",
+        "degraus": [
+          {
+            "label_en": "1 bra",
+            "on": true
+          },
+          {
+            "label_en": "2 bras",
+            "on": false
+          },
+          {
+            "label_en": "3 bras, 1 free",
+            "on": false
+          }
+        ]
+      },
+      {
+        "titulo_en": "YOUR CART (2)",
+        "itens": 2,
+        "desconto": 0,
+        "subtotal": 59.9,
+        "economia": 0.0,
+        "total": 59.9,
+        "msg": "Add 1 more bra and the third one is free.",
+        "variante_en": "black / 75B",
+        "sugestao_en": "same bra in blush",
+        "frete_en": "free shipping unlocked",
+        "degraus": [
+          {
+            "label_en": "1 bra",
+            "on": true
+          },
+          {
+            "label_en": "2 bras",
+            "on": true
+          },
+          {
+            "label_en": "3 bras, 1 free",
+            "on": false
+          }
+        ]
+      },
+      {
+        "titulo_en": "YOUR CART (3)",
+        "itens": 3,
+        "desconto": 0.3333333333,
+        "subtotal": 89.85,
+        "economia": 29.95,
+        "total": 59.9,
+        "msg": "Third bra free. Best deal unlocked, grab it before you check out.",
+        "variante_en": "black / 75B",
+        "frete_en": "free shipping unlocked · third bra free",
+        "degraus": [
+          {
+            "label_en": "1 bra",
+            "on": true
+          },
+          {
+            "label_en": "2 bras",
+            "on": true
+          },
+          {
+            "label_en": "3 bras, 1 free",
+            "on": true
+          }
+        ]
+      }
+    ]
+  },
+  "carrinho_lead": "Na maioria das lojas o carrinho só soma. No seu, ele negocia. A cada peça adicionada uma barra mostra quanto falta para a terceira sair de graça.",
+  "carrinho_mecanica": [
+    "Com uma peça, a barra mostra dois degraus vazios e diz quanto falta para o frete grátis. A frase é sobre o que ela ganha, nunca sobre o que ela gasta.",
+    "Com duas peças o frete grátis entra na hora, e a sugestão passa a ser uma só: falta uma para a terceira sair de graça. A peça sugerida é o mesmo modelo em outra cor, porque ela já decidiu que este serve nela.",
+    "Com três peças o subtotal é €89,85, a terceira sai por conta da loja e o total volta para €59,90. Ela leva três pelo preço de duas e a barra completa.",
+    "No último degrau o carrinho para de empurrar e a sugestão de peça some. Insistir depois do teto irrita e derruba a conversão."
+  ],
+  "carrinho_detalhe": "A linha de economia fica sempre visível no resumo, acima do total. Ela precisa ver quanto ganhou antes de ver quanto paga. Invertida, a mesma tela converte menos. E o desconto precisa entrar sozinho no carrinho, nunca por cupom digitado: cupom que a cliente tem que lembrar de colar é desconto que não acontece.",
+  "proximos_lead": "A estrutura está desenhada. O próximo passo é você validar a ordem dos blocos, porque mudar agora custa minutos e mudar depois custa a loja inteira remontada.",
+  "proximos_passos": [
+    "Você revisa as quatro telas e diz o que quer mudar de ordem, tirar ou acrescentar.",
+    "Nós fechamos a identidade visual: paleta, tipografia e o tratamento das fotos, aplicados sobre este esqueleto.",
+    "Montagem da loja com a estrutura aprovada, já com a oferta de leve 3 pague 2 e o carrinho configurados.",
+    "Cadastro dos produtos com foto no corpo, foto por baixo da camiseta branca, tabela de medidas e avaliações com o tamanho de quem escreveu.",
+    "Revisão final no celular antes de abrir, porque é de lá que vem quase todo o tráfego."
+  ],
+  "pedido_final": "Aprovar este wireframe, ou marcar os pontos que quer diferente. Enquanto isso a construção segue nas partes que não dependem da sua resposta. Se você já tem a paleta definida, mande as cores e o desenho é regerado na sua identidade em minutos.",
+  "telas": {
+    "home": {
+      "titulo": "A primeira tela resolve o tamanho, não mostra a vitrine.",
+      "lead": "Em sutiã, a dúvida que trava a compra não é preço, é tamanho. Quem não sabe o próprio número não compra, e quem chuta devolve. Por isso o caminho para achar o tamanho aparece antes de qualquer produto.",
+      "desktop": [
+        {
+          "tipo": "band",
+          "texto": "BUY 2 BRAS, GET 1 FREE · FREE SHIPPING OVER €59 · 60-DAY FIT GUARANTEE"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "hero",
+          "n": 1,
+          "rotulo": "hero · a peça no corpo, luz natural, rosto e postura relaxados",
+          "placeholder_en": "HERO · REAL WOMAN WEARING IT · SAY BYE TO CUP GAPS",
+          "cta": "SHOP BRAS"
+        },
+        {
+          "tipo": "band",
+          "texto": "BUY 2, GET 1 FREE · ADD 3 BRAS TO ACTIVATE"
+        },
+        {
+          "tipo": "categorias",
+          "n": 2,
+          "rotulo": "achar o tamanho antes da vitrine · band, cup e o teste de 30 segundos",
+          "itens_en": [
+            "FIND MY SIZE",
+            "BAND 65 TO 90",
+            "CUP A TO DD+",
+            "FIT GUIDE"
+          ]
+        },
+        {
+          "tipo": "categorias",
+          "n": 3,
+          "rotulo": "compre por estilo · é assim que ela pensa, nunca por coleção de estação",
+          "itens_en": [
+            "WIRELESS",
+            "PUSH-UP",
+            "T-SHIRT",
+            "STRAPLESS"
+          ]
+        },
+        {
+          "tipo": "vitrine",
+          "n": 4,
+          "rotulo": "mais vendidos · foto no corpo, preço cheio riscado e as cores no card",
+          "cols": 4,
+          "badge": "-57%",
+          "linha2": false
+        },
+        {
+          "tipo": "look",
+          "n": 5,
+          "rotulo": "antes e depois · o que o sutiã resolve na silhueta com a roupa por cima",
+          "placeholder_en": "BEFORE AND AFTER · CUP GAP, STRAPS AND BACK SMOOTHING",
+          "cta": "SHOP THE LIFT"
+        },
+        {
+          "tipo": "feature",
+          "n": 6,
+          "rotulo": "tecido e sustentação · responde a objeção real do nicho",
+          "itens_en": [
+            "NO WIRE · NO DIG · ALL DAY",
+            "SEAMLESS · INVISIBLE UNDER A T-SHIRT",
+            "STRAPS THAT STAY UP"
+          ]
+        },
+        {
+          "tipo": "ugc",
+          "n": 7,
+          "rotulo": "clientes reais · o tamanho de cada uma citado na legenda da foto"
+        },
+        {
+          "tipo": "trust",
+          "n": 8,
+          "rotulo": "confiança",
+          "itens_en": [
+            "60-day fit guarantee",
+            "free size exchange",
+            "discreet packaging"
+          ]
+        },
+        {
+          "tipo": "vip",
+          "n": 9,
+          "rotulo": "clube vip · primeiro acesso às cores novas",
+          "cta": "GET 10% OFF"
+        },
+        {
+          "tipo": "foot"
+        }
+      ],
+      "decisoes": [
+        "1. Foto de cena com a peça no corpo, rosto e postura relaxados. Sutiã em manequim ou em fundo branco parece catálogo de fornecedor, e é assim que a maioria das lojas do nicho erra.",
+        "2. O caminho do tamanho vem antes da vitrine. Tamanho é a objeção número um e a única que impede a cliente de sequer olhar preço. As lojas mais escaladas do nicho levam esse teste para o menu principal.",
+        "3 e 4. Estilo primeiro, para quem já sabe o que quer, mais vendidos depois, para quem quer o que já funcionou nos outros corpos.",
+        "5. O antes e depois é o que sustenta o preço. Ela precisa ver o que muda na silhueta com a roupa por cima, não a peça bonita sozinha.",
+        "6. Sem aro, sem costura e alça que não cai são as três frases que aparecem em quase toda avaliação positiva do nicho. Elas viram bloco de página, não letra miúda.",
+        "7 e 8. Cliente real com o tamanho na legenda vale mais que foto de modelo, e é assim que uma mulher de 90DD descobre que a peça serve nela. A garantia de troca fecha o risco de comprar sem provar."
+      ],
+      "nota_mobile": "O hero encurta e a oferta sobe. A vitrine vira carrossel com o terceiro card cortado na borda, sinalizando que tem mais para o lado.",
+      "mobile": [
+        {
+          "tipo": "band",
+          "texto": "BUY 2, GET 1 FREE · FREE SHIPPING OVER €59"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "m_hero",
+          "n": 1,
+          "rotulo": "hero curto · a peça no corpo",
+          "cta": "SHOP BRAS"
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "BUY 2, GET 1 FREE · ADD 3 BRAS TO ACTIVATE"
+        },
+        {
+          "tipo": "m_filtros",
+          "chips": [
+            "find my size",
+            "band",
+            "cup",
+            "wireless",
+            "push-up"
+          ]
+        },
+        {
+          "tipo": "m_vitrine",
+          "n": 2,
+          "rotulo": "vitrine · desliza pro lado",
+          "badge": "-57%"
+        },
+        {
+          "tipo": "m_look",
+          "n": 3,
+          "rotulo": "antes e depois",
+          "cta": "SHOP THE LIFT"
+        },
+        {
+          "tipo": "m_trust",
+          "itens_en": [
+            "60-day fit guarantee",
+            "free size exchange",
+            "discreet packaging"
+          ]
+        },
+        {
+          "tipo": "m_vip",
+          "cta": "GET 10% OFF"
+        }
+      ],
+      "decisoes_mobile": [
+        "A oferta aparece duas vezes antes da primeira rolagem, na faixa do topo e logo abaixo do hero.",
+        "O atalho do tamanho vira uma fileira de etiquetas logo abaixo da oferta, no ponto em que o polegar já está.",
+        "O carrossel corta o terceiro card de propósito. Card inteiro parece fim de lista e a cliente para de deslizar."
+      ]
+    },
+    "collection": {
+      "titulo": "Onde ela filtra pelo corpo dela, e onde a maioria das lojas perde a venda.",
+      "lead": "A coleção é a tela mais visitada depois do anúncio. Em sutiã o filtro não é por cor, é por band e cup. Loja que não deixa filtrar por tamanho obriga a cliente a abrir dez produtos para descobrir que nenhum serve nela.",
+      "desktop": [
+        {
+          "tipo": "band",
+          "texto": "BUY 2 BRAS, GET 1 FREE · FREE SHIPPING OVER €59 · 60-DAY FIT GUARANTEE"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "capa_colecao",
+          "n": 1,
+          "rotulo": "capa da coleção · a categoria com nome de estilo, nunca de fornecedor",
+          "placeholder_en": "COLLECTION COVER · WIRELESS BRAS, ALL CUPS FROM A TO DD+"
+        },
+        {
+          "tipo": "band",
+          "texto": "BUY 2, GET 1 FREE · ADD 3 BRAS TO ACTIVATE"
+        },
+        {
+          "tipo": "abas",
+          "n": 2,
+          "rotulo": "abas por estilo · é assim que ela pensa",
+          "abas": [
+            "all",
+            "wireless",
+            "push-up",
+            "t-shirt",
+            "strapless",
+            "lace",
+            "plus size"
+          ],
+          "cta": "sort by ∨"
+        },
+        {
+          "tipo": "grade_filtro",
+          "n": 3,
+          "rotulo": "grade · peça no corpo, selo de desconto visível e as cores no card",
+          "filtros": [
+            {
+              "nome": "BAND SIZE",
+              "valores": [
+                "65",
+                "70",
+                "75",
+                "80",
+                "85",
+                "90"
+              ]
+            },
+            {
+              "nome": "CUP SIZE",
+              "valores": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "DD+"
+              ]
+            },
+            {
+              "nome": "COVERAGE",
+              "valores": [
+                "full",
+                "balconette",
+                "plunge"
+              ]
+            },
+            {
+              "nome": "COLOUR",
+              "valores": []
+            },
+            {
+              "nome": "PRICE",
+              "valores": []
+            }
+          ],
+          "badge": "-57%",
+          "badge2": "-50%",
+          "faixa_meio": "BUY 2 BRAS, GET 1 FREE · THE THIRD ONE IS ON US",
+          "cta": "LOAD MORE"
+        },
+        {
+          "tipo": "texto_colecao",
+          "n": 4,
+          "rotulo": "texto da coleção · o único bloco de leitura, embaixo"
+        },
+        {
+          "tipo": "foot"
+        }
+      ],
+      "decisoes": [
+        "1. A capa nomeia o estilo, wireless, push-up ou t-shirt. Coleção com nome de estação não significa nada em roupa íntima.",
+        "2. A oferta reaparece no topo da coleção, para quem entrou pelo anúncio e pulou a página inicial.",
+        "3. Filtro de band e de cup é obrigatório e fica sempre visível. Guardar o tamanho escolhido entre as páginas é o detalhe que separa a loja boa da loja que cansa.",
+        "3. Cobertura é o segundo filtro real: full, balconette e plunge resolvem decote, e é isso que ela está tentando resolver quando abre a coleção.",
+        "3. Faixa de oferta no meio da grade, depois da segunda fileira, quando o olho já cansou de rolar.",
+        "4. O texto da coleção vai para o fim. Ele serve à busca do Google e não atrapalha quem já quer comprar."
+      ],
+      "nota_mobile": "Grade de duas colunas, o tamanho escolhido virando etiqueta fixa no topo, filtro e ordenação num botão só no rodapé.",
+      "mobile": [
+        {
+          "tipo": "band",
+          "texto": "BUY 2, GET 1 FREE · FREE SHIPPING OVER €59"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "m_capa",
+          "n": 1,
+          "rotulo": "capa curta"
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "BUY 2, GET 1 FREE · ADD 3 BRAS TO ACTIVATE"
+        },
+        {
+          "tipo": "m_filtros",
+          "chips": [
+            "75B",
+            "band",
+            "cup",
+            "coverage",
+            "colour"
+          ]
+        },
+        {
+          "tipo": "m_grade",
+          "n": 2,
+          "rotulo": "grade de 2 colunas",
+          "badge": "-57%",
+          "cta": "LOAD MORE"
+        },
+        {
+          "tipo": "m_stickybuy",
+          "n": 3,
+          "cta": "FILTER & SORT"
+        }
+      ],
+      "decisoes_mobile": [
+        "O tamanho escolhido fica como primeira etiqueta, sempre visível, para ela não precisar refiltrar a cada volta.",
+        "Duas colunas mantêm a foto no corpo legível. Três colunas transformam a grade em miniatura e a peça some.",
+        "Filtrar e ordenar viram um botão só, fixo no rodapé, porque no celular ninguém rola de volta ao topo para filtrar."
+      ]
+    },
+    "pdp": {
+      "titulo": "A página que transforma uma peça em três.",
+      "lead": "Aqui ela já quer. A função da página é provar que serve, provar que não marca por baixo da roupa e transformar uma compra em três, que é onde a oferta paga o anúncio.",
+      "desktop": [
+        {
+          "tipo": "band",
+          "texto": "BUY 2 BRAS, GET 1 FREE · FREE SHIPPING OVER €59 · 60-DAY FIT GUARANTEE"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "pdp_topo",
+          "galeria": {
+            "n": 1,
+            "rotulo": "6 a 8 ângulos · frente, lado, costas, fecho, macro do tecido e por baixo da camiseta",
+            "placeholder_en": "GALLERY · FRONT, SIDE, BACK, CLASP, FABRIC MACRO, UNDER A WHITE T-SHIRT"
+          },
+          "info": {
+            "padding": "0",
+            "n_badge": 2,
+            "rotulo_badge": "badge de tecido e cobertura",
+            "badge": "seamless · wireless · A to DD+",
+            "n_titulo": 3,
+            "rotulo_titulo": "título direto e prova social",
+            "prova": "743 reviews · 4,8 out of 5",
+            "n_preco": 4,
+            "rotulo_preco": "ancoragem de preço",
+            "n_chips": 5,
+            "rotulo_chips": "cor e tamanho · band e cup no mesmo seletor",
+            "chips": [
+              "70B",
+              "75B",
+              "75C",
+              "80C",
+              "85D",
+              "90DD"
+            ],
+            "urgencia": "Selling fast · ships in 24 to 48h · not sure? take the 30-second size quiz",
+            "n_cta": 6,
+            "rotulo_cta": "botão de compra e oferta logo abaixo",
+            "cta": "ADD TO CART",
+            "acordeoes": [
+              "fabric & care",
+              "fit & support",
+              "shipping & returns",
+              "discreet packaging"
+            ]
+          }
+        },
+        {
+          "tipo": "dobra",
+          "n": 7,
+          "rotulo": "abaixo da dobra · a página continua vendendo",
+          "colunas_dobra": [
+            {
+              "rotulo": "descrição rica",
+              "texto": "how it lifts without a wire"
+            },
+            {
+              "rotulo": "avaliações com foto",
+              "texto": "her size in every review"
+            },
+            {
+              "rotulo": "perguntas frequentes",
+              "texto": "does it show under a t-shirt?"
+            }
+          ]
+        },
+        {
+          "tipo": "size_chart",
+          "n": 8,
+          "rotulo": "tabela de medidas · sob-busto, busto e a conversão europeia, na própria página",
+          "colunas": [
+            "UNDERBUST (CM)",
+            "EU BAND",
+            "UK / US BAND",
+            "BUST MINUS UNDERBUST",
+            "CUP"
+          ],
+          "linhas": [
+            [
+              "68 to 72",
+              "65",
+              "30",
+              "2,5 to 5 cm",
+              "A"
+            ],
+            [
+              "73 to 77",
+              "70",
+              "32",
+              "5 to 7,5 cm",
+              "B"
+            ],
+            [
+              "78 to 82",
+              "75",
+              "34",
+              "7,5 to 10 cm",
+              "C"
+            ],
+            [
+              "83 to 87",
+              "80",
+              "36",
+              "10 to 12,5 cm",
+              "D"
+            ],
+            [
+              "88 to 92",
+              "85",
+              "38",
+              "12,5 to 15 cm",
+              "DD / E"
+            ],
+            [
+              "93 to 97",
+              "90",
+              "40",
+              "15 to 17,5 cm",
+              "F"
+            ]
+          ],
+          "nota": "Measure your underbust snug and level, then the fullest part of your bust. The difference between the two is your cup. Between two bands, take the smaller band and go one cup up: 34C becomes 32D."
+        },
+        {
+          "tipo": "complete",
+          "n": 9,
+          "rotulo": "complete o conjunto · a calcinha que combina e o pacote de três",
+          "badge": "-57%"
+        },
+        {
+          "tipo": "foot"
+        }
+      ],
+      "decisoes": [
+        "1. Entre seis e oito ângulos, com frente, lado, costas, o fecho e uma foto por baixo de uma camiseta branca. Essa última mata a objeção que mais aparece nas avaliações do nicho.",
+        "2. O selo de tecido abre a página porque responde à dúvida de conforto antes do preço: sem aro, sem costura, sustentação sem apertar.",
+        "4. Preço cheio riscado, preço de venda e economia em euros no mesmo bloco.",
+        "5. Band e cup no mesmo seletor, com o convite para o teste de tamanho ao lado. Quem não sabe o número precisa de um caminho ali, não de um link para outra aba.",
+        "6. A oferta fica colada no botão. Quem decidiu levar um vê na hora que a terceira é grátis, e a terceira é o que paga o anúncio.",
+        "8. A tabela de medidas fica na própria página, com sob-busto, busto e a conversão europeia. Devolução por tamanho errado é o custo silencioso que come a margem da operação inteira.",
+        "9. Completar o conjunto no fim da página é o caminho natural para a terceira peça, e a sugestão certa é o mesmo modelo em outra cor, não outro modelo."
+      ],
+      "nota_mobile": "Galeria em tela cheia, botão de compra fixo no rodapé acompanhando a rolagem e o preço sempre ao lado dele.",
+      "mobile": [
+        {
+          "tipo": "band",
+          "texto": "BUY 2, GET 1 FREE · FREE SHIPPING OVER €59"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "m_galeria",
+          "n": 1,
+          "rotulo": "galeria em tela cheia · desliza"
+        },
+        {
+          "tipo": "m_pdp",
+          "n": 2,
+          "rotulo": "cor e tamanho · band e cup",
+          "prova": "743 reviews",
+          "chips": [
+            "70B",
+            "75B",
+            "75C",
+            "80C",
+            "85D"
+          ]
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "BUY 2, GET 1 FREE · ADD 3 BRAS TO ACTIVATE"
+        },
+        {
+          "tipo": "m_acordeao",
+          "acordeoes": [
+            "fabric & care",
+            "fit & support",
+            "shipping & returns",
+            "discreet packaging"
+          ]
+        },
+        {
+          "tipo": "m_size",
+          "n": 3,
+          "rotulo": "tabela de medidas",
+          "colunas": [
+            "UNDERBUST",
+            "EU BAND",
+            "CUP"
+          ],
+          "linhas": [
+            [
+              "68-72",
+              "65",
+              "A"
+            ],
+            [
+              "73-77",
+              "70",
+              "B"
+            ],
+            [
+              "78-82",
+              "75",
+              "C"
+            ],
+            [
+              "83-87",
+              "80",
+              "D"
+            ],
+            [
+              "88-92",
+              "85",
+              "DD"
+            ]
+          ]
+        },
+        {
+          "tipo": "m_reviews",
+          "n": 4,
+          "rotulo": "avaliações com foto · com o tamanho de quem escreveu"
+        },
+        {
+          "tipo": "m_stickybuy",
+          "n": 5,
+          "cta": "ADD TO CART"
+        }
+      ],
+      "decisoes_mobile": [
+        "O preço e a linha de economia aparecem acima da dobra, antes dos seletores.",
+        "A tabela de medidas encolhe para sob-busto, band e cup, que são as três colunas que ela usa de fato no celular.",
+        "O botão fixo no rodapé carrega o preço junto e segue a rolagem inteira. Ela nunca precisa rolar de volta para comprar."
+      ]
+    }
+  }
+}

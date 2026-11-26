@@ -1,0 +1,320 @@
+{% comment %}
+  Category Circles — custom section.
+  Category grid with circular images and full size control.
+  Solves the collection-list limitation of themes whose slider only activates when blocks.size > columns_desktop.
+  CSS scoped via .category-circles__* prefix. Does not touch base.css, main.js, or theme.liquid.
+{% endcomment %}
+
+<section
+  class="category-circles section"
+  style="
+    --category-circles-bg: {{ section.settings.background_color }};
+    --category-circles-text: {{ section.settings.text_color }};
+    --category-circles-circle-size: {{ section.settings.circle_size_desktop }}px;
+    --category-circles-circle-size-mobile: {{ section.settings.circle_size_mobile }}px;
+    --category-circles-gap-desktop: {{ section.settings.gap_desktop }}px;
+    --category-circles-gap-mobile: {{ section.settings.gap_mobile }}px;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: var(--category-circles-bg);
+  "
+>
+  <div class="category-circles__inner">
+    {%- if section.settings.title != blank -%}
+      <h2 class="category-circles__heading" style="color: var(--category-circles-text);">
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+
+    <div class="category-circles__grid" data-align="{{ section.settings.alignment }}">
+      {%- for block in section.blocks -%}
+        {%- assign coll = block.settings.collection -%}
+        <a
+          href="{% if coll != blank %}{{ coll.url }}{% else %}#{% endif %}"
+          class="category-circles__item"
+          {{ block.shopify_attributes }}
+        >
+          <div class="category-circles__circle">
+            {%- if block.settings.custom_image != blank -%}
+              {{ block.settings.custom_image | image_url: width: 600 | image_tag:
+                loading: 'lazy',
+                class: 'category-circles__image',
+                widths: '200, 400, 600',
+                sizes: '(max-width: 749px) 33vw, 15vw'
+              }}
+            {%- elsif coll.image != blank -%}
+              {{ coll.image | image_url: width: 600 | image_tag:
+                loading: 'lazy',
+                class: 'category-circles__image',
+                widths: '200, 400, 600',
+                sizes: '(max-width: 749px) 33vw, 15vw'
+              }}
+            {%- elsif coll.products.first.featured_media != blank -%}
+              {{ coll.products.first.featured_media | image_url: width: 600 | image_tag:
+                loading: 'lazy',
+                class: 'category-circles__image',
+                widths: '200, 400, 600',
+                sizes: '(max-width: 749px) 33vw, 15vw'
+              }}
+            {%- else -%}
+              <div class="category-circles__placeholder">
+                {{ 'collection-1' | placeholder_svg_tag: 'category-circles__image' }}
+              </div>
+            {%- endif -%}
+          </div>
+          <span class="category-circles__label" style="color: var(--category-circles-text);">
+            {%- if block.settings.custom_title != blank -%}
+              {{ block.settings.custom_title }}
+            {%- else -%}
+              {{ coll.title }}
+            {%- endif -%}
+          </span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .category-circles {
+    width: 100%;
+  }
+  .category-circles__inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .category-circles__heading {
+    text-align: center;
+    font-family: var(--font-heading--family, inherit);
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin: 0 0 28px 0;
+  }
+  .category-circles__grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--category-circles-gap-desktop);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 4px 0;
+  }
+  .category-circles__grid::-webkit-scrollbar { display: none; }
+  .category-circles__grid[data-align="start"] { justify-content: flex-start; }
+
+  /* Desktop only: alignment=center wraps if content overflows */
+  @media (min-width: 750px) {
+    .category-circles__grid[data-align="center"] {
+      justify-content: center;
+      flex-wrap: wrap;
+      overflow-x: visible;
+    }
+  }
+
+  .category-circles__item {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: var(--category-circles-circle-size);
+  }
+  .category-circles__circle {
+    width: var(--category-circles-circle-size);
+    height: var(--category-circles-circle-size);
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #f5f0eb;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+  .category-circles__item:hover .category-circles__circle {
+    transform: scale(1.04);
+  }
+  .category-circles__image,
+  .category-circles__placeholder svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .category-circles__label {
+    font-family: var(--font-heading--family, inherit);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 749px) {
+    .category-circles__inner { padding: 0 12px; }
+    .category-circles__heading { font-size: 18px; margin-bottom: 20px; }
+    .category-circles__grid {
+      gap: var(--category-circles-gap-mobile);
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+    }
+    .category-circles__item {
+      width: var(--category-circles-circle-size-mobile);
+    }
+    .category-circles__circle {
+      width: var(--category-circles-circle-size-mobile);
+      height: var(--category-circles-circle-size-mobile);
+    }
+    .category-circles__label { font-size: 12px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Category Circles",
+  "tag": "section",
+  "class": "category-circles-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "COLLECTIONS"
+    },
+    {
+      "type": "header",
+      "content": "Circle size"
+    },
+    {
+      "type": "range",
+      "id": "circle_size_desktop",
+      "label": "Desktop circle size",
+      "min": 80,
+      "max": 260,
+      "step": 10,
+      "default": 140,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "circle_size_mobile",
+      "label": "Mobile circle size",
+      "min": 60,
+      "max": 180,
+      "step": 5,
+      "default": 90,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "label": "Gap desktop",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "label": "Gap mobile",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "start", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#FBF6F2"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#3B2F2A"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Custom image (optional — overrides collection image)"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom title (optional — overrides collection title)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category Circles",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}

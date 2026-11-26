@@ -1,0 +1,28 @@
+{
+  "_doc": "Mapeamento flexível: cabeçalho do export Meta Ads Manager (normalizado: lowercase, sem %, sem parênteses) -> KPI canônico. Cada canônico tem lista de sinônimos PT/EN. parse-xlsx.mjs faz lookup tolerante.",
+  "synonyms": {
+    "date": ["day", "dia", "data", "reporting starts", "início dos relatórios", "inicio dos relatorios"],
+    "campaign": ["campaign name", "nome da campanha", "campanha"],
+    "adset": ["ad set name", "nome do conjunto de anúncios", "conjunto de anuncios", "conjunto"],
+    "ad": ["ad name", "nome do anúncio", "anuncio"],
+    "spend": ["amount spent", "valor usado", "valor gasto", "gasto", "investimento"],
+    "impressions": ["impressões", "impressoes"],
+    "reach": ["alcance"],
+    "frequency": ["frequência", "frequencia"],
+    "clicks_link": ["link clicks", "cliques no link", "cliques em links"],
+    "clicks_all": ["clicks all", "cliques todos", "cliques"],
+    "ctr_link": ["ctr link click-through rate", "ctr cliques no link", "ctr de cliques no link", "ctr link"],
+    "ctr_all": ["ctr all", "ctr", "ctr todos"],
+    "cpc_link": ["cpc cost per link click", "cpc por clique no link", "cpc link"],
+    "cpm": ["cpm cost per 1000 impressions", "cpm custo por mil impressões", "cpm custo por mil impressoes", "cpm custo por 1.000 impressões", "cpm custo por 1.000 impressoes", "cpm custo por 1000 impressões", "cpm custo por 1000 impressoes"],
+    "purchases": ["compras", "website purchases", "purchase", "pixel purchases"],
+    "purchase_value": ["purchase conversion value", "valor de conversão de compra", "valor de conversao de compra", "purchases conversion value", "receita"],
+    "roas": ["purchase roas", "website purchase roas", "retorno sobre o investimento em publicidade", "roas de compras"],
+    "cpa": ["cost per purchase", "custo por compra", "cost per result", "custo por resultado", "cpa"],
+    "atc": ["adds to cart", "adicionados ao carrinho", "add to cart"],
+    "checkouts": ["checkouts initiated", "finalizações de compra iniciadas", "finalizacoes de compra iniciadas", "initiate checkout"],
+    "conversion_rate": ["conversion rate", "taxa de conversão", "taxa de conversao"],
+    "hold_3s": ["3-second video plays", "reproduções de vídeo de 3 segundos", "reproducoes de video de 3 segundos", "thruplays", "hold 3s"],
+    "result_rate": ["result rate", "taxa de resultado"]
+  }
+}

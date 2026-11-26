@@ -1,0 +1,803 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Bid Cap Sem Mistério (Copy)</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: coluna de leitura única guiada pela fórmula Leilão = Dinheiro × Qualidade; todo valor em euro com o real ao lado; o teto (linha âmbar) é o fio visual */
+:root{
+  --bg:#F3F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#5A6680; --line:#D9DFEA;
+  --accent:#2448D8; --accent-soft:#E3E9FF; --cap:#C47A00; --cap-soft:#FFF1D6;
+  --good:#1E8A55; --good-soft:#DDF3E7; --bad:#C2392F; --bad-soft:#FBE3E0; --skip:#C9D0DD;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0E1424; --surface:#161E33; --ink:#E7ECF7; --muted:#9AA6BF; --line:#2A3550;
+  --accent:#7D98FF; --accent-soft:#1F2A4E; --cap:#F2B23A; --cap-soft:#3A2D10;
+  --good:#4CC98A; --good-soft:#153526; --bad:#F0776C; --bad-soft:#3D1C1A; --skip:#323D57; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0E1424; --surface:#161E33; --ink:#E7ECF7; --muted:#9AA6BF; --line:#2A3550;
+  --accent:#7D98FF; --accent-soft:#1F2A4E; --cap:#F2B23A; --cap-soft:#3A2D10;
+  --good:#4CC98A; --good-soft:#153526; --bad:#F0776C; --bad-soft:#3D1C1A; --skip:#323D57; color-scheme:dark }
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.wrap{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:60px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.2rem,6vw,3.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.5rem,4vw,1.9rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0;max-width:68ch}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:16px}
+.step{display:flex;align-items:baseline;gap:12px}
+.step .n{font-family:var(--mono);font-weight:700;color:var(--cap);font-size:.95rem}
+.part{font-family:var(--display);font-weight:800;font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cap);border-top:3px dashed var(--cap);padding-top:14px}
+.eur{font-family:var(--mono);font-weight:700;white-space:nowrap}
+.brl{font-family:var(--mono);font-size:.78em;font-weight:500;color:var(--muted);white-space:nowrap}
+.note{font-size:.92rem;color:var(--muted)}
+.fx{display:inline-block;font-size:.85rem;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:4px 12px;color:var(--muted)}
+
+header.hero{padding-top:48px;display:flex;flex-direction:column;gap:18px}
+.hero p.lead{font-size:1.2rem}
+
+.formula{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 16px;font-family:var(--display);font-weight:800;font-size:clamp(1.25rem,4.4vw,2rem);text-align:center}
+.formula .op{color:var(--muted);font-weight:600}
+.chip{padding:6px 14px;border-radius:10px;line-height:1.2}
+.chip small{display:block;font-family:var(--body);font-size:.72rem;font-weight:600;letter-spacing:.04em;opacity:.85}
+.c-auc{background:var(--cap-soft);color:var(--cap)} .c-mon{background:var(--accent-soft);color:var(--accent)} .c-qua{background:var(--good-soft);color:var(--good)}
+.formula.sm{font-size:clamp(1.05rem,3.4vw,1.4rem);padding:16px}
+
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.two > *{min-width:0}
+.two .box{display:flex;flex-direction:column;gap:8px}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:99px;width:fit-content}
+.tag.vol{background:var(--accent-soft);color:var(--accent)} .tag.cap{background:var(--cap-soft);color:var(--cap)} .tag.qua{background:var(--good-soft);color:var(--good)} .tag.bad{background:var(--bad-soft);color:var(--bad)}
+.quote{border-left:4px solid var(--cap);padding:6px 0 6px 16px;font-size:1.08rem;font-style:italic;max-width:68ch}
+.quote cite{display:block;font-style:normal;font-size:.85rem;color:var(--muted);margin-top:4px}
+
+.faq{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;align-items:start}
+.faq details{background:var(--good-soft);border-radius:10px;padding:0 14px;min-width:0}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;font-weight:700;color:var(--good)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-top:-4px;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+.faq summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.faq details p{padding:0 0 12px;font-size:.95rem}
+.angles{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-direction:column;gap:6px}
+.angles li{background:var(--surface);border-radius:8px;padding:8px 10px;font-size:.92rem;display:flex;flex-direction:column;gap:2px}
+.angles span{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--good)}
+.angles em{font-style:normal;font-size:.8rem;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){.faq summary::after{transition:none}}
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.lvl{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.lvl b{font-family:var(--display);font-size:1.15rem;color:var(--c)}
+.lvl span{font-size:.8rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.lvl p{font-size:.95rem}
+.howto{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:10px;max-width:68ch}
+.howto li::marker{font-family:var(--mono);font-weight:700;color:var(--cap)}
+.countries details{background:var(--surface);border:1px solid var(--line)}
+.countries summary{color:var(--ink)}
+.clist{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;padding-bottom:12px}
+.clist > div{min-width:0}
+.clist h4{margin:0 0 4px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--bad)}
+.clist p{padding:0!important;font-size:.9rem;line-height:1.5}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+section{scroll-margin-top:16px}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.toc > div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.toc h4{margin:0 0 4px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cap)}
+.toc a{color:var(--ink);text-decoration:none;font-size:.95rem}
+.toc a:hover,.toc a:focus-visible{color:var(--accent);text-decoration:underline}
+.check{margin:0;padding:16px 20px 16px 2.6em;display:flex;flex-direction:column;gap:10px}
+.check li::marker{font-family:var(--mono);font-weight:700;color:var(--good)}
+.check span{color:var(--muted);font-size:.9rem}
+.flow{display:flex;flex-direction:column;gap:14px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.qh{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:1.1rem}
+.qh span{flex:0 0 32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:.9rem}
+.branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.br{background:var(--c-soft);border-left:4px solid var(--c);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.br > b{color:var(--c)}
+.br p{font-size:.93rem}
+.vorder{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.vorder > div{background:var(--c-soft);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.vorder b{color:var(--c)}
+.routine{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.routine .box{display:flex;flex-direction:column;gap:10px;min-width:0}
+.exnote{background:var(--cap-soft);border:1px solid var(--cap);border-left-width:5px}
+.mult{display:flex;flex-direction:column;gap:8px}
+.mrow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:center;font-size:.92rem;text-align:center}
+.mrow > span{padding:8px 6px;border-radius:8px;background:var(--bg);border:1px solid var(--line);min-width:0}
+.mrow .o{background:none;border:none;color:var(--muted);padding:0}
+.mrow .r0{background:var(--bad-soft);color:var(--bad);border-color:transparent;font-weight:700}
+.mrow .r1{background:var(--good-soft);color:var(--good);border-color:transparent;font-weight:700}
+.mhead{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mhead > span{background:none!important;border:none!important}
+
+/* jornada */
+.journeys{display:flex;flex-direction:column;gap:14px}
+.journey{display:flex;flex-direction:column;gap:8px}
+.journey .who{font-weight:700}
+.path{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+.path .ad{flex:1 1 150px;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.path .ad b{font-size:.95rem}
+.path .ad span{font-size:.82rem;color:var(--muted)}
+.path .ad.buy{background:var(--good-soft);border-color:var(--good)}
+.path .ad.buy b{color:var(--good)}
+.path .arr{align-self:center;color:var(--muted);font-family:var(--mono)}
+
+/* exemplos */
+.ex{display:flex;flex-direction:column;gap:14px}
+.split{display:flex;border-radius:10px;overflow:hidden;min-height:84px}
+.split div{flex:var(--w) 1 0;min-width:0;background:var(--c);color:var(--t,var(--ink));display:flex;flex-direction:column;justify-content:center;padding:8px 4px;text-align:center;border-right:2px solid var(--surface)}
+.split div:last-child{border-right:none}
+.split b{font-family:var(--mono);font-size:.95rem}
+.split i{font-style:normal;font-family:var(--mono);font-size:.7rem;opacity:.8}
+.split span{font-size:.72rem;line-height:1.2}
+.ruler{font-family:var(--mono);font-size:.95rem}
+.ladder{display:flex;flex-direction:column;gap:10px}
+.rung{display:grid;grid-template-columns:130px 1fr;gap:14px;align-items:center;padding:14px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--c)}
+.rung.main{background:var(--cap-soft);border-color:var(--cap)}
+.rung .lv{font-family:var(--mono);font-weight:700;font-size:1.3rem;color:var(--c);display:flex;flex-direction:column;line-height:1.2}
+.rung .lv small{font-size:.75rem;color:var(--muted);font-weight:500}
+.rung div{min-width:0}
+@media (max-width:480px){.rung{grid-template-columns:1fr;gap:4px}}
+.warn{background:var(--bad-soft);border-color:transparent}
+.dots{display:grid;grid-template-columns:repeat(20,1fr);gap:4px;max-width:420px}
+.dots i{aspect-ratio:1;border-radius:50%;background:var(--skip)}
+.dots i.buy{background:var(--good);box-shadow:0 0 0 3px var(--good-soft)}
+.scen{display:flex;flex-direction:column;gap:12px;border-top:4px solid var(--c)}
+.scen .tot{color:var(--c)}
+.vs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.vs > div{min-width:0}
+.ledger{font-variant-numeric:tabular-nums;display:grid;grid-template-columns:1fr auto;gap:6px 14px;font-size:.95rem}
+.ledger > span:nth-child(even){font-family:var(--mono);text-align:right}
+.ledger .tot{border-top:1px solid var(--line);padding-top:6px;font-weight:700;color:var(--cap)}
+
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.week div{border-radius:8px;padding:8px 4px;text-align:center;font-size:.8rem;display:flex;flex-direction:column;gap:2px;min-width:0}
+.week b{font-family:var(--mono);font-size:.85rem}
+.week .ok{background:var(--good-soft);color:var(--good)} .week .ko{background:var(--bad-soft);color:var(--bad)}
+@media (max-width:520px){.week{grid-template-columns:repeat(4,1fr)}}
+
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:480px;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:.9rem;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+
+ul.clean{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;max-width:68ch}
+
+.locks{display:flex;flex-direction:column}
+.lock{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;padding:16px;background:var(--surface);border:1px solid var(--line)}
+.lock:first-child{border-radius:12px 12px 0 0} .lock:last-child{border-radius:0 0 12px 12px} .lock + .lock{border-top:none}
+.lock .ic{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-family:var(--mono);font-weight:700;background:var(--c-soft);color:var(--c)}
+.lock div{min-width:0;display:flex;flex-direction:column;gap:4px}
+.lock .q{font-size:.9rem;color:var(--muted)}
+.meter{position:relative;display:flex;height:38px;border-radius:8px;overflow:hidden;background:var(--bg);border:1px solid var(--line)}
+.meter .fill{background:var(--cap);color:#fff;display:flex;align-items:center;padding:0 10px;font-size:.82rem;font-weight:700;white-space:nowrap}
+.meter .free{flex:1;display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--muted);white-space:nowrap}
+.meterlab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--muted);margin:4px 0 12px}
+.steps{margin:0 0 10px;padding-left:1.3em;display:flex;flex-direction:column;gap:6px}
+.lock .where{font-size:.8rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--c)}
+
+/* árvore da campanha */
+.tree{display:flex;flex-direction:column;gap:10px}
+.node{border-radius:10px;padding:12px 14px;border:1px solid var(--line);background:var(--surface)}
+.node.camp{border-color:var(--accent);background:var(--accent-soft)}
+.sets{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;padding-left:18px;border-left:2px solid var(--line);margin-left:12px}
+.sets .node{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sets .node.new{border-style:dashed;border-color:var(--cap)}
+.ads{display:flex;flex-wrap:wrap;gap:4px}
+.ads i{font-style:normal;font-size:.7rem;font-weight:700;padding:2px 6px;border-radius:5px}
+.ads .v{background:var(--accent-soft);color:var(--accent)} .ads .im{background:var(--good-soft);color:var(--good)}
+
+.matrix{overflow-x:auto}
+.matrix table{min-width:520px}
+.matrix td.cell{text-align:center;font-family:var(--mono);font-size:.8rem;color:var(--good);background:var(--good-soft);border:2px solid var(--surface)}
+.matrix th.side{text-align:left;text-transform:none;letter-spacing:0;font-size:.9rem;color:var(--ink)}
+
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start;padding:14px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--c)}
+.row .pct{font-weight:700;color:var(--c);font-size:.95rem}
+.row div{min-width:0}
+@media (max-width:480px){.row{grid-template-columns:1fr;gap:4px}}
+
+.clutch{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.clutch span{font-family:var(--mono);font-size:.85rem;padding:6px 10px;border-radius:8px;background:var(--good-soft);color:var(--good)}
+.clutch span.stop{background:var(--bad-soft);color:var(--bad)}
+.clutch span.back{background:var(--cap-soft);color:var(--cap)}
+.clutch em{font-style:normal;color:var(--muted)}
+
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:460px;font-size:.95rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tbl td:first-child{font-weight:700}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat b{font-family:var(--mono);font-size:1.3rem}
+.stat span{font-size:.85rem;color:var(--muted)}
+
+.errs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.errs .box{padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.errs h3{font-size:1rem;color:var(--bad)}
+.recap{background:var(--cap-soft);border:1px solid var(--cap);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px}
+footer{font-size:.9rem;color:var(--muted);border-top:1px solid var(--line);padding-top:20px;display:flex;flex-direction:column;gap:8px}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <span class="eyebrow">Meta Ads · estratégia de lance</span>
+  <h1>Bid cap sem mistério</h1>
+  <p class="lead">Bid cap (limite de lance) é dizer ao Meta: "pago no máximo tanto por cada venda". Se ele não consegue vender por esse preço, ele não gasta o seu dinheiro.</p>
+  <div class="formula" aria-label="Leilão igual a dinheiro vezes qualidade do anúncio">
+    <span class="chip c-auc">Leilão</span><span class="op">=</span>
+    <span class="chip c-mon">Dinheiro</span><span class="op">×</span>
+    <span class="chip c-qua">Qualidade do anúncio</span>
+  </div>
+  <p>Essa fórmula explica a página inteira. Todos os exemplos usam o mesmo produto, um relógio vendido na Europa, com o valor em real do lado.</p>
+  <div class="box exnote"><b>Todos os números desta página são exemplo.</b> Eles vêm de um relógio fictício vendido por €79, que custa €20 e tem empate de €46. O seu produto tem outros custos, então os seus números serão outros: o seu empate pode ser €12 ou €120. Use a lógica, nunca o valor. No passo 4 você vê como calcular o seu.</div>
+  <span class="fx">Câmbio de referência usado nos exemplos: €1 = R$ 6,20</span>
+  <nav class="toc box" aria-label="Índice">
+    <div><h4>Parte 1 · A lógica</h4><a href="#p1">1. Todo anúncio é um leilão</a><a href="#p2">2. Leilão = Dinheiro × Qualidade</a><a href="#p3">3. Por que um anúncio só não basta</a></div>
+    <div><h4>Parte 2 · Os números</h4><a href="#p4">4. O ponto de empate</a><a href="#p5">5. Por que o jeito antigo sai caro</a><a href="#p6">6. O teto funcionando</a></div>
+    <div><h4>Parte 3 · Na prática</h4><a href="#p7">7. As três travas</a><a href="#p8">8. Como montar</a><a href="#p9">9. Ângulos × formatos</a><a href="#p10">10. Top spenders</a><a href="#p11">11. O dia a dia</a><a href="#p12">12. O caixa</a><a href="#p13">13. Uma operação real</a><a href="#p14">14. Erros</a><a href="#p15">15. Checklist antes de publicar</a><a href="#otimizar"><b>Extra: como otimizar</b></a></div>
+  </nav>
+</header>
+
+<span class="part">Parte 1 · A lógica</span>
+
+<section>
+  <div class="step" id="p1"><span class="n">1</span><h2>Todo anúncio é um leilão</h2></div>
+  <p>Quando seu anúncio aparece na tela de alguém, é porque você ganhou um leilão contra outros anunciantes. O Meta escolhe quem aparece pensando em uma coisa: qual anúncio tem mais chance de fazer aquela pessoa parar, assistir, clicar e comprar.</p>
+  <p>Para cada pessoa, ele também estima quanto custaria conseguir uma venda dela. Umas saem baratas, outras caras. A estratégia de lance é a regra de quanto você topa pagar.</p>
+  <div class="two">
+    <div class="box">
+      <span class="tag vol">Maior volume (padrão do Meta)</span>
+      <h3>"Gaste tudo o que eu te dei"</h3>
+      <p>O Meta entra em quase todo leilão, inclusive nos caros, para usar o orçamento do dia inteiro.</p>
+    </div>
+    <div class="box">
+      <span class="tag cap">Limite de lance (bid cap)</span>
+      <h3>"Só compre se custar até €55"</h3>
+      <p>O Meta só entra nos leilões em que a venda cabe no seu teto. Se não acha nenhum, não gasta nada.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="step" id="p2"><span class="n">2</span><h2>Leilão = Dinheiro × Qualidade do anúncio</h2></div>
+  <p>O próprio Meta publicou como o leilão funciona: ganha quem junta dinheiro e anúncio bom.</p>
+  <div class="two">
+    <div class="box">
+      <span class="tag vol">Dinheiro</span>
+      <h3>Orçamento e quantidade de anúncios</h3>
+      <p><b>Escala vertical:</b> o orçamento da campanha.</p>
+      <p><b>Escala horizontal:</b> quantos anúncios e conjuntos você tem rodando. Dinheiro concentrado num anúncio só não vai longe. Muitos anúncios te dão bom posicionamento.</p>
+      <p class="note">O orçamento você já tem. No bid cap ele pode ficar alto desde o primeiro dia (passo 7).</p>
+    </div>
+    <div class="box">
+      <span class="tag qua">Qualidade do anúncio</span>
+      <h3>Ângulos × formatos</h3>
+      <p>Anúncios que falam de jeitos diferentes (ângulos) e aparecem de jeitos diferentes (formatos), mostrando o que seu produto tem de diferente dos outros.</p>
+      <p class="note">É aqui que o jogo se decide.</p>
+    </div>
+  </div>
+  <div class="faq">
+    <details>
+      <summary>O que é ângulo?</summary>
+      <p><b>Ângulo é a razão que o anúncio dá para a pessoa comprar.</b> É a resposta para "por que eu quero esse relógio?". Pessoas diferentes compram por razões diferentes, então cada razão vira um anúncio.</p>
+      <p>Mesmo relógio, mesma foto. Só muda a frase, e com ela muda quem para de rolar o feed:</p>
+      <ul class="angles">
+        <li><span>Preço</span>"Parece um relógio de €500. Custa €79."<em>fisga quem quer pagar pouco</em></li>
+        <li><span>Presente</span>"O presente que ele vai usar todo dia."<em>fisga quem está procurando presente</em></li>
+        <li><span>Status</span>"Repare como olham para o seu pulso na reunião."<em>fisga quem quer parecer bem-sucedido</em></li>
+        <li><span>Prova</span>"2.000 homens já usam. Nota 4,8."<em>fisga quem tem medo de comprar errado</em></li>
+      </ul>
+      <p>Trocar a cor do fundo ou o tamanho da letra não muda o ângulo. Mudar a razão de comprar, muda.</p>
+    </details>
+    <details>
+      <summary>O que é formato?</summary>
+      <p><b>É o jeito que o anúncio aparece na tela.</b> Vídeo de uma pessoa mostrando o relógio, foto do relógio no pulso, unboxing, imagem com o preço cortado. O mesmo ângulo pode virar vários formatos.</p>
+    </details>
+  </div>
+  <p>Repare que é uma <b>multiplicação</b>. Qualquer número vezes zero dá zero. No bid cap, colocar mais dinheiro num anúncio fraco não compra nada, porque o teto não deixa o Meta pagar caro por ele:</p>
+  <div class="box mult">
+    <div class="mrow mhead"><span>Dinheiro</span><span class="o"></span><span>Qualidade</span><span class="o"></span><span>Resultado</span></div>
+    <div class="mrow"><span>€1.600/dia<br><span class="brl">R$ 9.920</span></span><span class="o">×</span><span>anúncio fraco</span><span class="o">=</span><span class="r0">quase não gasta</span></div>
+    <div class="mrow"><span>€50/dia<br><span class="brl">R$ 310</span></span><span class="o">×</span><span>anúncio bom</span><span class="o">=</span><span class="r1">gasta e vende</span></div>
+    <div class="mrow"><span>€1.600/dia<br><span class="brl">R$ 9.920</span></span><span class="o">×</span><span>muitos anúncios bons</span><span class="o">=</span><span class="r1">escala com lucro</span></div>
+  </div>
+  <blockquote class="quote">"Você acha que tem mais pessoas colocando 5 mil por dia em anúncio, ou mais pessoas com aquele impulsionar de 20 reais? Só de você entrar dessa forma, você já entra na frente de 90% das pessoas."<cite>Guilherme, em call com aluno</cite></blockquote>
+</section>
+
+<section>
+  <div class="step" id="p3"><span class="n">3</span><h2>Por que um anúncio só não basta</h2></div>
+  <p>Ninguém compra no primeiro anúncio que vê. A pessoa interage aos poucos: para 2 segundos, assiste metade do vídeo, curte, entra no site, sai. Cada anúncio leva ela um passo para a frente. E cada pessoa faz esse caminho numa ordem diferente:</p>
+  <div class="box journeys">
+    <div class="journey">
+      <span class="who">Pessoa A precisa de confiança primeiro</span>
+      <div class="path">
+        <div class="ad"><b>Review em vídeo</b><span>alguém mostra para que serve</span></div><span class="arr">→</span>
+        <div class="ad"><b>Unboxing</b><span>vê a qualidade de perto</span></div><span class="arr">→</span>
+        <div class="ad buy"><b>Anúncio de preço</b><span>"de €129 por €79", compra</span></div>
+      </div>
+    </div>
+    <div class="journey">
+      <span class="who">Pessoa B começa pelo preço</span>
+      <div class="path">
+        <div class="ad"><b>Anúncio de preço</b><span>"relógio bonito e barato, vejo depois"</span></div><span class="arr">→</span>
+        <div class="ad"><b>Review em vídeo</b><span>"nossa, que qualidade"</span></div><span class="arr">→</span>
+        <div class="ad buy"><b>Unboxing de alguém conhecido</b><span>entra e compra</span></div>
+      </div>
+    </div>
+  </div>
+  <p>Se você só tem o anúncio de preço, perde a pessoa A. Se só tem review, perde a B. Com vários anúncios diferentes, o próprio Meta monta o caminho de cada pessoa.</p>
+  <p>E tem mais um motivo: <b>todo anúncio cansa</b>. Um anúncio bom costuma perder força em 2 ou 3 semanas. Quem para de subir anúncio novo para de vender.</p>
+</section>
+
+<span class="part">Parte 2 · Os números</span>
+
+<section>
+  <div class="step" id="p4"><span class="n">4</span><h2>Ache o seu teto: o ponto de empate</h2></div>
+  <p>Antes de qualquer campanha, você precisa saber quanto pode pagar de anúncio por uma venda sem ganhar nem perder. Isso é o <b>CPA de empate</b> (também chamado de CPA máximo).</p>
+  <div class="box ex">
+    <span class="tag cap">Exemplo: relógio vendido por €79 · R$ 490</span>
+    <div class="split" aria-label="Divisão dos €79 do preço">
+      <div style="--w:20;--c:var(--skip)"><b>€20</b><i>R$ 124</i><span>produto</span></div>
+      <div style="--w:8;--c:var(--skip)"><b>€8</b><i>R$ 50</i><span>frete</span></div>
+      <div style="--w:5;--c:var(--skip)"><b>€5</b><i>R$ 31</i><span>taxas</span></div>
+      <div style="--w:46;--c:var(--good-soft);--t:var(--good)"><b>€46</b><i>R$ 285</i><span>sobra para pagar o anúncio</span></div>
+    </div>
+    <p class="ruler">€79 − €20 − €8 − €5 = <b>€46</b> <span class="brl">(R$ 285)</span></p>
+    <p>Se o anúncio custar €46 por venda, você empata. Se custar menos, lucra. Se custar mais, perde.</p>
+  </div>
+  <div class="box exnote"><b>Na sua loja:</b> faça a mesma conta com os seus números. Preço que você cobra, menos o que você paga no produto, no frete e nas taxas. O que sobrar é o <b>seu</b> empate, e é ele que você usa em todo o resto da página onde aparece "€46".</div>
+  <p>O lance começa no empate e sobe em degraus só se a campanha não gastar:</p>
+  <div class="ladder">
+    <div class="rung main" style="--c:var(--cap)"><span class="lv">€46<small>R$ 285</small></span><div><b>Começa aqui: o empate</b><p>Parece que não dá lucro, mas não é assim. O teto é o máximo, e o Meta mistura vendas baratas e caras. Na prática a venda média sai abaixo dele.</p></div></div>
+    <div class="rung" style="--c:var(--accent)"><span class="lv">€55<small>R$ 341</small></span><div><b>Não gastou? Empate + 20%</b><p>€46 + €9. Você aceita um pequeno prejuízo para o Meta conseguir aprender.</p></div></div>
+    <div class="rung" style="--c:var(--bad)"><span class="lv">€69<small>R$ 428</small></span><div><b>Ainda não gastou? Empate + 50%</b><p>€46 + €23. Último degrau. Se não gastou com +20%, quase nunca gasta com +50%: o problema é o anúncio ou o site.</p></div></div>
+  </div>
+  <p class="note">"Uma venda no CPA máximo, no início da operação, é comprar dado de graça." Cada venda ensina o Meta quem compra seu produto, mesmo sem lucro. Daqui para baixo, usamos o teto de €55 nos exemplos.</p>
+  <div class="box warn"><b>Erro clássico:</b> usar o preço de venda como empate. Com teto de €79, você aceitaria pagar €79 de anúncio numa venda que só aguenta €46. São <b>€33 (R$ 205) de prejuízo</b> em cada relógio.</div>
+</section>
+
+<section>
+  <div class="step" id="p5"><span class="n">5</span><h2>Por que o jeito antigo sai caro</h2></div>
+  <p>Antes, a gente olhava CPM, CTR e CPC e achava que estava tudo bem. Um clique a €1 (R$ 6,20) parece barato. Agora veja a conta com o mesmo relógio:</p>
+  <div class="box ex">
+    <span class="tag vol">100 cliques de €1 = €100 · R$ 620</span>
+    <div class="dots" aria-label="100 cliques, só 1 vira venda"></div>
+    <p class="ruler">Uma loja boa converte 1%: só <b>1 em cada 100</b> visitantes compra. Para fazer <b>1 venda</b> você paga <b>€100</b> <span class="brl">(R$ 620)</span> de anúncio.</p>
+    <p>Mas essa venda só aguenta €46. Resultado: <b style="color:var(--bad)">€54 de prejuízo (R$ 335)</b> em cada relógio. E o pior: olhando só CTR, carrinho e checkout, o funil parecia "ok".</p>
+  </div>
+  <p>Agora o mesmo dia, com €200 (R$ 1.240) de orçamento, nas duas estratégias:</p>
+  <div class="two">
+    <div class="box scen" style="--c:var(--bad)">
+      <span class="tag bad">Maior volume (sem teto)</span>
+      <div class="ledger">
+        <span>Gasto no dia</span><span>€200 · R$ 1.240</span>
+        <span>Cliques (€1 cada)</span><span>200</span>
+        <span>Vendas (1%)</span><span>2</span>
+        <span>Custo por venda</span><span>€100 · R$ 620</span>
+        <span>Sobra das vendas (2 × €46)</span><span>€92 · R$ 570</span>
+        <span class="tot">Resultado do dia</span><span class="tot">−€108 · −R$ 670</span>
+      </div>
+      <p class="note">O Meta gasta o orçamento inteiro, mesmo vendendo caro.</p>
+    </div>
+    <div class="box scen" style="--c:var(--good)">
+      <span class="tag cap">Bid cap (teto €55)</span>
+      <div class="ledger">
+        <span>Gasto no dia</span><span>€114 · R$ 707</span>
+        <span>Vendas</span><span>3</span>
+        <span>Custo por venda (média)</span><span>€38 · R$ 236</span>
+        <span>Venda mais cara</span><span>até €55</span>
+        <span>Sobra das vendas (3 × €46)</span><span>€138 · R$ 856</span>
+        <span class="tot">Resultado do dia</span><span class="tot">+€24 · +R$ 149</span>
+      </div>
+      <p class="note">O Meta só comprou as vendas que cabiam no teto. Os outros €86 ficaram parados.</p>
+    </div>
+  </div>
+  <div class="box scen" style="--c:var(--accent)">
+    <span class="tag qua">E se o anúncio for fraco?</span>
+    <p>Mesmo relógio, conversão caiu para 0,5%. Cada venda custaria €200 (R$ 1.240).</p>
+    <div class="vs">
+      <div><b style="color:var(--bad)">Maior volume</b><p>Gasta €200, faz 1 venda e perde <b>€154 (R$ 955)</b>.</p></div>
+      <div><b style="color:var(--good)">Bid cap</b><p>Não acha venda abaixo de €55 e para quase na hora. Num caso real da casa, um conjunto gastou <b>R$ 7 em 14 dias</b> (€1,13). No teste comum, ele teria gastado R$ 600 em 3 dias.</p></div>
+    </div>
+  </div>
+  <div class="box scen" style="--c:var(--cap)">
+    <span class="tag cap">O dia ruim que apaga a semana</span>
+    <p>Uma operação gasta R$ 2.000 (€323) por dia e lucra uns R$ 200 (€32) por dia. Toda semana tem um dia ruim:</p>
+    <div class="week" aria-label="Semana de lucro e um dia ruim">
+      <div class="ok">seg<b>+R$200</b></div><div class="ok">ter<b>+R$200</b></div><div class="ok">qua<b>+R$200</b></div><div class="ok">qui<b>+R$200</b></div><div class="ok">sex<b>+R$200</b></div><div class="ok">sáb<b>+R$200</b></div><div class="ko">dom<b>−R$1.000</b></div>
+    </div>
+    <div class="vs">
+      <div><b style="color:var(--bad)">Maior volume</b><p>No domingo gasta os R$ 2.000 do mesmo jeito e perde R$ 1.000 (€161). Foi o lucro da semana inteira.</p></div>
+      <div><b style="color:var(--good)">Bid cap</b><p>No domingo o Meta não acha venda dentro do teto e gasta uns R$ 100 (€16). O lucro da semana fica.</p></div>
+    </div>
+  </div>
+  <p class="note">Os valores do dia comparado são exemplo para mostrar a lógica. O ponto: com o teto, mesmo que a conversão fique abaixo de 1%, você nunca paga €100 numa venda que vale €46.</p>
+</section>
+
+<section>
+  <div class="step" id="p6"><span class="n">6</span><h2>Veja o teto funcionando</h2></div>
+  <p>O mesmo dia, visto por dentro. Cada barra é um leilão: uma pessoa e o custo que o Meta estima para vender para ela.</p>
+  <div class="box">
+    <h3 style="margin-bottom:8px">Maior volume: entra em todos</h3>
+    <div class="chart"><svg id="chartVol" viewBox="0 0 640 230" role="img" aria-label="16 leilões, o Meta entra em todos"></svg></div>
+    <p class="note">Compra as 16 vendas, inclusive as de €70 e €74 (R$ 434 e R$ 459), que dão prejuízo.</p>
+  </div>
+  <div class="box">
+    <h3 style="margin-bottom:8px">Bid cap de €55: só entra nos que cabem</h3>
+    <div class="chart"><svg id="chartCap" viewBox="0 0 640 230" role="img" aria-label="16 leilões com teto de 55 euros, o Meta entra em 11"></svg></div>
+    <p class="note">Entra em 11 dos 16 leilões. As 5 vendas acima de €55 ficam de fora, e a média das que entraram é €38 (R$ 236), abaixo do empate de €46.</p>
+  </div>
+  <div class="legend"><span style="--c:var(--accent)">Meta compra</span><span style="--c:var(--skip)">Meta pula</span><span style="--c:var(--cap)">Seu teto</span></div>
+  <p><b>A grande sacada:</b> se a campanha não gasta, o Meta está te protegendo. Ele avisa que, por aquele preço, o anúncio não vende, e você descobre isso sem queimar dinheiro.</p>
+</section>
+
+<span class="part">Parte 3 · Na prática</span>
+
+<section>
+  <div class="step" id="p7"><span class="n">7</span><h2>As três travas da campanha</h2></div>
+  <p>Pense que você mandou alguém ao mercado comprar relógios para você revender. Você dá três instruções:</p>
+  <div class="locks">
+    <div class="lock" style="--c:var(--good);--c-soft:var(--good-soft)"><span class="ic">1</span><div><span class="where">o lance · fica em cada conjunto</span><h3>"Não pague mais de X em cada relógio"</h3><p>Esse é o <b>limite de lance</b>, o bid cap. O X é o seu empate (no exemplo do relógio, €46). Se o relógio está mais caro, a pessoa volta sem comprar. No Meta: se a venda sai mais cara que o teto, ele não compra.</p></div></div>
+    <div class="lock" style="--c:var(--accent);--c-soft:var(--accent-soft)"><span class="ic">2</span><div><span class="where">o orçamento · fica na campanha</span><h3>"Leve bastante dinheiro na carteira"</h3><p>Esse é o <b>orçamento diário</b>. Como a regra 1 já impede de pagar caro, pode levar muito: ela só gasta se achar relógio no preço. Por isso ele fica alto, uns R$ 5.000 (€806) por dia, mesmo que quase nunca seja usado.</p></div></div>
+    <div class="lock" style="--c:var(--cap);--c-soft:var(--cap-soft)"><span class="ic">3</span><div><span class="where">o limite de gasto · fica na campanha</span><h3>"Mas no total, não passe de tanto"</h3><p>Esse é o <b>limite de gasto da campanha</b>. É o freio de segurança: se você errar o lance, ela não estoura sua conta. Você começa com R$ 1.000 (€161) e vai liberando mais conforme a campanha prova que vende.</p></div></div>
+  </div>
+  <div class="box">
+    <h3 style="margin-bottom:6px">O limite de gasto é como uma barra que enche</h3>
+    <p style="margin-bottom:12px">Ele conta tudo o que a campanha gastou desde que nasceu, não só o de hoje. Quando a barra está quase cheia, você aumenta o limite.</p>
+    <div class="meter" aria-label="Campanha gastou 10 mil de um limite de 14 mil reais">
+      <div class="fill" style="width:71%"><span>gastou R$ 10.000</span></div>
+      <span class="free">sobra R$ 4.000</span>
+    </div>
+    <div class="meterlab"><span>R$ 0</span><span>limite R$ 14.000 · €2.258</span></div>
+    <ol class="steps">
+      <li>A campanha já gastou <b>R$ 10.000</b> (€1.613) no total.</li>
+      <li>Você não quer que ela gaste mais de <b>R$ 4.000</b> (€645) hoje. Então coloca o limite em <b>R$ 14.000</b>.</li>
+      <li>No dia seguinte o gasto chegou a R$ 13.000. A barra está quase cheia: você sobe o limite para <b>R$ 20.000</b>.</li>
+    </ol>
+    <p class="note">Quer parar a campanha? Não pause. Coloque o limite igual ao que ela já gastou: a barra fica cheia, ela para sozinha e não perde o que aprendeu.</p>
+  </div>
+  <div class="box warn"><b>Por que as três juntas?</b> Imagine lance de R$ 5.000 num produto de R$ 100, com orçamento de R$ 100.000. Você disse que aceita pagar R$ 5.000 por venda, e o Meta gasta tudo em minutos. O limite de gasto é a trava que segura esse tipo de erro.</div>
+</section>
+
+<section>
+  <div class="step" id="p8"><span class="n">8</span><h2>Como montar</h2></div>
+  <p>No Meta, tudo fica em três níveis, um dentro do outro. Pense numa cômoda:</p>
+  <div class="levels">
+    <div class="lvl" style="--c:var(--accent);--c-soft:var(--accent-soft)"><b>Campanha</b><span>a cômoda inteira</span><p>Você cria <b>uma só</b>. É nela que ficam o orçamento, o limite de gasto e a escolha "limite de lance".</p></div>
+    <div class="lvl" style="--c:var(--cap);--c-soft:var(--cap-soft)"><b>Conjunto</b><span>cada gaveta</span><p>Define <b>para quem</b> e <b>em que países</b> o anúncio aparece, e o <b>valor do lance</b> (€46). Cada lote novo de anúncios ganha uma gaveta nova.</p></div>
+    <div class="lvl" style="--c:var(--good);--c-soft:var(--good-soft)"><b>Anúncio</b><span>o que vai dentro da gaveta</span><p>O vídeo ou a imagem que a pessoa vê. De 5 a 8 por gaveta.</p></div>
+  </div>
+  <p>Fica assim depois de duas semanas rodando:</p>
+  <div class="box tree">
+    <div class="node camp"><b>Campanha de vendas</b><br><span class="note">orçamento R$ 5.000/dia · limite de gasto R$ 1.000 para começar · estratégia: limite de lance</span></div>
+    <div class="sets">
+      <div class="node"><b>Conjunto 1 (dia 1)</b><span class="note">lance = seu empate · mundo todo</span><div class="ads"><i class="v">vídeo</i><i class="v">vídeo</i><i class="v">vídeo</i><i class="im">imagem</i><i class="im">imagem</i></div></div>
+      <div class="node"><b>Conjunto 2 (dia 3)</b><span class="note">lance = seu empate · mundo todo</span><div class="ads"><i class="im">imagem</i><i class="im">imagem</i><i class="im">imagem</i><i class="im">imagem</i><i class="im">imagem</i><i class="im">imagem</i></div></div>
+      <div class="node new"><b>Conjunto 3 (dia 6, lote novo)</b><span class="note">lance um pouco acima dos que vendem</span><div class="ads"><i class="v">vídeo</i><i class="v">vídeo</i><i class="v">vídeo</i><i class="im">imagem</i><i class="im">imagem</i></div></div>
+    </div>
+  </div>
+  <h3>Passo a passo no Gerenciador de Anúncios</h3>
+  <ol class="howto">
+    <li><b>Crie a campanha</b> com objetivo <b>Vendas</b>.</li>
+    <li><b>Na campanha:</b> ligue o orçamento da campanha (Advantage) e coloque <b>R$ 5.000 por dia</b>. Se o Meta avisar que está alto, ignore. Em "Estratégia de lance", troque "Volume mais alto" por <b>Limite de lance</b>. Preencha o <b>limite de gasto da campanha</b> com R$ 1.000.</li>
+    <li><b>No conjunto:</b> digite o valor do lance: o <b>seu empate</b>, calculado no passo 4 (no exemplo do relógio, €46). Em localização, marque <b>todos os países</b> e depois cole a <b>lista de exclusão</b> (abaixo). Idioma: <b>inglês</b>. Não coloque interesse nem público parecido: deixe aberto. Posicionamento automático.</li>
+    <li><b>Nos anúncios:</b> suba <b>3 vídeos e 2 imagens</b>, todos diferentes entre si.</li>
+    <li><b>Publique</b> e deixe rodar o dia inteiro, sem mexer.</li>
+  </ol>
+  <div class="two">
+    <div class="box" style="border-top:4px solid var(--good)"><h3>Pode</h3><ul class="clean"><li>De 5 a 8 anúncios por conjunto (vídeo até 8, imagem até 14).</li><li>Uma imagem de cada tipo no mesmo conjunto.</li><li>Lote novo de anúncios = conjunto novo, na mesma campanha.</li></ul></div>
+    <div class="box" style="border-top:4px solid var(--bad)"><h3>Não pode</h3><ul class="clean"><li>Duplicar campanha ou conjunto.</li><li>Colocar imagens quase iguais no mesmo conjunto.</li><li>Rodar uma campanha de "volume mais alto" na mesma conta: ela rouba os leilões.</li></ul></div>
+  </div>
+  <h3>Por que o mundo todo, tirando 77 países?</h3>
+  <p>Muitos países têm pouca concorrência e gente procurando boas ofertas, porque a maioria dos anunciantes só olha Brasil, Estados Unidos e Europa. Numa operação da casa rodando assim, o CPM ficou em R$ 28 (€4,52) e o clique em R$ 0,80 (€0,13).</p>
+  <p>Mas alguns países precisam sair. Se ficarem, o Meta gasta muito neles, porque o clique lá é baratíssimo, e quase ninguém compra. Saem os países:</p>
+  <ul class="clean">
+    <li>em guerra ou com economia fraca;</li>
+    <li>em que o frete da China custa mais que o produto (relógio de €10 com frete de €40);</li>
+    <li>em que as pessoas só compram pagando na entrega;</li>
+    <li>com muito clique e pouca compra, como o Brasil.</li>
+  </ul>
+  <div class="faq countries">
+    <details>
+      <summary>Ver a lista dos 77 países excluídos</summary>
+      <div class="clist">
+        <div><h4>Ásia e Oriente Médio · 30</h4><p>Afeganistão, Armênia, Bangladesh, Camboja, Cazaquistão, China, Filipinas, Geórgia, Iêmen, Índia, Indonésia, Iraque, Jordânia, Laos, Líbano, Maldivas, Mianmar, Mongólia, Nepal, Palestina, Paquistão, Quirguistão, Síria, Sri Lanka, Tailândia, Taiwan, Tajiquistão, Turquia, Uzbequistão, Vietnã</p></div>
+        <div><h4>África · 25</h4><p>Argélia, Benin, Burkina Faso, Camarões, Chade, Costa do Marfim, Egito, Eritreia, Etiópia, Gana, Guiné Equatorial, Líbia, Mali, Marrocos, Níger, Nigéria, República Centro-Africana, República Democrática do Congo, Senegal, Somália, Sudão do Sul, Togo, Tunísia, Zâmbia, Zimbábue</p></div>
+        <div><h4>Américas · 13</h4><p>Argentina, Bolívia, Brasil, Colômbia, El Salvador, Equador, Guatemala, Haiti, Honduras, Nicarágua, Paraguai, República Dominicana, Venezuela</p></div>
+        <div><h4>Europa · 6</h4><p>Albânia, Belarus, Kosovo, Malta, Moldávia, Montenegro</p></div>
+        <div><h4>Territórios · 3</h4><p>Ilhas Geórgia do Sul e Sandwich do Sul, Ilhas Menores Distantes dos Estados Unidos, Território Britânico do Oceano Índico</p></div>
+      </div>
+      <p class="note">Dica: depois de colar a lista uma vez, salve como "Excluir Worldwide". Nos próximos conjuntos é só escolher a lista salva.</p>
+    </details>
+  </div>
+</section>
+
+<section>
+  <div class="step" id="p9"><span class="n">9</span><h2>Qualidade = ângulos × formatos</h2></div>
+  <p>Como o dinheiro você já tem, o trabalho de verdade é a qualidade. E qualidade, aqui, quer dizer variedade de verdade:</p>
+  <div class="two">
+    <div class="box"><span class="tag qua">Ângulo</span><h3>O que o anúncio fala</h3><p>O motivo para comprar: a dor que resolve, o benefício, a prova de quem já comprou, a oferta, a comparação com outros relógios.</p></div>
+    <div class="box"><span class="tag qua">Formato</span><h3>Como o anúncio aparece</h3><p>Vídeo de pessoa mostrando (UGC), imagem, unboxing, demonstração, depoimento, anúncio de preço cortado.</p></div>
+  </div>
+  <p>Cada ângulo combinado com cada formato vira um anúncio diferente. 4 ângulos × 4 formatos = <b>16 anúncios</b>, cada um com chance de pegar um tipo de pessoa:</p>
+  <div class="matrix box" style="padding:10px">
+    <table>
+      <thead><tr><th></th><th>Vídeo UGC</th><th>Imagem</th><th>Unboxing</th><th>Preço cortado</th></tr></thead>
+      <tbody>
+        <tr><th class="side">Dor</th><td class="cell">1</td><td class="cell">2</td><td class="cell">3</td><td class="cell">4</td></tr>
+        <tr><th class="side">Benefício</th><td class="cell">5</td><td class="cell">6</td><td class="cell">7</td><td class="cell">8</td></tr>
+        <tr><th class="side">Prova social</th><td class="cell">9</td><td class="cell">10</td><td class="cell">11</td><td class="cell">12</td></tr>
+        <tr><th class="side">Oferta</th><td class="cell">13</td><td class="cell">14</td><td class="cell">15</td><td class="cell">16</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Trocar só a cor do fundo ou uma palavra do texto não cria ângulo novo. Para o Meta, continua sendo o mesmo anúncio.</p>
+  <div class="two">
+    <div class="box" style="border-top:4px solid var(--good)"><h3>Um anúncio gastou?</h3><p>"Preciso de mais 5 iguais a esse." Peça variações dele, mudando uma coisa por vez: o gancho, quem aparece, a edição, a primeira frase.</p></div>
+    <div class="box" style="border-top:4px solid var(--bad)"><h3>Um anúncio não gastou?</h3><p>Quebre ele em partes e pergunte o que afastou: o começo, a imagem, o texto, a oferta. Evite isso no próximo.</p></div>
+  </div>
+  <p class="note">De onde tirar anúncio: vídeos de relógio no TikTok Shop (pelo Kalodata), com nova narração em inglês e sem o "compre no carrinho laranja"; fotos de concorrentes refeitas por IA com o seu relógio e a sua oferta.</p>
+</section>
+
+<section>
+  <div class="step" id="p10"><span class="n">10</span><h2>Top spenders: o gasto é a nota do anúncio</h2></div>
+  <p><b>Top spenders</b> são os anúncios que mais gastam. Como o teto só deixa o Meta gastar onde ele acredita que vende, o gasto vale mais que CTR ou CPC:</p>
+  <div class="rows">
+    <div class="row" style="--c:var(--good)"><span class="pct">Gastou</span><div><b>Criativo bom.</b> O Meta acredita que ele vende dentro do seu teto. Mesmo se não vendeu ainda, já te mostrou que tipo de anúncio funciona.</div></div>
+    <div class="row" style="--c:var(--accent)"><span class="pct">Gastou e vendeu com lucro</span><div><b>Estrutura boa.</b> Lance, oferta e anúncio estão certos. Faça mais anúncios parecidos e suba o limite de gasto.</div></div>
+    <div class="row" style="--c:var(--cap)"><span class="pct">Gastou e não vendeu</span><div>Se outros conjuntos vendem, foi o público daquele conjunto: o Meta para sozinho (ex.: gastou R$ 80 e parou). Se nenhum vende, olhe o site: página lenta, carrinho, checkout.</div></div>
+    <div class="row" style="--c:var(--bad)"><span class="pct">Não gastou</span><div>O anúncio não convence por aquele preço. Faça anúncio melhor. Pode deixar ligado se gasta centavos; desligue se gasta uns R$ 20 (€3) por dia sem vender.</div></div>
+  </div>
+  <blockquote class="quote">"O gasto é mais importante do que métricas. Porque o gasto é o que faz o Facebook falar que está valendo a pena mostrar isso para o público dele."<cite>Guilherme</cite></blockquote>
+  <p class="note">Exemplo real: o primeiro conjunto de uma operação deu R$ 1.000 de prejuízo, mas gastou. Ele provou que vídeos de pessoas mostrando o produto (UGC) funcionavam naquela loja. A operação passou a fazer mais UGC e hoje tem retorno de 3 para 1.</p>
+</section>
+
+<section>
+  <div class="step" id="p11"><span class="n">11</span><h2>O dia a dia</h2></div>
+  <div class="tbl box" style="padding:6px 8px">
+    <table>
+      <thead><tr><th>Quando</th><th>O que fazer</th></tr></thead>
+      <tbody>
+        <tr><td>Dia 1</td><td>Sobe o conjunto 1 e deixa o dia inteiro. Pode subir a qualquer hora.</td></tr>
+        <tr><td>Não gastou</td><td>Sobe outro conjunto no dia seguinte, sem desligar o anterior. Repete.</td></tr>
+        <tr><td>Gastou e vendeu</td><td>Espera 2 a 3 dias para ver como o conjunto evolui antes de subir o próximo.</td></tr>
+        <tr><td>Conjunto novo</td><td>Sempre com lance um pouco acima dos que já vendem. Se os validados estão em €40, o novo não entra a €40: o Meta prefere gastar no que já vende.</td></tr>
+        <tr><td>Ritmo</td><td>Um conjunto novo a cada 2 ou 3 dias. Quanto mais rápido você sobe, mais rápido escala.</td></tr>
+        <tr><td>Paciência</td><td>Uma venda pode aparecer até 7 dias depois do clique. Não julgue em um dia.</td></tr>
+        <tr><td>Quer escalar</td><td>Suba mais conjuntos com anúncios novos (principalmente variações dos que gastaram) e aumente o limite de gasto aos poucos. Nunca duplique a campanha.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>Baixar o lance: igual embreagem</h3>
+  <p>Quando um conjunto vende bem, você baixa o lance para lucrar mais. Mas aos poucos, de R$ 5 em R$ 5, no máximo R$ 10 (€1 ou €2) por vez:</p>
+  <p class="note">Exemplo com o relógio:</p>
+  <div class="box clutch">
+    <span>€55 vende</span><em>→</em><span>€54 vende</span><em>→</em><span>€53 vende</span><em>→</em><span class="stop">€52 parou</span><em>→</em><span class="back">volta para €53</span>
+  </div>
+  <p>Nunca pule do empate direto para o lance que você sonha (de €46 para €30, por exemplo). O conjunto para de entregar e não volta.</p>
+</section>
+
+<section>
+  <div class="step" id="p12"><span class="n">12</span><h2>Comece com calma: o caixa manda</h2></div>
+  <p>Vender rápido demais no começo também é problema. O dinheiro da venda demora para cair, mas o fornecedor e o Meta você paga na hora:</p>
+  <div class="box ex">
+    <div class="ledger">
+      <span>Dinheiro da venda cai na conta</span><span>5 a 7 dias depois</span>
+      <span>Entrega para o cliente</span><span>10 a 12 dias</span>
+      <span>Fornecedor e Meta</span><span>pagos na hora</span>
+    </div>
+    <p>Nos primeiros 7 dias, você banca a operação do seu bolso. Depois o dinheiro vira fluxo: o que cai hoje é das vendas de uma semana atrás.</p>
+  </div>
+  <p>Por isso o limite de gasto sobe devagar no começo. Vendeu muito e o dinheiro ainda não caiu? Segure, pague o fornecedor em dia e evite reembolso por atraso.</p>
+</section>
+
+<section>
+  <div class="step" id="p13"><span class="n">13</span><h2>Uma operação real da casa</h2></div>
+  <p>Operação de relógio na Europa, rodando no bid cap há menos de 14 dias:</p>
+  <div class="stats">
+    <div class="stat"><b>55</b><span>compras na campanha</span></div>
+    <div class="stat"><b>R$ 270</b><span>CPA de empate (€44)</span></div>
+    <div class="stat"><b>R$ 220</b><span>lance usado (€35)</span></div>
+    <div class="stat"><b>R$ 170</b><span>custo das vendas recentes (€27)</span></div>
+    <div class="stat"><b>R$ 100</b><span>de lucro por venda (€16)</span></div>
+    <div class="stat"><b>75</b><span>anúncios na campanha</span></div>
+  </div>
+  <p>Dos 75 anúncios, só 6 ou 7 gastaram de verdade. Os outros não custaram quase nada, mas contam: o Meta vê uma loja com muitos anúncios, de qualidade e com dinheiro. Por isso ela ganha leilão fácil.</p>
+  <p class="note">O conjunto que validou (33 compras) virou base: a equipe fez vários anúncios parecidos com ele num conjunto novo, que já fez 4 vendas a R$ 170.</p>
+</section>
+
+<section>
+  <div class="step" id="p14"><span class="n">14</span><h2>Erros que derrubam o método</h2></div>
+  <div class="errs">
+    <div class="box"><h3>Achar que dinheiro resolve</h3><p>Orçamento alto com anúncio fraco continua sem gastar. O que falta é qualidade.</p></div>
+    <div class="box"><h3>Usar o preço como empate</h3><p>Preço de €79 com empate de €46: um lance de €79 paga €33 a mais do que a venda aguenta.</p></div>
+    <div class="box"><h3>Achar que a estrutura não funciona</h3><p>"Não gastou" quer dizer que o Meta te protegeu. A resposta é anúncio melhor.</p></div>
+    <div class="box"><h3>Variar só a cor</h3><p>Dez versões do mesmo anúncio com fundo diferente contam como uma só.</p></div>
+    <div class="box"><h3>Baixar o lance de uma vez</h3><p>De €46 para €30 num dia: o conjunto para e não volta. Desça de pouco em pouco.</p></div>
+    <div class="box"><h3>Escalar sem caixa</h3><p>Vender muito antes do dinheiro cair trava o pagamento do fornecedor.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="step" id="p15"><span class="n">15</span><h2>Checklist antes de publicar</h2></div>
+  <ol class="check box">
+    <li>Calculei o empate do <b>meu</b> produto: preço − produto − frete − taxas. <span>(no exemplo do relógio deu €46, o seu vai dar outro valor)</span></li>
+    <li>Campanha de <b>Vendas</b>, orçamento de <b>R$ 5.000/dia</b> e estratégia <b>limite de lance</b>.</li>
+    <li>Limite de gasto da campanha em <b>R$ 1.000</b>.</li>
+    <li>No conjunto, o lance está no valor do <b>meu</b> empate.</li>
+    <li>Mundo todo, com a lista dos 77 países excluída, idioma inglês e público aberto.</li>
+    <li>3 vídeos e 2 imagens, com ângulos e formatos diferentes entre si.</li>
+    <li>Nenhuma campanha de "volume mais alto" rodando na mesma conta.</li>
+    <li>O próximo lote de anúncios já está pronto para o conjunto 2.</li>
+    <li>Tenho caixa para bancar 7 dias de anúncio e fornecedor.</li>
+  </ol>
+</section>
+
+<section class="recap">
+  <h2>Resumindo</h2>
+  <div class="formula sm"><span class="chip c-auc">Leilão</span><span class="op">=</span><span class="chip c-mon">Dinheiro<small>orçamento + muitos anúncios</small></span><span class="op">×</span><span class="chip c-qua">Qualidade<small>ângulos × formatos</small></span></div>
+  <p>O bid cap coloca um teto no preço de cada venda. Com o teto, você não paga €100 (R$ 620) por uma venda que só aguenta €46 (R$ 285). O dinheiro você já tem. O que faz a campanha gastar e dar lucro é subir anúncio bom toda semana, com ângulos e formatos diferentes, e deixar o Meta concentrar o gasto nos que vendem.</p>
+</section>
+
+<section id="otimizar">
+  <span class="part" style="border-top:none;padding-top:0">Extra · Otimização</span>
+  <h2>Como otimizar a campanha</h2>
+  <p>Otimizar é decidir, olhando os números, o que mexer e o que deixar quieto. No bid cap você mexe em <b>quatro coisas</b> só: o lance, os anúncios, os conjuntos e o limite de gasto. O orçamento fica alto e quase nunca muda.</p>
+
+  <div class="box exnote"><b>Leia esta parte com o seu número.</b> Onde está escrito "empate", é o empate do <b>seu</b> produto, calculado no passo 4. Os valores entre parênteses são do relógio de exemplo e servem só para você visualizar.</div>
+
+  <h3>A regra de ouro: olhe a janela de 7 dias</h3>
+  <p>O Meta conta uma venda até 7 dias depois do clique. Um conjunto que parece ruim na terça pode ter 3 vendas no sábado. Mudança feita por causa de um dia ruim costuma estragar o que estava funcionando.</p>
+
+  <h3>As 3 perguntas, para cada conjunto</h3>
+  <div class="flow">
+    <div class="q">
+      <div class="qh"><span>1</span>O conjunto gastou nos últimos 2 a 3 dias?</div>
+      <div class="branches">
+        <div class="br" style="--c:var(--bad);--c-soft:var(--bad-soft)"><b>Quase nada</b><p>O lance está abaixo de +50%? Suba <b>um degrau</b>: empate → empate + 20% → empate + 50% (no exemplo: €46 → €55 → €69). Já está no +50%? O anúncio não convence: suba um <b>conjunto novo</b> com anúncios novos. O antigo pode ficar ligado se gasta centavos.</p></div>
+        <div class="br" style="--c:var(--good);--c-soft:var(--good-soft)"><b>Sim, gastou</b><p>O Meta acredita nos anúncios. Vá para a pergunta 2.</p></div>
+      </div>
+    </div>
+    <div class="q">
+      <div class="qh"><span>2</span>Vendeu?</div>
+      <div class="branches">
+        <div class="br" style="--c:var(--cap);--c-soft:var(--cap-soft)"><b>Ainda não, e gastou menos que o seu empate</b><p>Espere. Ainda não gastou o valor de uma venda (no exemplo, menos de €46).</p></div>
+        <div class="br" style="--c:var(--bad);--c-soft:var(--bad-soft)"><b>Não, e já gastou o seu empate ou mais</b><p>No exemplo, €46 (R$ 285) sem nenhuma venda. Pause o conjunto, ou só o anúncio que levou o gasto. Se <b>nenhum</b> conjunto vende, o problema é o site: veja a tabela "onde a venda trava" abaixo.</p></div>
+        <div class="br" style="--c:var(--good);--c-soft:var(--good-soft)"><b>Sim, vendeu</b><p>Vá para a pergunta 3.</p></div>
+      </div>
+    </div>
+    <div class="q">
+      <div class="qh"><span>3</span>Quanto custou cada venda, na média de 7 dias?</div>
+      <div class="branches">
+        <div class="br" style="--c:var(--cap);--c-soft:var(--cap-soft)"><b>Acima do seu empate</b><p>Baixe o lance <b>um pouco</b>, uns 2% a 4% (no exemplo, €1 ou €2), e espere mais alguns dias. Continuou acima e parou de melhorar? Pause e coloque a energia em anúncio novo.</p></div>
+        <div class="br" style="--c:var(--good);--c-soft:var(--good-soft)"><b>No seu empate ou abaixo</b><p>Conjunto validado. Faça as três coisas: baixe o lance aos poucos para lucrar mais, peça <b>5 variações</b> dos anúncios que mais gastaram e suba o limite de gasto.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Gastou e não vende: onde a venda trava</h3>
+  <p>Se os anúncios gastam em vários conjuntos e ninguém compra, siga o caminho do cliente e veja onde ele para:</p>
+  <div class="tbl box" style="padding:6px 8px">
+    <table>
+      <thead><tr><th>O que acontece</th><th>O que costuma ser</th><th>O que fazer</th></tr></thead>
+      <tbody>
+        <tr><td>Clica, mas a página quase não registra visita</td><td>Site lento ou pixel com problema</td><td>Teste a velocidade no celular e confira o pixel</td></tr>
+        <tr><td>Visita, mas não coloca no carrinho</td><td>A página não convence: foto, preço, avaliações</td><td>Melhore a página do produto e a oferta</td></tr>
+        <tr><td>Coloca no carrinho, mas não vai ao checkout</td><td>Surpresa no frete ou no preço final</td><td>Mostre o frete antes e deixe o carrinho simples</td></tr>
+        <tr><td>Vai ao checkout, mas não paga</td><td>Pagamento: método local faltando, erro no cartão</td><td>Teste a compra você mesmo e confira os meios de pagamento</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Ordem para olhar os números: primeiro vendas e checkouts, depois o custo por clique, depois quanto tempo as pessoas assistem o vídeo, por último o CPM. CPM caro com clique barato está ótimo.</p>
+
+  <h3>Situações comuns e o que fazer</h3>
+  <div class="tbl box" style="padding:6px 8px">
+    <table>
+      <thead><tr><th>Você percebeu que...</th><th>Faça isto</th></tr></thead>
+      <tbody>
+        <tr><td>Os anúncios novos não recebem verba</td><td>Os campeões estão pegando todo o leilão. Suba os novos em conjunto separado, com lance um pouco acima dos campeões.</td></tr>
+        <tr><td>Um anúncio campeão começou a gastar menos e a frequência subiu</td><td>Ele está cansando, o que costuma acontecer em 2 a 3 semanas. Já tenha as variações dele no ar antes disso.</td></tr>
+        <tr><td>Dentro de um conjunto, só um anúncio gasta e não vende</td><td>Desligue só ele. Os outros do conjunto continuam.</td></tr>
+        <tr><td>Um anúncio gasta um valor que incomoda (por exemplo, uns R$ 20 por dia) e nunca vende</td><td>Desligue. Somado no mês, vira dinheiro.</td></tr>
+        <tr><td>Um anúncio gasta centavos por dia</td><td>Deixe ligado. Não custa nada e pode pegar mais tarde.</td></tr>
+        <tr><td>A campanha bate o limite de gasto todo dia, com lucro</td><td>Está pronta para crescer: suba o limite de gasto e o ritmo de conjuntos novos.</td></tr>
+        <tr><td>A campanha nunca chega perto do limite de gasto</td><td>Falta anúncio bom. Mais variedade de ângulos e formatos.</td></tr>
+        <tr><td>Vendeu tanto que o caixa apertou</td><td>Segure o limite de gasto até o dinheiro das vendas cair na conta.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Como fazer variações de um anúncio que gastou</h3>
+  <p>O campeão vira modelo. Mude <b>uma coisa por vez</b>, mantendo o resto igual, para saber o que funcionou. Comece pelo que é fácil:</p>
+  <div class="vorder">
+    <div style="--c:var(--good);--c-soft:var(--good-soft)"><b>1º · O visual</b><p>Os primeiros segundos, quem aparece, o formato, o tipo de edição.</p></div>
+    <div style="--c:var(--accent);--c-soft:var(--accent-soft)"><b>2º · A primeira frase</b><p>O gancho falado ou escrito e a explicação de por que o produto funciona.</p></div>
+    <div style="--c:var(--cap);--c-soft:var(--cap-soft)"><b>3º · O ângulo</b><p>A razão de comprar e o roteiro inteiro. Mais trabalhoso, faça quando o resto já roda.</p></div>
+  </div>
+  <p>Faça 3 a 5 variações de cada, suba num conjunto novo, veja quais gastaram e junte as partes vencedoras num anúncio novo. Por exemplo: o começo do anúncio A com a pessoa do anúncio B.</p>
+
+  <h3>A rotina</h3>
+  <div class="routine">
+    <div class="box"><span class="tag qua">Todo dia · 5 minutos</span><ul class="clean"><li>Quanto cada conjunto gastou e vendeu.</li><li>Algum anúncio gastando sem vender? Desliga só ele.</li><li>A campanha está perto do limite de gasto?</li></ul></div>
+    <div class="box"><span class="tag cap">A cada 2 ou 3 dias</span><ul class="clean"><li>Sobe um conjunto novo com anúncios novos.</li><li>Conjunto que não gastou: sobe um degrau no lance.</li></ul></div>
+    <div class="box"><span class="tag vol">Toda semana</span><ul class="clean"><li>Pergunta 3 em cada conjunto, com a média de 7 dias.</li><li>Baixa o lance dos validados, de pouco em pouco.</li><li>Pede variações dos que mais gastaram.</li><li>Pausa quem gastou o seu empate sem vender.</li></ul></div>
+  </div>
+
+  <div class="box warn"><b>O que não fazer:</b> mexer no orçamento todo dia, baixar o lance de uma vez, subir o lance acima de +50%, pausar a campanha inteira, duplicar conjunto que vende e julgar qualquer coisa por um dia só.</div>
+</section>
+
+<section>
+  <h2>Mini dicionário</h2>
+  <div class="tbl box" style="padding:6px 8px">
+    <table>
+      <tbody>
+        <tr><td>Bid cap</td><td>Limite de lance: o máximo que você aceita pagar de anúncio por uma venda.</td></tr>
+        <tr><td>Limite de gasto</td><td>O máximo que a campanha pode gastar somando tudo desde que nasceu.</td></tr>
+        <tr><td>Worldwide</td><td>Anunciar para o mundo todo, tirando os países da lista de exclusão.</td></tr>
+        <tr><td>CPA</td><td>Custo por aquisição: quanto de anúncio você gastou para cada venda.</td></tr>
+        <tr><td>CPA de empate</td><td>O CPA em que você não ganha nem perde. Também chamado de CPA máximo.</td></tr>
+        <tr><td>CPC</td><td>Custo por clique.</td></tr>
+        <tr><td>CPM</td><td>Custo para aparecer mil vezes.</td></tr>
+        <tr><td>CTR</td><td>De cada 100 pessoas que viram o anúncio, quantas clicaram.</td></tr>
+        <tr><td>CBO</td><td>Orçamento definido na campanha, que o Meta divide entre os conjuntos.</td></tr>
+        <tr><td>Conjunto</td><td>Grupo de anúncios dentro da campanha. É onde fica o valor do lance.</td></tr>
+        <tr><td>Top spender</td><td>O anúncio que concentra a maior parte do gasto.</td></tr>
+        <tr><td>UGC</td><td>Vídeo de uma pessoa comum mostrando ou usando o produto.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <p>Todos os valores desta página (preço, custos, empate, lances, orçamento, limite de gasto) são exemplos para explicar a lógica. Os seus números saem dos custos reais do seu produto. Euro convertido a €1 = R$ 6,20, só como referência. Cada produto e país tem margem diferente: calcule o empate de cada um antes de definir o lance.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  // 100 cliques, 1 venda
+  var d=document.querySelector('.dots');
+  for(var i=0;i<100;i++){var e=document.createElement('i');if(i===57)e.className='buy';d.appendChild(e);}
+
+  // leilões fixos em euro (mesmo exemplo do relógio)
+  var costs=[26,62,38,70,22,45,52,33,66,43,74,30,58,40,50,35];
+  var NS='http://www.w3.org/2000/svg',W=640,H=230,L=46,R=12,T=16,B=26,max=82;
+  var y=function(v){return T+(H-T-B)*(1-v/max);};
+  function el(svg,n,a,txt){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;svg.appendChild(e);return e;}
+  function draw(id,cap){
+    var svg=document.getElementById(id),bw=(W-L-R)/costs.length;
+    [0,20,40,60,80].forEach(function(v){
+      el(svg,'line',{x1:L,x2:W-R,y1:y(v),y2:y(v),stroke:'var(--line)','stroke-width':1});
+      el(svg,'text',{x:L-8,y:y(v)+4,'text-anchor':'end','font-size':11,fill:'var(--muted)','font-family':'JetBrains Mono, monospace'},'€'+v);
+    });
+    costs.forEach(function(c,i){
+      var ok=!cap||c<=cap;
+      el(svg,'rect',{x:L+i*bw+4,y:y(c),width:bw-8,height:y(0)-y(c),rx:3,fill:ok?'var(--accent)':'var(--skip)'});
+    });
+    if(cap){
+      el(svg,'line',{x1:L,x2:W-R,y1:y(cap),y2:y(cap),stroke:'var(--cap)','stroke-width':2.5,'stroke-dasharray':'7 5'});
+      el(svg,'text',{x:W-R,y:y(cap)-6,'text-anchor':'end','font-size':12,'font-weight':700,fill:'var(--cap)','font-family':'JetBrains Mono, monospace'},'teto €'+cap+' (R$ 341)');
+    }
+    el(svg,'text',{x:(L+W-R)/2,y:H-6,'text-anchor':'middle','font-size':11,fill:'var(--muted)'},'16 leilões (custo estimado de uma venda)');
+  }
+  draw('chartVol',0);draw('chartCap',55);
+})();
+</script>
+
+</body></html>

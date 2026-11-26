@@ -1,0 +1,29 @@
+{
+  "descricao": "Endereços de teste por país pra cotação de frete no checkout (skill 71). Formato Shopify checkout. Telefones em formato válido local (fictícios).",
+  "paises_default": ["IT", "DE", "ES", "FR", "GB", "PT", "NL", "BE", "AT", "CH"],
+  "enderecos": {
+    "IT": { "first_name": "Marco", "last_name": "Rossi", "address1": "Via del Corso 12", "city": "Roma", "zip": "00186", "province": "RM", "country": "Italy", "phone": "+39 06 6994 1234" },
+    "DE": { "first_name": "Lukas", "last_name": "Müller", "address1": "Friedrichstraße 76", "city": "Berlin", "zip": "10117", "province": "", "country": "Germany", "phone": "+49 30 2647 5890" },
+    "ES": { "first_name": "Carlos", "last_name": "García", "address1": "Calle Gran Vía 28", "city": "Madrid", "zip": "28013", "province": "Madrid", "country": "Spain", "phone": "+34 915 23 45 67" },
+    "FR": { "first_name": "Julien", "last_name": "Bernard", "address1": "10 Rue de Rivoli", "city": "Paris", "zip": "75004", "province": "", "country": "France", "phone": "+33 1 42 60 38 12" },
+    "GB": { "first_name": "Oliver", "last_name": "Smith", "address1": "221B Baker Street", "city": "London", "zip": "NW1 6XE", "province": "", "country": "United Kingdom", "phone": "+44 20 7946 0958" },
+    "PT": { "first_name": "João", "last_name": "Silva", "address1": "Rua Augusta 145", "city": "Lisboa", "zip": "1100-053", "province": "", "country": "Portugal", "phone": "+351 21 346 5872" },
+    "NL": { "first_name": "Daan", "last_name": "de Vries", "address1": "Kalverstraat 92", "city": "Amsterdam", "zip": "1012 PH", "province": "", "country": "Netherlands", "phone": "+31 20 624 8375" },
+    "BE": { "first_name": "Thomas", "last_name": "Peeters", "address1": "Rue Neuve 45", "city": "Bruxelles", "zip": "1000", "province": "", "country": "Belgium", "phone": "+32 2 219 46 12" },
+    "AT": { "first_name": "Felix", "last_name": "Gruber", "address1": "Kärntner Straße 21", "city": "Wien", "zip": "1010", "province": "", "country": "Austria", "phone": "+43 1 513 24 87" },
+    "CH": { "first_name": "Luca", "last_name": "Meier", "address1": "Bahnhofstrasse 52", "city": "Zürich", "zip": "8001", "province": "", "country": "Switzerland", "phone": "+41 44 211 36 90" },
+    "US": { "first_name": "James", "last_name": "Miller", "address1": "350 5th Ave", "city": "New York", "zip": "10118", "province": "NY", "country": "United States", "phone": "+1 212 736 3100" },
+    "CA": { "first_name": "Liam", "last_name": "Tremblay", "address1": "1250 Rue Sainte-Catherine O", "city": "Montréal", "zip": "H3G 1P1", "province": "QC", "country": "Canada", "phone": "+1 514 861 4448" },
+    "AU": { "first_name": "Jack", "last_name": "Wilson", "address1": "200 George St", "city": "Sydney", "zip": "2000", "province": "NSW", "country": "Australia", "phone": "+61 2 9240 3000" },
+    "MX": { "first_name": "Diego", "last_name": "Hernández", "address1": "Av. Paseo de la Reforma 222", "city": "Ciudad de México", "zip": "06600", "province": "CDMX", "country": "Mexico", "phone": "+52 55 5208 3200" }
+  },
+  "checks_por_pais": [
+    "mercado_correto (URL/seletor leva ao market certo, moeda local exibida)",
+    "pdp_preco (preço renderiza na moeda do mercado, formatação correta)",
+    "carrinho (produto adiciona, drawer abre, total certo)",
+    "frete_cota (checkout com endereço do país retorna pelo menos 1 tarifa. Com padrão de frete próprio definido, conferir nomes e valores contra ele; sem padrão, PASS = pelo menos uma tarifa cotada)",
+    "frete_sem_prazo (nenhuma tarifa exibe prazo, nem no nome nem na descrição: proibido business days, dias úteis, días hábiles, (2-7d))",
+    "pagamento_visivel (métodos de pagamento renderizam na tela final)",
+    "taxas_mensagem (mensagem de duties/taxas coerente pro país, quando aplicável)"
+  ]
+}

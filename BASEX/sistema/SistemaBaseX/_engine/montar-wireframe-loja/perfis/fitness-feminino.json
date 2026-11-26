@@ -1,0 +1,725 @@
+{
+  "nicho": "Fitness Feminino",
+  "slug": "fitness-feminino",
+  "marca": "Your Brand",
+  "referencias": [
+    "padrão visual levantado nas lojas que já vendem neste nicho"
+  ],
+  "paleta": {
+    "brand": "#66384A",
+    "branco": "#FFFFFF",
+    "ink": "#272B2D",
+    "soft": "#F7F2F3",
+    "gain": "#E32C2B",
+    "gainbg": "#FDEEEE",
+    "line": "#E7E1E3"
+  },
+  "urls": {
+    "home": "yourbrand.com",
+    "collection": "yourbrand.com/collections/leggings",
+    "pdp": "yourbrand.com/products/sculpt-seamless-set"
+  },
+  "capa": {
+    "titulo": "O esqueleto da sua loja.",
+    "subtitulo": "Quatro telas desenhadas antes de uma linha de código: página inicial, coleção, página de produto e carrinho. Cada bloco tem uma função de venda. Nada entra por enfeite."
+  },
+  "como_ler": "Wireframe é o desenho da estrutura antes do acabamento. Aqui você decide o que aparece, em que ordem e o que a cliente vê primeiro. Cor, foto e tipografia entram depois, na fase de identidade visual. Aprovar a estrutura agora evita refazer a loja inteira lá na frente.",
+  "legenda": [
+    {
+      "css": "background:repeating-linear-gradient(135deg,#EDEBE7 0 5px,#F7F6F3 5px 10px);border:1px solid #D8D5D0",
+      "texto": "Retângulo hachurado: uma imagem vai entrar ali (foto no corpo, vídeo do agachamento, avaliação de cliente)."
+    },
+    {
+      "css": "background:#D8D5D0",
+      "texto": "Barra cinza: um texto vai entrar ali. O tamanho da barra indica o tamanho aproximado do texto."
+    },
+    {
+      "css": "background:#272B2D",
+      "texto": "Número em grafite: a ordem de leitura. É a sequência em que a cliente absorve a página."
+    },
+    {
+      "css": "background:#66384A",
+      "texto": "Faixa ameixa: a oferta. Ela reaparece em toda tela porque é o motor da conversão."
+    },
+    {
+      "css": "background:#66384A;border-radius:8px",
+      "texto": "Bloco cheio: botão de ação. Um por tela, sem competição."
+    },
+    {
+      "css": "background:#E32C2B",
+      "texto": "Selo vermelho: desconto e economia. É o único lugar do site onde entra vermelho."
+    }
+  ],
+  "oferta_texto": "O desenho serve a uma decisão comercial: em roupa fit a cliente não leva uma peça avulsa, leva o conjunto que já combina, e é o segundo conjunto que paga o anúncio. O herói é o Sculpt Seamless Set, legging mais top, a €49,90 em vez de €89,90. Dois conjuntos saem com 20% e três com 30%. Frete grátis acima de €70 e troca de tamanho grátis em 30 dias, que é o que tira o medo de comprar legging sem provar.",
+  "paleta_texto": "Uma loja bem resolvida usa no máximo quatro cores. Aqui elas saem do código visual das lojas que já vendem neste nicho: ameixa profundo no botão principal, grafite azulado no texto, e o branco dominando o resto. O ameixa carrega tudo que tem peso, faixa, botão, título, preço e selo. O rosa lavado apoia um bloco e some. O sinal de ganho aqui é vermelho, e isso vem da própria referência: as lojas que mais escalam no nicho marcam desconto em #E32C2B. Em roupa fit a compra é por impulso e o desconto precisa gritar. O vermelho aparece só no selo, na linha de economia e na barra do carrinho. Nunca em botão, título ou faixa.",
+  "swatches": [
+    {
+      "nome": "Ameixa profundo",
+      "hex": "#66384A",
+      "papel": "a cor da marca: faixa, botão, título, preço"
+    },
+    {
+      "nome": "Branco",
+      "hex": "#FFFFFF",
+      "papel": "fundo de tudo"
+    },
+    {
+      "nome": "Grafite",
+      "hex": "#272B2D",
+      "papel": "texto corrido"
+    },
+    {
+      "nome": "Rosa lavado",
+      "hex": "#F7F2F3",
+      "papel": "secundária, uso raro: apoiar sem competir"
+    },
+    {
+      "nome": "Vermelho",
+      "hex": "#E32C2B",
+      "papel": "só sinal de ganho: desconto, economia, barra do carrinho"
+    }
+  ],
+  "porque_importa": "O wireframe abaixo não está em cinza genérico. Ele já usa as cores tiradas das lojas que vendem no seu nicho, para você enxergar o clima da loja desde agora. O acabamento final refina os tons, mas a direção é esta. A estrutura vem antes do visual porque uma loja pode ficar linda e vender mal: o que faz vender é a ordem dos blocos, a oferta visível sem rolar a tela e o botão de compra sempre ao alcance do polegar.",
+  "visao_geral_lead": "Antes de entrar em cada tela, o conjunto. Em cima, as três páginas como a cliente vê no computador. Embaixo, as mesmas páginas no celular, mais o carrinho. Depois deste panorama, cada tela aparece grande e com as decisões explicadas.",
+  "caminho_cliente": "Ela chega do anúncio direto na página de produto ou na inicial, passa pela coleção para escolher a cor, volta ao produto e fecha no carrinho. As quatro telas repetem a mesma oferta, então em qualquer ponto de entrada ela vê a mesma regra.",
+  "visao_geral": [
+    {
+      "titulo": "PÁGINA INICIAL",
+      "chave": "home",
+      "url": "yourbrand.com"
+    },
+    {
+      "titulo": "COLEÇÃO",
+      "chave": "collection",
+      "url": "yourbrand.com/collections/leggings"
+    },
+    {
+      "titulo": "PRODUTO",
+      "chave": "pdp",
+      "url": "yourbrand.com/products/sculpt-seamless-set"
+    }
+  ],
+  "oferta": {
+    "faixa": "2 SETS -20% · 3 SETS -30% · FREE SHIPPING OVER €70 · 30-DAY FIT GUARANTEE",
+    "degraus": "BUY 2 SETS -20% · BUY 3 SETS -30%",
+    "garantia": "30-day fit guarantee · free size swap",
+    "frete_gratis": "€70",
+    "heroi": {
+      "nome": "Sculpt Seamless Set",
+      "preco": "€49,90",
+      "de": "€89,90",
+      "save": "save €40"
+    },
+    "labels": {
+      "subtotal": "subtotal",
+      "economia": "you save",
+      "total": "total",
+      "checkout": "CHECKOUT"
+    },
+    "carrinho_estados": [
+      {
+        "titulo_en": "YOUR CART (1)",
+        "itens": 1,
+        "desconto": 0,
+        "subtotal": 49.9,
+        "economia": 0.0,
+        "total": 49.9,
+        "msg": "Add 1 more set and save 20%.",
+        "variante_en": "plum / M",
+        "sugestao_en": "matching sports bra",
+        "degraus": [
+          {
+            "label_en": "1 set",
+            "on": true
+          },
+          {
+            "label_en": "2 sets -20%",
+            "on": false
+          },
+          {
+            "label_en": "3 sets -30%",
+            "on": false
+          }
+        ]
+      },
+      {
+        "titulo_en": "YOUR CART (2)",
+        "itens": 2,
+        "desconto": 0.2,
+        "subtotal": 99.8,
+        "economia": 19.96,
+        "total": 79.84,
+        "msg": "20% off applied. Add 1 more set to reach 30%.",
+        "variante_en": "plum / M",
+        "sugestao_en": "matching sports bra",
+        "frete_en": "free shipping unlocked",
+        "degraus": [
+          {
+            "label_en": "1 set",
+            "on": true
+          },
+          {
+            "label_en": "2 sets -20%",
+            "on": true
+          },
+          {
+            "label_en": "3 sets -30%",
+            "on": false
+          }
+        ]
+      },
+      {
+        "titulo_en": "YOUR CART (3)",
+        "itens": 3,
+        "desconto": 0.3,
+        "subtotal": 149.7,
+        "economia": 44.91,
+        "total": 104.79,
+        "msg": "Maximum discount unlocked: 30%. Grab it before you check out.",
+        "variante_en": "plum / M",
+        "frete_en": "free shipping unlocked",
+        "degraus": [
+          {
+            "label_en": "1 set",
+            "on": true
+          },
+          {
+            "label_en": "2 sets -20%",
+            "on": true
+          },
+          {
+            "label_en": "3 sets -30%",
+            "on": true
+          }
+        ]
+      }
+    ]
+  },
+  "carrinho_lead": "Na maioria das lojas o carrinho só soma. No seu, ele negocia. A cada conjunto adicionado uma barra mostra quanto falta para o próximo desconto.",
+  "carrinho_mecanica": [
+    "Com um conjunto, a barra mostra que falta um para os 20%. A frase é sobre o que ela ganha, nunca sobre o que ela gasta.",
+    "Com dois conjuntos, o desconto entra na hora, a economia aparece em euros e o frete grátis é liberado no mesmo momento, porque €79,84 passa dos €70.",
+    "Com três conjuntos, a barra completa e o carrinho para de empurrar. Insistir depois do teto irrita e derruba a conversão.",
+    "A sugestão de peça aparece só enquanto existe degrau a destravar. No último estado ela some."
+  ],
+  "carrinho_detalhe": "A linha de economia fica sempre visível no resumo, acima do total. A cliente precisa ver o quanto ganhou antes de ver o quanto paga. Invertida, a mesma tela converte menos.",
+  "proximos_lead": "A estrutura está desenhada. O próximo passo é você validar a ordem dos blocos, porque mudar agora custa minutos e mudar depois custa a loja inteira remontada.",
+  "proximos_passos": [
+    "Você revisa as quatro telas e diz o que quer mudar de ordem, tirar ou acrescentar.",
+    "Nós fechamos a identidade visual: paleta, tipografia e o tratamento das fotos, aplicados sobre este esqueleto.",
+    "Montagem da loja com a estrutura aprovada, já com a oferta e o carrinho configurados.",
+    "Cadastro dos produtos com foto no corpo, vídeo do agachamento, guia de tamanho e avaliações.",
+    "Revisão final no celular antes de abrir, porque é de lá que vem quase todo o tráfego."
+  ],
+  "pedido_final": "Aprovar este wireframe, ou marcar os pontos que quer diferente. Enquanto isso a construção segue nas partes que não dependem da sua resposta.",
+  "telas": {
+    "home": {
+      "titulo": "A primeira tela vende o corpo em movimento, não a vitrine.",
+      "lead": "Legging se compra por impulso, e impulso morre em segundos. A página inicial existe para mostrar a peça no corpo, em movimento, com a oferta visível antes de qualquer rolagem.",
+      "desktop": [
+        {
+          "tipo": "band",
+          "texto": "2 SETS -20% · 3 SETS -30% · FREE SHIPPING OVER €70 · 30-DAY FIT GUARANTEE"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "hero",
+          "n": 1,
+          "rotulo": "hero · corpo em movimento, agachamento ou corrida",
+          "placeholder_en": "HERO · SQUAT AND RUN · REAL MOVEMENT, NOT A MANNEQUIN",
+          "cta": "SHOP THE SET"
+        },
+        {
+          "tipo": "band",
+          "texto": "BUY 2 SETS -20% · BUY 3 SETS -30%"
+        },
+        {
+          "tipo": "categorias",
+          "n": 2,
+          "rotulo": "categorias · legging, top, short, conjunto",
+          "itens_en": [
+            "LEGGINGS",
+            "SPORTS BRAS",
+            "SHORTS",
+            "SETS"
+          ]
+        },
+        {
+          "tipo": "vitrine",
+          "n": 3,
+          "rotulo": "mais vendidos · a legging que puxa o volume",
+          "cols": 4,
+          "badge": "-45%",
+          "linha2": true,
+          "badge2": "-50%"
+        },
+        {
+          "tipo": "look",
+          "n": 4,
+          "rotulo": "monte o conjunto · legging e top que já combinam",
+          "placeholder_en": "SET ON BODY · FRONT AND BACK",
+          "cta": "SHOP THE SET"
+        },
+        {
+          "tipo": "feature",
+          "n": 5,
+          "rotulo": "tecido e teste de agachamento · a objeção número um do nicho",
+          "itens_en": [
+            "SQUAT PROOF · NO SEE THROUGH",
+            "HIGH WAIST THAT STAYS UP",
+            "4 WAY STRETCH · SECOND SKIN"
+          ]
+        },
+        {
+          "tipo": "ugc",
+          "n": 6,
+          "rotulo": "clientes reais · altura e tamanho na legenda de cada foto"
+        },
+        {
+          "tipo": "trust",
+          "n": 7,
+          "rotulo": "confiança",
+          "itens_en": [
+            "30-day fit guarantee",
+            "free size swap",
+            "secure payment"
+          ]
+        },
+        {
+          "tipo": "vip",
+          "n": 8,
+          "rotulo": "clube vip · primeiro acesso às cores novas",
+          "cta": "SUBSCRIBE"
+        }
+      ],
+      "decisoes": [
+        "1. Foto de cena com a peça em movimento. Legging em manequim ou em fundo branco parece catálogo de fornecedor, e é assim que a maioria das lojas do nicho erra.",
+        "2 e 3. Categorias primeiro, para quem está navegando. Mais vendidos logo depois, para quem quer o que já funcionou com outras clientes.",
+        "4. O conjunto pronto é o que faz o segundo item sair. A cliente não monta a combinação sozinha, e é vendendo conjunto que as lojas deste nicho escalam.",
+        "5. Tecido e teste de agachamento respondem a objeção número um do nicho: fica transparente quando eu agacho?",
+        "6. Cliente real com altura e tamanho na legenda. Quem tem 1,70m precisa ver alguém de 1,70m para confiar no caimento.",
+        "7 e 8. A garantia de troca de tamanho tira o risco de comprar sem provar. O clube VIP captura quem não comprou hoje e volta na próxima cor."
+      ],
+      "nota_mobile": "O hero encurta e a oferta sobe. A vitrine vira carrossel com o terceiro card cortado na borda, sinalizando que tem mais para o lado.",
+      "mobile": [
+        {
+          "tipo": "band",
+          "texto": "2 SETS -20% · FREE SHIPPING OVER €70"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "m_hero",
+          "n": 1,
+          "rotulo": "hero curto",
+          "cta": "SHOP THE SET"
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "BUY 2 SETS -20% · BUY 3 SETS -30%"
+        },
+        {
+          "tipo": "m_vitrine",
+          "n": 2,
+          "rotulo": "vitrine · desliza pro lado",
+          "badge": "-45%"
+        },
+        {
+          "tipo": "m_look",
+          "n": 3,
+          "rotulo": "monte o conjunto",
+          "cta": "SHOP THE SET"
+        },
+        {
+          "tipo": "m_trust",
+          "itens_en": [
+            "30-day fit guarantee",
+            "free size swap",
+            "secure payment"
+          ]
+        },
+        {
+          "tipo": "m_vip",
+          "cta": "SUBSCRIBE"
+        }
+      ],
+      "decisoes_mobile": [
+        "A oferta aparece duas vezes antes da primeira rolagem, na faixa do topo e logo abaixo do hero.",
+        "O carrossel corta o terceiro card de propósito. Card inteiro parece fim de lista e a cliente para de deslizar.",
+        "Os selos de confiança ficam acima do rodapé, no ponto exato em que ela decide se confia na loja."
+      ]
+    },
+    "collection": {
+      "titulo": "Onde ela escolhe, e onde a maioria das lojas perde a venda.",
+      "lead": "A coleção é a tela mais visitada depois do anúncio. Filtro por tamanho, cor e nível de compressão, que são os três critérios reais de escolha em roupa fit.",
+      "desktop": [
+        {
+          "tipo": "band",
+          "texto": "2 SETS -20% · 3 SETS -30% · FREE SHIPPING OVER €70 · 30-DAY FIT GUARANTEE"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "capa_colecao",
+          "n": 1,
+          "rotulo": "capa da coleção · a linha com nome próprio",
+          "placeholder_en": "COLLECTION COVER · THE SCULPT LINE"
+        },
+        {
+          "tipo": "band",
+          "texto": "BUY 2 SETS -20% · BUY 3 SETS -30%"
+        },
+        {
+          "tipo": "abas",
+          "n": 2,
+          "rotulo": "abas de categoria",
+          "abas": [
+            "all",
+            "leggings",
+            "sets",
+            "sports bras",
+            "shorts"
+          ],
+          "cta": "sort by ∨"
+        },
+        {
+          "tipo": "grade_filtro",
+          "n": 3,
+          "rotulo": "grade · peça no corpo, com o ângulo de trás junto",
+          "filtros": [
+            {
+              "nome": "SIZE",
+              "valores": [
+                "XS",
+                "S",
+                "M",
+                "L",
+                "XL"
+              ]
+            },
+            {
+              "nome": "COLOUR",
+              "valores": []
+            },
+            {
+              "nome": "SUPPORT",
+              "valores": [
+                "light",
+                "medium",
+                "high"
+              ]
+            },
+            {
+              "nome": "FABRIC",
+              "valores": []
+            },
+            {
+              "nome": "PRICE",
+              "valores": []
+            }
+          ],
+          "badge": "-45%",
+          "badge2": "-50%",
+          "faixa_meio": "BUY 2 SETS -20% · BUY 3 SETS -30%",
+          "cta": "LOAD MORE"
+        },
+        {
+          "tipo": "texto_colecao",
+          "n": 4,
+          "rotulo": "texto da coleção · o único bloco de leitura, embaixo"
+        }
+      ],
+      "decisoes": [
+        "1. A capa nomeia a linha. Coleção sem nome vira lista de produtos, e lista de produtos não cria desejo.",
+        "2. A oferta reaparece no topo da coleção, para quem entrou pelo anúncio e pulou a página inicial.",
+        "3. Filtro por nível de compressão é obrigatório aqui. Quem treina pesado e quem usa a legging no dia a dia não querem a mesma peça.",
+        "3. O card mostra a peça no corpo com o ângulo de trás junto. É o ângulo que decide a compra neste nicho e quase nenhuma loja coloca na grade.",
+        "3. Faixa de oferta no meio da grade, depois da segunda fileira, quando o olho já cansou de rolar.",
+        "4. O texto da coleção vai para o fim. Ele serve à busca do Google e não atrapalha quem já quer comprar."
+      ],
+      "nota_mobile": "Grade de duas colunas, filtro e ordenação virando botão fixo no rodapé.",
+      "mobile": [
+        {
+          "tipo": "band",
+          "texto": "2 SETS -20% · FREE SHIPPING OVER €70"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "m_capa",
+          "n": 1,
+          "rotulo": "capa curta"
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "BUY 2 SETS -20% · BUY 3 SETS -30%"
+        },
+        {
+          "tipo": "m_filtros",
+          "chips": [
+            "filter",
+            "sort",
+            "size",
+            "colour",
+            "support"
+          ]
+        },
+        {
+          "tipo": "m_grade",
+          "n": 2,
+          "rotulo": "grade de 2 colunas",
+          "badge": "-45%",
+          "cta": "LOAD MORE"
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "FILTER & SORT"
+        }
+      ],
+      "decisoes_mobile": [
+        "Duas colunas mantêm a foto grande o bastante para ler o caimento. Três colunas viram miniatura e a cliente não decide.",
+        "Filtro fixo no rodapé, porque ela filtra depois de rolar, não antes de entrar.",
+        "O selo de desconto fica no canto do card, visível sem precisar abrir o produto."
+      ]
+    },
+    "pdp": {
+      "titulo": "A página que transforma uma peça em conjunto.",
+      "lead": "Aqui a cliente já quer. A função da página é provar que o tecido não fica transparente, mostrar a peça em corpo real e transformar uma compra em duas.",
+      "desktop": [
+        {
+          "tipo": "band",
+          "texto": "2 SETS -20% · 3 SETS -30% · FREE SHIPPING OVER €70 · 30-DAY FIT GUARANTEE"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "pdp_topo",
+          "galeria": {
+            "n": 1,
+            "rotulo": "5 a 8 ângulos · inclui o vídeo do teste de agachamento",
+            "placeholder_en": "GALLERY · FRONT, BACK, SQUAT VIDEO, FABRIC MACRO"
+          },
+          "info": {
+            "padding": "0",
+            "n_badge": 2,
+            "rotulo_badge": "badge de tecido",
+            "badge": "squat proof · 4-way stretch · high waist",
+            "n_titulo": 3,
+            "rotulo_titulo": "título direto e prova social",
+            "prova": "2.480 reviews",
+            "n_preco": 4,
+            "rotulo_preco": "ancoragem de preço",
+            "n_chips": 5,
+            "rotulo_chips": "cor e tamanho · com aviso de estoque",
+            "chips": [
+              "XS",
+              "S",
+              "M",
+              "L",
+              "XL"
+            ],
+            "urgencia": "Selling fast · ships in 24 to 48h",
+            "n_cta": 6,
+            "rotulo_cta": "botão de compra e oferta logo abaixo",
+            "cta": "ADD TO CART",
+            "acordeoes": [
+              "fabric & care",
+              "shipping & returns",
+              "size guide",
+              "fit guarantee"
+            ]
+          }
+        },
+        {
+          "tipo": "dobra",
+          "n": 7,
+          "rotulo": "abaixo da dobra · a página continua vendendo",
+          "colunas_dobra": [
+            {
+              "rotulo": "descrição rica",
+              "texto": "how the fabric behaves"
+            },
+            {
+              "rotulo": "avaliações com foto",
+              "texto": "height and size in every review"
+            },
+            {
+              "rotulo": "perguntas frequentes",
+              "texto": "kills the objection"
+            }
+          ]
+        },
+        {
+          "tipo": "size_chart",
+          "n": 8,
+          "rotulo": "tabela de medidas · cintura, quadril, entrepernas e altura",
+          "colunas": [
+            "SIZE",
+            "WAIST (CM)",
+            "HIP (CM)",
+            "INSEAM (CM)",
+            "HEIGHT (CM)",
+            "EU / UK / US"
+          ],
+          "linhas": [
+            [
+              "XS",
+              "60 to 64",
+              "84 to 88",
+              "66",
+              "155 to 165",
+              "32 to 34 / 4 to 6 / 0 to 2"
+            ],
+            [
+              "S",
+              "64 to 70",
+              "88 to 94",
+              "68",
+              "160 to 170",
+              "36 / 8 / 4"
+            ],
+            [
+              "M",
+              "70 to 76",
+              "94 to 100",
+              "70",
+              "165 to 175",
+              "38 / 10 / 6"
+            ],
+            [
+              "L",
+              "76 to 84",
+              "100 to 108",
+              "72",
+              "170 to 178",
+              "40 / 12 / 8"
+            ],
+            [
+              "XL",
+              "84 to 92",
+              "108 to 116",
+              "72",
+              "170 to 180",
+              "42 / 14 / 10"
+            ]
+          ],
+          "nota": "Measure your waist at the narrowest point and your hips at the widest, standing relaxed. Between two sizes, take the smaller one for a tighter sculpting fit and the larger one for everyday training."
+        },
+        {
+          "tipo": "complete",
+          "n": 9,
+          "rotulo": "complete o conjunto · o top que combina com esta legging",
+          "badge": "-45%"
+        }
+      ],
+      "decisoes": [
+        "1. Entre 5 e 8 ângulos, com o vídeo do agachamento entre os primeiros. É a prova que nenhuma foto parada entrega.",
+        "2. O badge de tecido abre a página porque responde à dúvida de opacidade antes de ela rolar a tela.",
+        "4. Preço cheio riscado, preço de venda e economia em euros no mesmo bloco.",
+        "5. Tamanho e cor junto do seletor, com o aviso de estoque logo abaixo, onde a mão já está.",
+        "6. A oferta fica colada no botão. Quem decidiu levar um vê na hora que o segundo sai 20% mais barato.",
+        "8. A tabela de medidas fica na própria página, com cintura, quadril, entrepernas e altura. Devolução por tamanho errado é o custo que come a margem da operação inteira.",
+        "9. Completar o conjunto no fim da página é o caminho natural para o segundo item, e é ele que leva o carrinho ao primeiro degrau."
+      ],
+      "nota_mobile": "Galeria em tela cheia, botão de compra fixo no rodapé acompanhando a rolagem.",
+      "mobile": [
+        {
+          "tipo": "band",
+          "texto": "2 SETS -20% · FREE SHIPPING OVER €70"
+        },
+        {
+          "tipo": "header"
+        },
+        {
+          "tipo": "m_galeria",
+          "n": 1,
+          "rotulo": "galeria em tela cheia · desliza"
+        },
+        {
+          "tipo": "m_pdp",
+          "n": 2,
+          "rotulo": "cor e tamanho",
+          "prova": "2.480 reviews",
+          "chips": [
+            "XS",
+            "S",
+            "M",
+            "L",
+            "XL"
+          ]
+        },
+        {
+          "tipo": "m_barra_fixa",
+          "texto": "BUY 2 SETS -20% · BUY 3 SETS -30%"
+        },
+        {
+          "tipo": "m_acordeao",
+          "acordeoes": [
+            "fabric & care",
+            "shipping & returns",
+            "size guide",
+            "fit guarantee"
+          ]
+        },
+        {
+          "tipo": "m_size",
+          "n": 3,
+          "rotulo": "tabela de medidas",
+          "colunas": [
+            "SIZE",
+            "WAIST",
+            "HIP"
+          ],
+          "linhas": [
+            [
+              "XS",
+              "60-64",
+              "84-88"
+            ],
+            [
+              "S",
+              "64-70",
+              "88-94"
+            ],
+            [
+              "M",
+              "70-76",
+              "94-100"
+            ],
+            [
+              "L",
+              "76-84",
+              "100-108"
+            ],
+            [
+              "XL",
+              "84-92",
+              "108-116"
+            ]
+          ]
+        },
+        {
+          "tipo": "m_reviews",
+          "n": 4,
+          "rotulo": "avaliações com foto"
+        },
+        {
+          "tipo": "m_stickybuy",
+          "n": 5,
+          "cta": "ADD TO CART"
+        }
+      ],
+      "decisoes_mobile": [
+        "O preço e a linha de economia aparecem acima da dobra, antes dos seletores.",
+        "A tabela de medidas encolhe para cintura e quadril, que são as duas colunas que ela realmente usa no celular.",
+        "O botão fixo no rodapé segue a rolagem inteira. Se ela decidir na avaliação com foto, o botão está a um polegar de distância."
+      ]
+    }
+  }
+}

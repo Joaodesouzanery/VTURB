@@ -1,0 +1,13 @@
+{
+  "name": "refatorar-section",
+  "version": "2.0.0",
+  "description": "Engine da skill 19 v2. Gera locales/en.default.schema.json + migrator v1 → v2.",
+  "type": "module",
+  "scripts": {
+    "gen-locale": "node gen-locale.mjs",
+    "migrate-v1-to-v2": "node migrator-v1-to-v2.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

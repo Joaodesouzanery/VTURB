@@ -1,0 +1,9 @@
+{
+  "descricao": "Marcas enterprise globais a excluir por default. Append por nicho via blacklists/{nicho}.json",
+  "marcas": [
+    "Nike", "Adidas", "Puma", "Under Armour", "Apple", "Samsung", "Sony", "LG",
+    "Microsoft", "Google", "Amazon", "Coca-Cola", "Pepsi", "McDonald's",
+    "Burger King", "Starbucks", "Zara", "H&M", "SHEIN", "Uniqlo", "Gap",
+    "IKEA", "Wayfair", "Sephora", "Ulta Beauty"
+  ]
+}

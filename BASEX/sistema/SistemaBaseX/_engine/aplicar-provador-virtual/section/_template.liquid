@@ -1,0 +1,238 @@
+{% comment %}
+  ============================================================
+  BX Provador Virtual — recomendacao de tamanho
+  ------------------------------------------------------------
+  Section autocontida. Nao toca em layout/theme.liquid, nao toca
+  em assets/base.css e nao depende de JS interno do tema.
+
+  Onde colocar: no template de produto, logo abaixo do bloco de
+  informacoes. O botao se ancora sozinho perto do seletor de
+  tamanho quando encontra um.
+
+  Fonte de dados da tabela de medidas, nesta ordem:
+    1. metafield do produto  custom.tabela_medidas  (JSON)
+    2. o campo "Tabela de medidas" desta section
+    3. nada -> a section nao renderiza (melhor sumir do que
+       recomendar sem lastro)
+
+  Gerado por _engine/aplicar-provador-virtual/montar.mjs
+  NAO editar direto: editar os modulos e rodar o montador.
+  ============================================================
+{% endcomment %}
+
+{%- liquid
+  assign op_tamanho = nil
+  assign nomes_tamanho = 'tamanho,size,talla,taille,grosse,größe,misura,maat,storlek'
+  for op in product.options_with_values
+    assign nome_min = op.name | downcase
+    if nomes_tamanho contains nome_min
+      assign op_tamanho = op
+      break
+    endif
+  endfor
+
+  comment
+    Nada de tabela = nada de provador. Recomendar tamanho sem medida
+    da peca seria adivinhacao com cara de calculo.
+  endcomment
+  assign json_metafield = product.metafields.custom.tabela_medidas.value
+  assign json_section = section.settings.tabela_json
+  assign tem_dados = false
+  if json_metafield != blank
+    assign tem_dados = true
+  elsif json_section != blank
+    assign tem_dados = true
+  endif
+-%}
+
+{%- if tem_dados and op_tamanho != nil -%}
+
+<div
+  class="bx-provador color-{{ section.settings.color_scheme }}"
+  id="bx-provador-{{ section.id }}"
+  data-bx-provador
+  style="
+    --bxfit-acento: {{ section.settings.cor_acento }};
+    --bxfit-texto: {{ section.settings.cor_texto }};
+    --bxfit-fundo: {{ section.settings.cor_fundo }};
+    --bxfit-borda: {{ section.settings.cor_borda }};
+    --bxfit-raio: {{ section.settings.raio }}px;
+    --bxfit-margem: {{ section.settings.margem_topo }}px;
+  "
+  {{ section.shopify_attributes }}
+>
+  <div class="bxfit-slot"></div>
+
+  <script type="application/json" data-bx-config>
+    {
+      "produto": {{ product.title | json }},
+      "handle": {{ product.handle | json }},
+      "textoBotao": {{ section.settings.texto_botao | json }},
+      "textoTitulo": {{ section.settings.texto_titulo | json }},
+      "perfilId": {{ section.settings.perfil | json }},
+      "caimento": {{ section.settings.caimento | json }},
+      "tecido": {{ section.settings.tecido | json }},
+      "sexo": {{ section.settings.sexo | json }},
+      "unidade": {{ section.settings.unidade | json }},
+      "escalaDetalhada": {{ section.settings.escala_detalhada | json }},
+      "vesteEm": {{ section.settings.veste_em | json }},
+      "ancorar": {{ section.settings.ancorar | json }},
+      "opcaoTamanho": {
+        "nome": {{ op_tamanho.name | json }},
+        "posicao": {{ op_tamanho.position | json }},
+        "valores": {{ op_tamanho.values | json }}
+      },
+      "disponiveis": [
+        {%- assign sep = '' -%}
+        {%- for v in op_tamanho.values -%}
+          {%- assign achou = false -%}
+          {%- for var in product.variants -%}
+            {%- if var.available -%}
+              {%- if op_tamanho.position == 1 and var.option1 == v -%}{%- assign achou = true -%}{%- endif -%}
+              {%- if op_tamanho.position == 2 and var.option2 == v -%}{%- assign achou = true -%}{%- endif -%}
+              {%- if op_tamanho.position == 3 and var.option3 == v -%}{%- assign achou = true -%}{%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if achou -%}{{ sep }}{{ v | json }}{%- assign sep = ',' -%}{%- endif -%}
+        {%- endfor -%}
+      ],
+      "tabela": {% if json_metafield != blank %}{{ json_metafield | json }}{% else %}{{ json_section | json }}{% endif %}
+    }
+  </script>
+</div>
+
+{%- endif -%}
+
+{% stylesheet %}
+/*__CSS__*/
+{% endstylesheet %}
+
+<script>
+/*__JS__*/
+</script>
+
+{% schema %}
+{
+  "name": "BX Provador Virtual",
+  "tag": "section",
+  "class": "bx-provador-section",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "header", "content": "Tabela de medidas" },
+    {
+      "type": "paragraph",
+      "content": "O provador só aparece quando existe tabela de medidas E o produto tem uma opção chamada Tamanho. Sem os dois, ele some da página em vez de recomendar no chute."
+    },
+    {
+      "type": "textarea",
+      "id": "tabela_json",
+      "label": "Tabela de medidas (JSON)",
+      "info": "Deixe vazio para usar o metafield custom.tabela_medidas do produto, que é o caminho recomendado por ser por produto."
+    },
+    { "type": "header", "content": "O produto" },
+    {
+      "type": "select",
+      "id": "perfil",
+      "label": "Tipo de produto",
+      "options": [
+        { "value": "generico", "label": "Roupa em geral" },
+        { "value": "camisaMasculina", "label": "Camisa masculina" },
+        { "value": "jaqueta", "label": "Jaqueta" },
+        { "value": "casaco", "label": "Casaco" },
+        { "value": "calca", "label": "Calça, short e bermuda" },
+        { "value": "saia", "label": "Saia" },
+        { "value": "legging", "label": "Legging e fitness" },
+        { "value": "sutia", "label": "Sutiã e top" },
+        { "value": "calcado", "label": "Calçado e sandália" },
+        { "value": "relogio", "label": "Relógio" }
+      ],
+      "default": "generico"
+    },
+    {
+      "type": "select",
+      "id": "tecido",
+      "label": "Elasticidade do tecido",
+      "info": "OBRIGATÓRIO acertar. Marcar um tecido de malha como sem elasticidade faz o provador reprovar todos os tamanhos.",
+      "options": [
+        { "value": "", "label": "Não sei (o provador fica mais cauteloso)" },
+        { "value": "plano", "label": "Sem elasticidade (linho, sarja, jeans rígido)" },
+        { "value": "poucoElast", "label": "Pouco elástico (até 3% elastano)" },
+        { "value": "malha", "label": "Malha (4 a 9% elastano)" },
+        { "value": "elastica", "label": "Bem elástica (10 a 17%)" },
+        { "value": "compressao", "label": "Compressão (18% ou mais)" }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "caimento",
+      "label": "Caimento pretendido",
+      "options": [
+        { "value": "justo", "label": "Justo" },
+        { "value": "ajustado", "label": "Ajustado" },
+        { "value": "regular", "label": "Regular" },
+        { "value": "solto", "label": "Solto" },
+        { "value": "oversized", "label": "Oversized" }
+      ],
+      "default": "regular"
+    },
+    {
+      "type": "select",
+      "id": "veste_em",
+      "label": "Esta peça veste fora do normal?",
+      "info": "A Zalando publicou que este aviso simples, sozinho, reduziu devolução mais que o recomendador personalizado inteiro. Se as avaliações repetem que veste pequeno, marque aqui.",
+      "options": [
+        { "value": "", "label": "Veste normal" },
+        { "value": "pequeno", "label": "Veste menor que o normal" },
+        { "value": "grande", "label": "Veste maior que o normal" }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "sexo",
+      "label": "Modelagem",
+      "options": [
+        { "value": "f", "label": "Feminina" },
+        { "value": "m", "label": "Masculina" }
+      ],
+      "default": "f"
+    },
+    { "type": "header", "content": "Aparência e textos" },
+    { "type": "text", "id": "texto_botao", "label": "Texto do botão", "default": "Descubra o seu tamanho" },
+    { "type": "text", "id": "texto_titulo", "label": "Título dentro da janela", "default": "Qual tamanho serve em você" },
+    {
+      "type": "checkbox",
+      "id": "ancorar",
+      "label": "Encostar o botão no seletor de tamanho",
+      "info": "Desligue se o botão ficar num lugar estranho no seu tema.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "escala_detalhada",
+      "label": "Escala de 7 níveis em vez de 5",
+      "info": "Acrescenta levemente justo e levemente folgado.",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "unidade",
+      "label": "Unidade mostrada",
+      "options": [
+        { "value": "cm", "label": "Centímetros" },
+        { "value": "in", "label": "Polegadas" }
+      ],
+      "default": "cm"
+    },
+    { "type": "color", "id": "cor_acento", "label": "Cor de destaque", "default": "#1B472B" },
+    { "type": "color", "id": "cor_texto", "label": "Cor do texto", "default": "#303030" },
+    { "type": "color", "id": "cor_fundo", "label": "Cor de fundo", "default": "#FFFFFF" },
+    { "type": "color", "id": "cor_borda", "label": "Cor das bordas", "default": "#E8E4DE" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Esquema de cores", "default": "scheme-1" },
+    { "type": "range", "id": "raio", "label": "Arredondamento", "min": 0, "max": 24, "step": 2, "unit": "px", "default": 8 },
+    { "type": "range", "id": "margem_topo", "label": "Espaço acima", "min": 0, "max": 48, "step": 4, "unit": "px", "default": 12 }
+  ],
+  "presets": [{ "name": "BX Provador Virtual" }]
+}
+{% endschema %}

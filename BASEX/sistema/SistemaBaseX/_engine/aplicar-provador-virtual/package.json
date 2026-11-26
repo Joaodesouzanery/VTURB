@@ -1,0 +1,17 @@
+{
+  "name": "aplicar-provador-virtual",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "^1.61.1"
+  },
+  "scripts": {
+    "preflight": "node preflight.mjs",
+    "montar": "node montar.mjs",
+    "teste": "node teste/testar-nucleo.mjs && node teste/testar-tema.mjs && node teste/testar-navegador.mjs",
+    "postinstall": "playwright install chromium"
+  }
+}
