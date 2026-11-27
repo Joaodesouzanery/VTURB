@@ -1,66 +1,73 @@
 ---
 titulo: "Como Ela Fez 13 Milhões em Vendas Pelo WhatsApp?  | Morgana Kayser - Segredos da Escala #012"
-convidado: "Felipe Ferreira (conforme o conteúdo da transcrição; o título cita Morgana Kayser)"
+convidado: "Morgana Kayser"
 data: 2023-10-19
-tags: [resumo, vturb, vsl, copy, infoproduto, escala, trafego-pago, nutra]
+tags: [resumo, vturb, vendas, whatsapp, recuperacao, copy, infoproduto]
 fonte: "[[2023-10-19_como-ela-fez-13-milhoes-em-vendas-pelo-whatsapp-morgana-kayser-segredo_ZsMxJ5K4Imc]]"
 ---
 # Resumo: Como Ela Fez 13 Milhões em Vendas Pelo WhatsApp? | Morgana Kayser - Segredos da Escala #012
 
-> Aviso: o texto da transcrição é de uma conversa com Felipe Ferreira (infoprodutos, mastermind Alta Cúpula), conduzida por João Campos. Não há conteúdo sobre Morgana Kayser nem sobre vendas por WhatsApp além de uma menção a recuperação por WhatsApp. O resumo segue o que está no texto.
-
 ## Tese central
-Felipe Ferreira defende que uma oferta vencedora de marketing direto se apoia em mecanismo único com muita prova, em VSL com formato cada vez mais sofisticado (rosto, atores, superprodução) e em teste de volume de ofertas. Quando uma oferta não "abre bem" mesmo após otimizações, é melhor lançar outra do que insistir nela.
+Morgana Kayser, especialista em vendas e recuperação pelo WhatsApp, defende que vender no WhatsApp é um processo estruturado e humanizado: quebrar o gelo, criar ligação, deixar o cliente falar, gerar valor antes de falar o preço, provar com prova social e fechar com duas opções favoráveis. Ela diz que esse processo nasceu da venda porta a porta em Portugal e que funciona tanto para recuperação (carrinho, Pix, boleto) quanto para funil receptivo, com automação e atendimento híbrido para escalar.
 
 ## Pontos-chave
-- Primeira oferta (nicho maternidade, tirar criança do telemóvel) nasceu de estudo de público e mecanismo único aprendidos em mentoria.
-- Pesquisa de público feita nos comentários de vídeos virais do YouTube, copiando os comentários com mais likes e resumindo em seis tópicos: dores, desejos, medos, soluções já tentadas, objeções.
-- Mecanismo "jejum de dopamina", embalado como "cinco técnicas neurolinguísticas" (a "roupa" do mecanismo) e apoiado em crença que o mercado já tinha.
-- Para ele, o elemento principal de um mecanismo é conseguir prová-lo (prova científica, mediática, social, analogia); hoje procura primeiro a prova e depois o mecanismo.
-- Estrutura da Lead: problema, medo, promessa/solução, mecanismo, prova social (depoimentos focados em benefícios), quebra de objeções.
-- Hoje prefere Leads com prova mediática (cortes de podcast, reportagens) encaixadas na linha de raciocínio da cópia, e Bullets/fascinations como ganchos secundários.
-- Criativo: quebra de padrão nos 1 a 2 segundos, qualificação, dor, citar o mecanismo (a "roupa"), resultado futuro com prova, CTA; deve ser congruente com Lead e VSL.
-- Colocar um rosto (ator/expert) na mesma VSL cinematográfica fez a oferta saltar de 2 a 3 mil/dia para 6 a 30 mil/dia e a conversão subir 50% (1% para 1,5%) em um trecho e, em outro, ele diz que subiu 100%.
-- Métrica principal para ele é a conversão da VSL (acima de 2% em infoproduto "abre bem"), não o ROAS, porque o funil de backend pode elevar o retorno depois.
-- Ofertas têm vida útil: em alta escala, tendem a durar cerca de 2 a 3 meses; recomenda extrair o máximo e já preparar a próxima, inclusive remodelando a mesma oferta (1.0, 2.0, 3.0).
-- Sofisticação do bloco de oferta no emagrecimento (aplicativo personalizado em vez de ebook de receitas) foi diferencial; depois saturou.
-- O mastermind Alta Cúpula reúne pessoas de tráfego direto com resultados, entrada por indicação, número limitado de membros.
+- Ela começou a vender aos 8 anos, trabalhou com infoproduto jurídico por cerca de 4 a 5 anos no WhatsApp e depois vendeu porta a porta em Portugal (contratos de energia); lá profissionalizou o processo de vendas.
+- Em Portugal, segundo ela, um contrato por dia era considerado bom e ela fechava até 15 por dia, reduzindo a venda ao essencial (a cada 10 faturas na mão, um contrato fechado).
+- Sempre conhecer a comunidade: advogados, público do Caíque e público de emagrecimento exigem abordagens diferentes; as pessoas querem falar com pessoas, não com empresas.
+- Vendedor que mais vende é o que está confortável com seu personagem; não forçar personagem que não é dele.
+- Áudios foram "viragem de chave" no WhatsApp: quebrar o gelo com áudio animado, tom de voz e energia.
+- Criar ligação deixando o cliente falar (80% ele, 20% você) e usando histórias pessoais só de forma sutil.
+- Identificar necessidades antes de qualquer oferta: saber o que a "Dona Maria" sofre, não só o que o público em geral sofre.
+- Agitar o problema sempre falando de outras pessoas ("que bom que você está aqui antes que aconteça").
+- Eliminar objeções antecipadamente (ex.: mostrar CNPJ, endereço, telefone, laboratório) mas sem colocar objeções na cabeça do cliente (ela evita falar de garantia ou composição no script).
+- Gerar valor é elevar o produto acima de "mais um" (exemplo da melancia que cuida do coração e da chaleira que apita) e só então falar do preço.
+- Quando o cliente pergunta o preço cedo, tirá-lo da "zona de objeções" e trazê-lo para o processo; o cliente achar caro depende do valor percebido.
+- Estrutura de equipe: atendimento híbrido (automação + pessoas), gestor de automação mais fácil de achar que vendedor excelente; vendedores usam os áudios e argumentos dela.
+- Em lançamentos grandes ela coloca a mão na massa, trabalha com contingência de números de WhatsApp e muita folga de estrutura.
 
 ## Frameworks e passo a passo
-1. Estudo de público: extrair comentários de YouTube, resumir em dores, desejos, medos, soluções tentadas e objeções.
-2. Mecanismo único: algo simples, com um toque de novidade, que dê para provar e encaixar na VSL; usar crença que o mercado já tem.
-3. Dar uma "roupa" ao mecanismo (nome palatável, ex.: cinco técnicas neurolinguísticas; truque da banana vs. receita da banana bariátrica).
-4. Lead: qualificar com dores, medo, promessa, citar o mecanismo, prova social com benefícios, quebrar objeções, depois história.
-5. Prova mediática: "minerar" por dias vídeos de especialistas e reportagens, montar um arquivo com link e minutagem, e encaixar os trechos na linha lógica da cópia.
-6. Criativo: quebra de padrão, qualificação, dor, mecanismo, resultado futuro com prova, CTA (usar "gratuito").
-7. Otimização: olhar o gráfico da VSL, achar quedas, ajustar Lead e criativo, usar feedback da recuperação (WhatsApp, boleto, Pix) para quebrar objeções no bloco de oferta.
-8. Escala de formato: texto/cinematográfica, rosto, cenário, mais pessoas, podcast, reportagem, documentário, enquete de rua.
-9. Decisão: abriu bem (conversão alta) então otimizar tráfego e funil; não abriu após otimizações em uma a duas semanas então partir para nova oferta ou nova roupa do mesmo mecanismo.
+Processo de vendas no WhatsApp (ordem em que ela apresentou):
+1. Quebrar o gelo (personalidade, áudio, animação).
+2. Criar ligação (deixar a pessoa falar, história pessoal sutil).
+3. Identificar as necessidades (perguntar a dor específica).
+4. Agitar o problema (consequências de não tratar, usando exemplos de outras pessoas).
+5. Eliminar objeções antecipadamente (mostrar dados da empresa, quebrar as 3 principais).
+6. Gerar valor (mostrar que o produto resolve a dor de um jeito diferente de qualquer outro).
+7. Prova social (áudios encaminhados de clientes parecidos com o lead; não usar locução nem depoimento falso).
+8. Apresentar a oferta e só então falar o preço.
+9. Realizar o fecho: dar duas opções favoráveis (ex.: boleto ou Pix; cartão ou Pix).
+
+Níveis de recuperação:
+- Nível 1: chamar no X1 (um a um) pelo WhatsApp a lista da plataforma de pagamento; prioridade citada: carrinho abandonado e Pix gerado, depois boleto; pagamento recusado também converte muito.
+- Nível 2: automação com atendimento híbrido (automação mais pessoas que interrompem quando surge objeção não mapeada).
+- Nível 3/4: remarketing estruturado por 60 dias, estrutura de WhatsApp com contingência e lançamentos temáticos/meteóricos em grupos.
+
+Remarketing: primeiro, segundo e terceiro dia contato diário; depois mensagens espaçadas por 60 dias com vários ângulos.
 
 ## Números e exemplos citados
-- Faturamento total dele: "um pouco mais de 27" milhões, segundo a conversa; três versões da oferta de emagrecimento somaram "um pouco mais de 20 milhões" em cerca de 10 meses; melhor mês, 4 milhões.
-- Primeira oferta lançada em julho de 2022: julho ~30 e poucos mil, agosto 60 a 70 mil, setembro ~100 mil, margem de 20% a 25%.
-- Depois do rosto: de 2 a 3 mil/dia para 6, 7 até 30 mil/dia (conforme o texto); conversão de 1% para 1,5%.
-- Maternidade chegou ao máximo de 800 mil no mês.
-- Oferta bem acertada: 100 mil/dia, 180 mil em um dia poucos dias após o acerto; ROAS 1,8 citado como exemplo; margem final em torno de 30%.
-- Custo de produção: básica ~10 mil; a maior, 30 mil; videógrafo 1.000 a 1.500 por diária; ator ~500.
-- Taxa de acerto: 10% a 20% em VSL comum; 30% a 40% partindo de mecanismo já validado com superprodução.
-- Testes de criativo: 48 horas por teste, cerca de 50 a 80 criativos por semana na terceira versão.
-- Mastermind: 56 vagas mencionadas, 38 membros atuais, mais de 100 aplicações no lançamento.
+- Mais de 12 milhões (título fala em 13 milhões) em vendas pelo WhatsApp.
+- Lançamento do Caíque: 2 milhões em 7 dias, com ela trabalhando 36 horas direto.
+- Estrutura: 270 números de WhatsApp; cerca de 10% de chips banidos como taxa normal, subindo para 15 a 17% com ajustes na contingência; 1.000 leads divididos em grupos de 200 a 300 por número.
+- Conversão: boleto 50 a 80%; carrinho abandonado 60 a 75%; lead que entra no WhatsApp 40 a 50%; pagamento recusado 80 a 90%.
+- WhatsApp responde por cerca de 40% das vendas da empresa; antes do remarketing era cerca de 20%, depois 30 a 40%.
+- Primeira venda de consultoria de script a 35.000 fechada pelo WhatsApp; mentoria a 3.000.
+- Venda de energia em Portugal: 15 contratos por dia, cerca de 4 minutos de ligação de confirmação.
+- Atendimento da empresa de segunda a segunda, das 9h às 23h, em turnos.
+- Um funil de uma empresa teve margem zero no front e foi salvo pelo backend (relato do João).
 
 ## Ações práticas
-- Mapear dores, desejos, medos e objeções do público em comentários de vídeos virais.
-- Procurar o mecanismo pela prova disponível, não só pela ideia.
-- Dar nova "roupa" a um mecanismo já validado em vez de inventar do zero.
-- Minerar cortes de podcast e reportagens e encaixá-los na Lead e no criativo.
-- Colocar rosto/ator na VSL e testar formato (podcast, reportagem, cenário).
-- Usar mensagens de recuperação (WhatsApp, boleto, Pix) para descobrir objeções e reescrever o bloco de oferta.
-- Medir a conversão da VSL (meta acima de 2% em info) antes de otimizar tráfego e funil.
-- Testar mais ofertas em menor tempo e abandonar a que não abre após duas semanas de otimização.
-- Contratar atores com experiência em teleprompter e evitar atores muito queimados no mercado.
+- Baixar da plataforma de pagamento as listas de carrinho abandonado, Pix gerado, pagamento recusado e boleto e chamar no WhatsApp no mesmo dia, sem deixar acumular.
+- Escrever um script único (em vez de improvisar) para saber o que melhorar.
+- Gravar áudios com voz natural para quebrar objeções e como prova social (nada de locução).
+- Usar foto de perfil de pessoa real, sorrindo e olhando para a câmera; chamar o lead pelo nome.
+- Mapear as três principais objeções, quebrá-las no script e deixar uma equipe para as demais.
+- Contratar ferramenta de automação de WhatsApp assim que o produto estiver validado e usar atendimento híbrido.
+- Montar contingência de números de WhatsApp para diluir risco de banimento e acompanhar a taxa de banimento em planilha.
+- Fazer remarketing de 60 dias para leads que não compraram.
+- Colocar leads compradores em grupos de WhatsApp para lançamentos meteóricos semanais ou mensais.
 
 ## Frases marcantes
-- "A prova é o principal, a principal característica de um mecanismo único vencedor."
-- "Promessa, por promessa, todo mundo faz; agora você conseguir provar para ela é o mais difícil."
-- "Hoje ganha no mercado quem mais testa, quem mais lança."
-- "Não é fazer igual, tem que fazer melhor."
+- "As pessoas querem falar com pessoas, não querem falar com as empresas."
+- "Não é o que o João pensa, é o que o cliente acha."
+- "Qualquer coisa chama-me aqui, estou à disposição: essas frases são de vendedor preguiçoso."
+- "Ninguém sabia da Morgana Kayser, mas os meus resultados chegaram na frente de mim."
