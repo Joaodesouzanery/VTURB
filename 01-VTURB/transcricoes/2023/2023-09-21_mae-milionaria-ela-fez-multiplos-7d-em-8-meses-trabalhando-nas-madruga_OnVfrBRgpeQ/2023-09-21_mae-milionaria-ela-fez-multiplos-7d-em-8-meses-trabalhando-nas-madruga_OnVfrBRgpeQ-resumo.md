@@ -21,7 +21,7 @@ Eduarda Medina, mãe de uma menina de 3 anos, diz ter faturado cerca de R$ 2 mil
 - O João explica a estrutura "causa raiz": a causa do problema é X; as pessoas tentam Y, que não resolve a causa; a solução nova ataca a causa. Qualquer psicologia pode ser encaixada nesse modelo, e cada psicologia gera conversão diferente.
 - Para o João, 80% do tempo da copy é convencer a acreditar no mecanismo e 20% é vender; a oferta (soma de entregáveis, garantia e termos) aumenta o valor percebido.
 - Ela depende de ter tempo: contratou gestor de projetos, que operacionaliza pesquisa e tarefas, e passou a lançar no mínimo duas ofertas por mês.
-- Aprendeu a escalar "na marra", no Skin in the Game, e demorou cerca de 4 meses para subir de US$ ... (ver números).
+- Aprendeu a escalar "na marra", no "Skin in the Game" (ninguém ensinou), e demorou cerca de 4 meses para ir de R$ 100.000 a R$ 500.000; hoje escala mais rápido.
 - Ela evita formatos de urgência artificial (ex.: "site vai sair do ar"); prefere razões reais para agir agora.
 - Hoje faz consultoria individual, focada em informações avançadas e em ensinar a pensar, não só a replicar.
 

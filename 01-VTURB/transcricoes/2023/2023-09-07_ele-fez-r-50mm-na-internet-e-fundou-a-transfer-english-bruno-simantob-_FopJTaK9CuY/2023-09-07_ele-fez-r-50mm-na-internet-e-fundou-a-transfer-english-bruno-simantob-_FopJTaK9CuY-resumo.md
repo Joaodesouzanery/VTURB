@@ -59,9 +59,8 @@ Bruno Simantob conta como saiu de uma sequência de negócios que não deram cer
 - Evitar comprar itens de luxo antes de um patrimônio líquido relevante e ajustar o custo de vida ao patrimônio.
 
 ## Frases marcantes
-- "O que te trouxe até aqui não é o que te leva até o próximo ponto." (ideia de adicionar, não substituir)
-- "Eu quero provar que o negócio é real, não só fazer uma promessa."
-- "É melhor ter um pedaço de um bolo gigante do que um queque."
+- "Vale mais ter apenas um pedaço de um bolo gigante do que um queque."
+- "Quando junta essas duas coisas (marketing e visão de negócio), acabou o jogo."
 
 ## Nota
 A transcrição vai até o encerramento do episódio. Algumas palavras e termos saíram confusos nas legendas automáticas (por exemplo "dióspiro", provavelmente CPA, e datas de 2021/2022 do lançamento), e foram omitidos ou sinalizados.
