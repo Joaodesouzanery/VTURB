@@ -44,7 +44,7 @@ Bruno Simantob, fundador da Transfer English, argumenta que o que decide um neg�
 - iFood: o restaurante perde de 12% a 30% da receita; cerca de 90% do mercado de encomendas no Brasil (afirmação dele).
 - Ele ofereceu R$ 1 milhão líquido por ano a um copywriter, sem achar quem batesse a meta; pagou um diretor de vendas contratado em 2022/2023 sem resultado (valor não ficou claro).
 - Clientes estrangeiros do VTURB pagam múltiplos de clientes brasileiros; a marca no menu do botão direito foi implementada em cerca de 30 minutos pelo programador.
-- Carreira comercial na Transfer: de 10 a 20 mil por mês para vendedores comuns, 40 a 50 mil para líderes (segundo ele, em reais).
+- Remuneração de vendedores citada: de "10, 15, 20 paus" para vendedores bons e "40, 50" para quem lidera, ao longo de um a três anos (unidade e periodicidade não ficaram claras na legenda).
 - Sete dígitos por dia hoje equivaleriam aos seis dígitos de antes; 99% do tráfego da VSL não compra.
 - VTURB: 14 dias grátis e 15% de desconto por dois meses.
 
