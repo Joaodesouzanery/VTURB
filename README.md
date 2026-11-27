@@ -33,4 +33,4 @@ O YouTube limita a taxa (erro 429): o script pausa sozinho e retoma. Vídeos sem
 - **Só o sistema BaseX:** abra `02-BASEX/sistema/SistemaBaseX` como vault (é o que o curso recomenda).
 
 ## Pendências
-`MIRO DESING.pdf` (a enviar) · `doc-instagram.html` (original vazio) · 4 vídeos sem legenda no YouTube · cerca de 40 vídeos têm a transcrição cortada no fim (limite da legenda do YouTube; os resumos avisam).
+`MIRO DESING.pdf` (a enviar) · `doc-instagram.html` (original vazio) · 4 vídeos sem legenda no YouTube · dezenas de vídeos têm a transcrição cortada no fim (limite da legenda do YouTube; os resumos avisam).
