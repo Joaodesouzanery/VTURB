@@ -9,7 +9,7 @@ python baixar.py --descricoes --cookies-from-browser chrome  # (uma vez) adicion
 python indexar.py                                            # gera INDEX.md, conhecimento/, temas/ e convidados/
 ```
 
-- `transcricoes/AAAA/AAAA-MM-DD_slug_id/transcricao.md` – uma pasta por vídeo
+- `transcricoes/AAAA/AAAA-MM-DD_slug_id/AAAA-MM-DD_slug_id.md` – uma pasta por vídeo
 - `INDEX.md` – lista de todos os vídeos
 - `conhecimento/AAAA.md` – transcrições do ano num arquivo só, para anexar em chats/Projects do Claude
 - `MARKETING/` – casos e playbooks de marketing com IA
