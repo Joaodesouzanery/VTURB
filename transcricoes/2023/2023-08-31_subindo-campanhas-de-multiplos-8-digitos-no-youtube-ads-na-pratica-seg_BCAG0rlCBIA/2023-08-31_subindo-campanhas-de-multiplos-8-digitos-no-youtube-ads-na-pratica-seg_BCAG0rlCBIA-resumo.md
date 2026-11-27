@@ -40,7 +40,7 @@ No YouTube Ads, o que separa quem escala de quem não consegue é o setup corret
 - Lucas começou com cerca de R$ 1.000; primeira venda levou cerca de 3 meses (e-book de geladinho gourmet); chegou a cerca de R$ 6 mil/mês como afiliado e investiu cerca de R$ 700 mil em Facebook antes de entrar na operação do convidado-anfitrião.
 - Máximo investido: R$ 150 mil em um único dia no YouTube.
 - Consultoria externa mudou o setup; operação ia de cerca de R$ 100-200 mil/mês no YouTube para R$ 600-800 mil e R$ 1 milhão/mês depois de acertar um criativo; um criativo recebeu R$ 3 milhões de investimento.
-- Criativo com receita: CTR de cerca de 3,5% subiu e o CPA caiu para algo como a metade (na fala, de aproximadamente 110 para valores próximos de 50-60; os números exatos estão imprecisos na transcrição); outro criativo de pescoço ("pescoço de tartaruga") com 4,5 minutos foi o campeão.
+- Criativo com receita: em um caso de diabetes, um criativo com CPA em torno de 110 melhorou bastante ao adicionar a receita (o convidado fala em reduzir o CPA quase à metade; os números exatos estão imprecisos na legenda); CTR citado de cerca de 3,5%. Outro criativo de pescoço ("pescoço de tartaruga") com 4,5 minutos foi o campeão.
 - Exemplo de CPA: produto físico com CPA alvo de R$ 200 recebe lance de R$ 400; infoproduto com CPA R$ 100 recebe R$ 200.
 - Conversão marcada com atraso de cerca de 24 horas na conta deles.
 - Orçamentos diários de campanhas na escala soft chegaram a R$ 6 mil a 8 mil por campanha.
