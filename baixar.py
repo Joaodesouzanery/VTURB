@@ -76,7 +76,7 @@ def rodar(vid, args, tmp, cookies, langs):
     cmd = YTDLP + [
         "--skip-download", "--no-simulate", "--write-subs", "--write-auto-subs",
         "--sub-langs", langs, "--sub-format", "vtt", "--no-warnings",
-        "--sleep-requests", "1.5", "--sleep-subtitles", "2",
+        "--write-description", "--sleep-requests", "1.5", "--sleep-subtitles", "2",
         "--dateafter", args.depois, "--datebefore", args.antes,
         "--print", "%(upload_date)s|%(title)s",
         "-o", str(tmp / "%(id)s"), f"https://www.youtube.com/watch?v={vid}",
@@ -127,18 +127,56 @@ def process(vid, args, tmp, cookies):
     slug = re.sub(r"[^a-z0-9]+", "-", unicodedata.normalize("NFKD", title).encode("ascii", "ignore").decode().lower()).strip("-")[:70]
     pasta = args.saida / date[:4] / f"{d}_{slug}_{vid}"
     pasta.mkdir(parents=True, exist_ok=True)
-    dest = pasta / "transcricao.md"
+    dest = pasta / f"{pasta.name}.md"
+    desc_file = tmp / f"{vid}.description"
+    descricao = desc_file.read_text(encoding="utf-8", errors="ignore").strip() if desc_file.exists() else ""
+    if desc_file.exists():
+        desc_file.unlink()
     paras = re.sub(r"((?:[^.!?]+[.!?]\s*){5})", r"\1\n\n", text)
     safe_title = title.replace('"', "'")
     dest.write_text(
         f'---\ntitulo: "{safe_title}"\nurl: https://www.youtube.com/watch?v={vid}\n'
-        f"data: {d}\nid: {vid}\ncanal: VTURB\n---\n\n# {title}\n\n{paras.strip()}\n",
+        f"data: {d}\nid: {vid}\ncanal: VTURB\n---\n\n# {title}\n\n{paras.strip()}\n"
+        + (f"\n## Descrição do vídeo\n\n{descricao}\n" if descricao else ""),
         encoding="utf-8")
     return vid, "ok", str(pasta.name)
 
 
+def preencher_descricoes(args, cookies):
+    """Adiciona a descrição do YouTube (links, capítulos) às transcrições já baixadas."""
+    arquivos = [f for f in sorted(args.saida.glob("*/*/*.md"))
+                if not f.name.endswith("-resumo.md") and "## Descrição do vídeo" not in f.read_text(encoding="utf-8")]
+    print(f"{len(arquivos)} transcrições sem descrição.")
+    with tempfile.TemporaryDirectory() as t:
+        tmp = Path(t)
+        for n, f in enumerate(arquivos, 1):
+            vid = re.search(r"^id: (\S+)", f.read_text(encoding="utf-8"), re.M).group(1)
+            cmd = YTDLP + ["--skip-download", "--write-description", "--no-warnings", "--sleep-requests", "1.5",
+                           "-o", str(tmp / "%(id)s"), f"https://www.youtube.com/watch?v={vid}"] + cookies
+            for _ in range(6):
+                esperar_pausa()
+                time.sleep(random.uniform(2, 4))
+                r = subprocess.run(cmd, capture_output=True, text=True)
+                if "429" in r.stderr:
+                    registrar_429()
+                    continue
+                if "needs to be reloaded" in r.stderr:
+                    time.sleep(10)
+                    continue
+                break
+            d = tmp / f"{vid}.description"
+            if d.exists():
+                with f.open("a", encoding="utf-8") as fh:
+                    fh.write(f"\n## Descrição do vídeo\n\n{d.read_text(encoding='utf-8', errors='ignore').strip()}\n")
+                d.unlink()
+                print(f"[{n}/{len(arquivos)}] ok {f.name}", flush=True)
+            else:
+                print(f"[{n}/{len(arquivos)}] sem descrição {vid}", flush=True)
+
+
 def main():
     p = argparse.ArgumentParser()
+    p.add_argument("--descricoes", action="store_true", help="só preencher descrições nas transcrições existentes")
     p.add_argument("--limit", type=int, default=0, help="só os N primeiros (teste)")
     p.add_argument("--workers", type=int, default=2)
     p.add_argument("--depois", default="20220101")
@@ -148,6 +186,9 @@ def main():
     args = p.parse_args()
     cookies = ["--cookies-from-browser", args.cookies] if args.cookies else []
     args.saida.mkdir(exist_ok=True)
+    if args.descricoes:
+        preencher_descricoes(args, cookies)
+        return
 
     estado = Path("processados.txt")
     feitos = set(estado.read_text().split()) if estado.exists() else set()

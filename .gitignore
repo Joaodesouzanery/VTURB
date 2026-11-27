@@ -1,3 +1,6 @@
 .venv/
 __pycache__/
 processados.txt
+.obsidian/workspace*.json
+.obsidian/cache
+.obsidian/appearance.json
