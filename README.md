@@ -12,7 +12,7 @@ python indexar.py                                            # gera INDEX.md e c
 - `INDEX.md` – lista de todos os vídeos
 - `conhecimento/AAAA.md` – transcrições do ano num arquivo só, para anexar em chats/Projects do Claude
 - `MARKETING/` – casos e playbooks de marketing com IA
-- `BASEX/` – material do curso/sistema (originais, texto e vault do Obsidian)
+- `BASEX/` – material do curso/sistema (originais, playbooks, texto e vault do Obsidian); `ECOM/` – página ECOM completa
 - `.claude/skills/` – skills: baixar, consultar, resumir e marketing
 
 Sem legenda: `sem_legenda.txt`.
