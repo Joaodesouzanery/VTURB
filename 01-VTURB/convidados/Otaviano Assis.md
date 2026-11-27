@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2026-06-02 · [[2026-06-02_os-bastidores-das-operacoes-que-fazem-multiplos-9d-mes-otaviano-assis-_0DlzYLUmKcU]]
+- 2026-06-02 · [[2026-06-02_os-bastidores-das-operacoes-que-fazem-multiplos-9d-mes-otaviano-assis-_0DlzYLUmKcU]] · [[2026-06-02_os-bastidores-das-operacoes-que-fazem-multiplos-9d-mes-otaviano-assis-_0DlzYLUmKcU-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

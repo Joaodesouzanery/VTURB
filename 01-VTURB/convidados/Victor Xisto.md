@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2026-01-20 · [[2026-01-20_escalando-100k-dia-com-low-ticket-aos-19-anos-victor-xisto-segredos-da_GSSh_3RoU98]]
+- 2026-01-20 · [[2026-01-20_escalando-100k-dia-com-low-ticket-aos-19-anos-victor-xisto-segredos-da_GSSh_3RoU98]] · [[2026-01-20_escalando-100k-dia-com-low-ticket-aos-19-anos-victor-xisto-segredos-da_GSSh_3RoU98-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

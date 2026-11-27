@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2024-09-03 · [[2024-09-03_ela-criou-narrativas-que-fizeram-45mm-queila-trizotti-segredos-da-esca_fBaX4ixKkFo]]
+- 2024-09-03 · [[2024-09-03_ela-criou-narrativas-que-fizeram-45mm-queila-trizotti-segredos-da-esca_fBaX4ixKkFo]] · [[2024-09-03_ela-criou-narrativas-que-fizeram-45mm-queila-trizotti-segredos-da-esca_fBaX4ixKkFo-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

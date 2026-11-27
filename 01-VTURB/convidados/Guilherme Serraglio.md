@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2026-07-28 · [[2026-07-28_os-segredos-dos-criativos-white-que-mais-vendem-guilherme-serraglio-se_KbhppPLSF-Q]]
+- 2026-07-28 · [[2026-07-28_os-segredos-dos-criativos-white-que-mais-vendem-guilherme-serraglio-se_KbhppPLSF-Q]] · [[2026-07-28_os-segredos-dos-criativos-white-que-mais-vendem-guilherme-serraglio-se_KbhppPLSF-Q-resumo\|resumo]]
 
 ## Temas
 - [[Criativos e creators]]

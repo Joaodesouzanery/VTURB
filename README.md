@@ -4,7 +4,7 @@ Repositório privado com tudo organizado em quatro áreas. Pode ser aberto no **
 
 ```
 01-VTURB/        Canal do YouTube @vturb (2023–2026)
-  transcricoes/AAAA/<vídeo>/   transcrição + resumo (66 vídeos com resumo) por vídeo
+  transcricoes/AAAA/<vídeo>/   transcrição + resumo (todos os 177 vídeos) por vídeo
   temas/  convidados/          páginas-hub com [[links]] (alimentam o grafo)
   conhecimento/AAAA.md         transcrições do ano num arquivo só (para anexar em chats)
   INDEX.md  glossario.md  sem_legenda.txt
@@ -33,4 +33,4 @@ O YouTube limita a taxa (erro 429): o script pausa sozinho e retoma. Vídeos sem
 - **Só o sistema BaseX:** abra `02-BASEX/sistema/SistemaBaseX` como vault (é o que o curso recomenda).
 
 ## Pendências
-`MIRO DESING.pdf` (a enviar) · `doc-instagram.html` (original vazio) · 4 vídeos sem legenda no YouTube · alguns vídeos têm a transcrição cortada no fim (limite da legenda do YouTube).
+`MIRO DESING.pdf` (a enviar) · `doc-instagram.html` (original vazio) · 4 vídeos sem legenda no YouTube · cerca de 40 vídeos têm a transcrição cortada no fim (limite da legenda do YouTube; os resumos avisam).

@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2023-12-07 · [[2023-12-07_como-ele-fez-20-milhoes-em-vendas-com-e-mail-marketing-laschuk-segredo_VACN2PpwenE]]
+- 2023-12-07 · [[2023-12-07_como-ele-fez-20-milhoes-em-vendas-com-e-mail-marketing-laschuk-segredo_VACN2PpwenE]] · [[2023-12-07_como-ele-fez-20-milhoes-em-vendas-com-e-mail-marketing-laschuk-segredo_VACN2PpwenE-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

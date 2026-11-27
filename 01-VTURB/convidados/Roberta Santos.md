@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2025-10-21 · [[2025-10-21_o-guia-para-faturar-100k-mes-com-infoprodutos-roberta-santos-segredos-_K8THfJoNWKU]]
+- 2025-10-21 · [[2025-10-21_o-guia-para-faturar-100k-mes-com-infoprodutos-roberta-santos-segredos-_K8THfJoNWKU]] · [[2025-10-21_o-guia-para-faturar-100k-mes-com-infoprodutos-roberta-santos-segredos-_K8THfJoNWKU-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

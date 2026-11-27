@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2026-10-27 · [[2026-10-27_a-formula-dos-criativos-que-vendem-milhoes-marconi-romulo-segredos-da-_2FMHhCHrOig]]
+- 2026-10-27 · [[2026-10-27_a-formula-dos-criativos-que-vendem-milhoes-marconi-romulo-segredos-da-_2FMHhCHrOig]] · [[2026-10-27_a-formula-dos-criativos-que-vendem-milhoes-marconi-romulo-segredos-da-_2FMHhCHrOig-resumo\|resumo]]
 
 ## Temas
 - [[Criativos e creators]]

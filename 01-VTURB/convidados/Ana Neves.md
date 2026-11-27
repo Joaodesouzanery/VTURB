@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2025-03-04 · [[2025-03-04_como-ela-faz-1-500-vendas-por-dia-no-perpetuo-ana-neves-segredos-da-es_tu-BnCnt3HU]]
+- 2025-03-04 · [[2025-03-04_como-ela-faz-1-500-vendas-por-dia-no-perpetuo-ana-neves-segredos-da-es_tu-BnCnt3HU]] · [[2025-03-04_como-ela-faz-1-500-vendas-por-dia-no-perpetuo-ana-neves-segredos-da-es_tu-BnCnt3HU-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

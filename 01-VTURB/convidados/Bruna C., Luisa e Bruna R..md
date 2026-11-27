@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2025-09-09 · [[2025-09-09_os-segredos-dos-criativos-que-vendem-1m-dia-bruna-c-luisa-e-bruna-r-se_wHdyTM-nVqg]]
+- 2025-09-09 · [[2025-09-09_os-segredos-dos-criativos-que-vendem-1m-dia-bruna-c-luisa-e-bruna-r-se_wHdyTM-nVqg]] · [[2025-09-09_os-segredos-dos-criativos-que-vendem-1m-dia-bruna-c-luisa-e-bruna-r-se_wHdyTM-nVqg-resumo\|resumo]]
 
 ## Temas
 - [[Criativos e creators]]

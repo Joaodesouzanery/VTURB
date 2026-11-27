@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2026-03-17 · [[2026-03-17_escalando-operacoes-americanas-para-100mm-ano-gabriel-medeiros-segredo_YfI0CjI_XaE]]
+- 2026-03-17 · [[2026-03-17_escalando-operacoes-americanas-para-100mm-ano-gabriel-medeiros-segredo_YfI0CjI_XaE]] · [[2026-03-17_escalando-operacoes-americanas-para-100mm-ano-gabriel-medeiros-segredo_YfI0CjI_XaE-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

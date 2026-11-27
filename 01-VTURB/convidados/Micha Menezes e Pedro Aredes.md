@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2024-08-13 · [[2024-08-13_eles-fizeram-20mm-com-perpetuo-micha-menezes-e-pedro-aredes-segredos-d_ZaZM0-09Yhc]]
+- 2024-08-13 · [[2024-08-13_eles-fizeram-20mm-com-perpetuo-micha-menezes-e-pedro-aredes-segredos-d_ZaZM0-09Yhc]] · [[2024-08-13_eles-fizeram-20mm-com-perpetuo-micha-menezes-e-pedro-aredes-segredos-d_ZaZM0-09Yhc-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

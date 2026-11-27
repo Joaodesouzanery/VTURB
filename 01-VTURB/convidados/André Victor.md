@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2024-11-12 · [[2024-11-12_ele-fez-multiplos-8d-vendendo-infoprodutos-andre-victor-segredos-da-es_Cfqs9KZmhWQ]]
+- 2024-11-12 · [[2024-11-12_ele-fez-multiplos-8d-vendendo-infoprodutos-andre-victor-segredos-da-es_Cfqs9KZmhWQ]] · [[2024-11-12_ele-fez-multiplos-8d-vendendo-infoprodutos-andre-victor-segredos-da-es_Cfqs9KZmhWQ-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

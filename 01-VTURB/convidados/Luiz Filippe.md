@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2024-01-11 · [[2024-01-11_ele-e-especialista-em-jornada-do-cliente-e-ja-fez-8-digitos-no-digital_NQ7_KtnIB6U]]
+- 2024-01-11 · [[2024-01-11_ele-e-especialista-em-jornada-do-cliente-e-ja-fez-8-digitos-no-digital_NQ7_KtnIB6U]] · [[2024-01-11_ele-e-especialista-em-jornada-do-cliente-e-ja-fez-8-digitos-no-digital_NQ7_KtnIB6U-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

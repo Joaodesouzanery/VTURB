@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2025-05-13 · [[2025-05-13_escalando-produtos-high-ticket-no-perpetuo-cami-figueira-segredos-da-e_ArlNB_5wZGs]]
+- 2025-05-13 · [[2025-05-13_escalando-produtos-high-ticket-no-perpetuo-cami-figueira-segredos-da-e_ArlNB_5wZGs]] · [[2025-05-13_escalando-produtos-high-ticket-no-perpetuo-cami-figueira-segredos-da-e_ArlNB_5wZGs-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

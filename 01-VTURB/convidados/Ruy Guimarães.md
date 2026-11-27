@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2026-09-08 · [[2026-09-08_criando-super-experts-que-escalam-9-digitos-ruy-guimaraes-segredos-da-_9EYH87yOzoo]]
+- 2026-09-08 · [[2026-09-08_criando-super-experts-que-escalam-9-digitos-ruy-guimaraes-segredos-da-_9EYH87yOzoo]] · [[2026-09-08_criando-super-experts-que-escalam-9-digitos-ruy-guimaraes-segredos-da-_9EYH87yOzoo-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

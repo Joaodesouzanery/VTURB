@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2024-02-08 · [[2024-02-08_como-ele-saiu-das-dividas-e-fez-100-milhoes-com-infoprodutos-iuri-meir_H0Z6q2c-iUw]]
+- 2024-02-08 · [[2024-02-08_como-ele-saiu-das-dividas-e-fez-100-milhoes-com-infoprodutos-iuri-meir_H0Z6q2c-iUw]] · [[2024-02-08_como-ele-saiu-das-dividas-e-fez-100-milhoes-com-infoprodutos-iuri-meir_H0Z6q2c-iUw-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

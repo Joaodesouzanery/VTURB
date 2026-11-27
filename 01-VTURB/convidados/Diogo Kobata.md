@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2024-09-10 · [[2024-09-10_o-ex-militar-que-fatura-8d-mes-no-digital-diogo-kobata-segredos-da-esc_BbhJn8NXRso]]
+- 2024-09-10 · [[2024-09-10_o-ex-militar-que-fatura-8d-mes-no-digital-diogo-kobata-segredos-da-esc_BbhJn8NXRso]] · [[2024-09-10_o-ex-militar-que-fatura-8d-mes-no-digital-diogo-kobata-segredos-da-esc_BbhJn8NXRso-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

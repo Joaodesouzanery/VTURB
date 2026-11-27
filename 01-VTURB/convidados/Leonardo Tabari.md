@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2025-01-07 · [[2025-01-07_ele-ja-faturou-100-milhoes-com-marketing-digital-leonardo-tabari-segre_3f1LgV4LgAY]]
+- 2025-01-07 · [[2025-01-07_ele-ja-faturou-100-milhoes-com-marketing-digital-leonardo-tabari-segre_3f1LgV4LgAY]] · [[2025-01-07_ele-ja-faturou-100-milhoes-com-marketing-digital-leonardo-tabari-segre_3f1LgV4LgAY-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]

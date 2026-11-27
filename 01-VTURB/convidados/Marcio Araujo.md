@@ -5,7 +5,7 @@ tags: [convidado, vturb]
 
 1 episódio(s) no canal VTURB.
 
-- 2024-06-18 · [[2024-06-18_da-roca-a-8d-vendendo-infoprodutos-no-exterior-marcio-araujo-segredos-_hluHnZ5fA2U]]
+- 2024-06-18 · [[2024-06-18_da-roca-a-8d-vendendo-infoprodutos-no-exterior-marcio-araujo-segredos-_hluHnZ5fA2U]] · [[2024-06-18_da-roca-a-8d-vendendo-infoprodutos-no-exterior-marcio-araujo-segredos-_hluHnZ5fA2U-resumo\|resumo]]
 
 ## Temas
 - [[Escala e faturamento]]
