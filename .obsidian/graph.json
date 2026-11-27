@@ -7,12 +7,12 @@
   "showOrphans": false,
   "collapse-color-groups": false,
   "colorGroups": [
-    {"query": "path:temas", "color": {"a": 1, "rgb": 14701138}},
-    {"query": "path:convidados", "color": {"a": 1, "rgb": 5431378}},
-    {"query": "path:transcricoes", "color": {"a": 1, "rgb": 8421504}},
-    {"query": "path:\"BASEX/sistema/SistemaBaseX/02. Conhecimento\"", "color": {"a": 1, "rgb": 2201331}},
-    {"query": "path:\"BASEX/sistema/SistemaBaseX/03. Skills\"", "color": {"a": 1, "rgb": 15277667}},
-    {"query": "path:MARKETING", "color": {"a": 1, "rgb": 16750848}}
+    {"query": "path:01-VTURB/temas", "color": {"a": 1, "rgb": 14701138}},
+    {"query": "path:01-VTURB/convidados", "color": {"a": 1, "rgb": 5431378}},
+    {"query": "path:01-VTURB/transcricoes", "color": {"a": 1, "rgb": 8421504}},
+    {"query": "path:\"02-BASEX/sistema/SistemaBaseX/02. Conhecimento\"", "color": {"a": 1, "rgb": 2201331}},
+    {"query": "path:\"02-BASEX/sistema/SistemaBaseX/03. Skills\"", "color": {"a": 1, "rgb": 15277667}},
+    {"query": "path:04-MARKETING", "color": {"a": 1, "rgb": 16750848}}
   ],
   "collapse-display": false,
   "showArrow": false,
