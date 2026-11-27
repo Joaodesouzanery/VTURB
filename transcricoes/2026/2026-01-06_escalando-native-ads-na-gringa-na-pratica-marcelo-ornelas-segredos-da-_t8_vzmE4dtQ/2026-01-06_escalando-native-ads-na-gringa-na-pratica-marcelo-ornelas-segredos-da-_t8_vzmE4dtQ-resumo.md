@@ -65,7 +65,7 @@ Native Ads (principalmente Taboola, citada na transcrição como "Tabula") é a 
 - Testar uma lead curta com link para o VSL logo no início do advertorial e comparar passagem x conversão.
 
 ## Frases marcantes
-- "Tem que apanhar" e "se não depender somente de um canal de aquisição" (ideia dita por Marcelo: nenhuma empresa deve depender de uma só fonte de tráfego).
+- "Se não depender somente de um canal de aquisição, uma fonte de tráfego... para uma empresa não pode acontecer." (Marcelo, sobre depender de uma só fonte)
 - "Uma das melhores coisas que podes fazer é trabalhar de graça, desde que geres valor." (opinião do apresentador sobre começar a carreira)
 - "O criativo é imagem ao quadrado vezes headline igual sucesso." (apresentador, concordado por Marcelo)
 - "Tenta não te queimar, porque o mercado é pequeno." (apresentador, concordado por Marcelo)

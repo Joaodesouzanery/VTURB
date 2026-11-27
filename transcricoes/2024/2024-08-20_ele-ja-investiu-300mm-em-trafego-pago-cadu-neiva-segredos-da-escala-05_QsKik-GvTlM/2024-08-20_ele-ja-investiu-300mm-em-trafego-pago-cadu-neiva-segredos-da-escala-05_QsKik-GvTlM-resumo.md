@@ -63,6 +63,6 @@ Cadu Neiva, fundador de uma das maiores agências de tráfego para infoprodutos 
 - Antes de sofisticar o lançamento, execute o básico do método bem feito.
 
 ## Frases marcantes
-- "Pensa que o mercado digital não é um mercado fácil... a gente tem que fazer até dar certo."
+- "Mercado digital não é um mercado fácil... a gente tem que fazer até dar certo."
 - "Se eu fosse vender caixão hoje, faria a mesma coisa" (sobre a estratégia de remarketing educativo).
 - "Segue o mestre, seja um bom discípulo; depois de dominar a técnica, tem de ser mestre."
